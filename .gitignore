@@ -1,0 +1,11 @@
+# Build output
+/build/
+*.o
+*.d
+*.elf
+*.map
+# Game data — never commit ROMs, saves, or the base ROM
+*.gba
+*.sav
+*.sram
+baserom.gba
