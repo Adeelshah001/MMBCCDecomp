@@ -1,0 +1,885 @@
+name	address	wave	status	source	notes
+CpuFastSet	0x0804DB24	0	MATCHED	src/bios.c	"C idiom: __asm__ volatile(""svc #0x0c"") in void F(void*,void*,unsigned)"
+CpuSet	0x0804DB28	0	MATCHED	src/bios.c	templated svc 0x0B; bx lr
+LZ77UnCompVram	0x0804DB2C	0	MATCHED	src/bios.c	templated svc 0x12; bx lr
+LZ77UnCompWram	0x0804DB30	0	MATCHED	src/bios.c	templated svc 0x11; bx lr
+RLUnCompVram	0x0804DB34	0	MATCHED	src/bios.c	templated svc 0x15; bx lr
+Sram_Memcpy	0x0804DB38	0	MATCHED	src/sram.c	do/while copy; s32 n=len-1
+Sram_WaitcntInit	0x0804DB5C	0	MATCHED	src/sram.c	pinned r2/r0; copies following fn to IWRAM stack buf, executes via _call_via_r3
+Sram_Read	0x0804DBC0	0	MATCHED	src/sram.c	signature (src,dst,len); arg0 is source
+Sram_VerifyCompare	0x0804DC00	0	BLOCKED	src/sram.c	BLOCKED: 15-byte diff; gcc-2.95 basic-block ordering; see docs/match_notes_wave0.md
+Sram_VerifyWorker	0x0804DC30	0	MATCHED	src/sram.c	same skeleton as WaitcntInit, 0xC0 buffer
+Sram_RetryWrapper	0x0804DC94	0	MATCHED	src/sram.c	for(tries=0;tries<=2;tries++){read;verify;if(!res)break;} u8 tries
+_call_via_r0	0x0804DCCC	0	MATCHED	asm/thunks.s	libgcc-style Thumb call-via-register thunk
+_call_via_r1	0x0804DCD0	0	MATCHED	asm/thunks.s	libgcc-style Thumb call-via-register thunk
+_call_via_r2	0x0804DCD4	0	MATCHED	asm/thunks.s	libgcc-style Thumb call-via-register thunk
+_call_via_r3	0x0804DCD8	0	MATCHED	asm/thunks.s	libgcc-style Thumb call-via-register thunk
+_call_via_r4	0x0804DCDC	0	MATCHED	asm/thunks.s	libgcc-style Thumb call-via-register thunk
+_call_via_r5	0x0804DCE0	0	MATCHED	asm/thunks.s	libgcc-style Thumb call-via-register thunk
+_call_via_r6	0x0804DCE4	0	MATCHED	asm/thunks.s	libgcc-style Thumb call-via-register thunk
+_call_via_r7	0x0804DCE8	0	MATCHED	asm/thunks.s	libgcc-style Thumb call-via-register thunk
+Init	0x080000C0	0	ASM	asm/crt0.s	ARM boot; C-match if feasible
+IntrWait	0x080000FC	0	ASM	asm/crt0.s	
+IrqDispatcher	0x080001BC	0	ASM	asm/crt0.s	
+ArmTrampoline	0x080002A4	0	ASM	asm/crt0.s	
+crt0_thumb_helpers	0x0800033C	0	ASM	asm/crt0.s	
+Task_Switch	0x08000328	1	UNMATCHED	asm/crt0.s → carve-out	inside crt0.s tail; Wave-0 worker owns the carve-out
+Task_Register	0x08000D90	1	MATCHED	src/task_register.c	24-byte TaskEntry; stack base via (baseReg -= 0x1428) anti-fold idiom
+MainLoop	0x080004FC	1	BLOCKED	src/mainloop.c	BLOCKED: agbcc -O2 hoists base+0x2202, ROM hoists base+0x2000 (LICM); ~30 variants tried; see docs/match_notes_mainloop.md
+HBlank_RasterSetup	0x08000AD4	1	MATCHED	src/hblank.c	raster engine arming; sel mapping corrected (sel=1->R0,2->R1,3->R01)
+HBlank_Raster0	0x08000B54	1	MATCHED	src/hblank.c	near-twin of Raster1; volatile vcount + write-posting reads
+HBlank_Raster1	0x08000BAC	1	MATCHED	src/hblank.c	cloned from Raster0, one pool word differs
+HBlank_Raster01	0x08000C04	1	MATCHED	src/hblank.c	two StridedCopy calls/scanline; desc ptr uninitialized idiom
+StridedCopy	0x08000C68	5	MATCHED	src/strided_copy.c	UNBLOCKED Wave 5 (was BLOCKED): register pinning (d=r4,dst=r3,sstep=r5) + load-order + inline asm earlyclobber for lsls r0,r5,#24; coordinator-verified 0 diffs over 52 B in built ROM
+Text_SelectBlob	0x0804C6B4	1	MATCHED	src/text.c	matched with old_agbcc (r2 vs r3 regalloc); extern-absolute-symbol idiom
+Text_OpenDialogue	0x0804CDE8	1	BLOCKED	src/text.c	BLOCKED: prologue matches (12 insns), control-flow/pool diverge later; see docs/match_notes_text.md
+ARM_MixSamples_0804BB9C	0x0804BB9C	9	BLOCKED	(worker C)	W9-C: True ARM entry (Thumb bx trampoline @0x0804BB96). 488B sample-mixer: vol L/R ldrb, beq->Audio_MixFragment@BCDC, 4x-unrolled + per-sample PCM paths, shared epilogue @0x0804BD78. C impossible (ARM code). Renamed from ARM_SampleMulAccum (behavior). See docs/match_notes_wave9_C.md
+HwInit_WaitCntDma	0x0800063C	1	MATCHED	src/hwinit.c	WAITCNT=0x45B7; DMA3 arming; asm barrier keeps 0x02000ED0 base opaque
+Vec2_SetMirrored	0x0800DD2C	2	MATCHED	src/vec2.c	old_agbcc (main mis-allocates); o->x=(flip&0x80)?-x:x; o->y=y; coordinator-verified 30/30 B
+Vec2_AddMirrored	0x0800DD4C	2	MATCHED	src/vec2.c	old_agbcc; o->x+=(flip&0x80)?-x:x; o->y+=y; coordinator-verified 38/38 B
+Vec2_CopyMirrored	0x0800DD08	6	BLOCKED	-	PERMANENTLY BLOCKED (Wave 6 vintage test): 2-byte pop {r2} vs {r1} diff; exhaustive agbcc/old_agbcc x -O1/-O2/-Os x interwork/no-interwork x register-pressure variants ALL yield pop {r1}; ROM-wide survey 479/480 fns use pop {r1} — lone heuristic anomaly in original epilogue chooser, not a systematic version difference; do not retry; see docs/match_notes_wave6_blkB.md and /tmp/wave6_blkB/vec2_vintage_conclusion.md
+EntryMgr_Teardown	0x08004F18	2	MATCHED	src/entrymgr.c	old_agbcc; teardown of 3-entry mgr at 0x02003670 via sub_08004208; coordinator-verified 88/88 B in built ROM
+EntryMgr_HookA	0x08004F70	2	MATCHED	src/entrymgr.c	"vestigial hook slot (worker-D ""HelperA""); forwards to empty sub_080057FC; coordinator-verified 10/10 B in built ROM"
+EntryMgr_HookB	0x08004F7C	2	MATCHED	src/entrymgr.c	"vestigial hook slot (worker-D ""HelperB""); empty; coordinator-verified 2/2 B in built ROM"
+EntryMgr_Setup	0x08004F80	2	MATCHED	src/entrymgr.c	old_agbcc; re-init via sub_0800419C family, bumps gen counter; twin of Teardown; coordinator-verified 108/108 B in built ROM
+GatedDispatch	0x08006DD8	2	MATCHED	src/gateddispatch.c	main agbcc; flag-gated forwarder to sub_08006E6C; coordinator-verified 88/88 B in built ROM
+Text_SelectBlobIdx	0x0804A378	2	MATCHED	src/text_idx.c	main agbcc; tiny forwarder: return (s16)sub_0800303C(idx); 18 B code + 2 B pad; coordinator-verified 20/20 B in built ROM
+Gfx_BlitRequest	0x08006A54	2	MATCHED	src/gfx.c	main agbcc; guarded forwarder to sub_08006AD8 (name tentative); 68 B code + 8 B pool; coordinator-verified 76/76 B in built ROM
+Obj_AddEntry	0x0802D7A0	10	ASM	asm/objaddentry.s	W10-H: C declared impossible (10-param global regalloc: work->r7,a1->r6,a7->sl,a8->r8,a9->r9,m3->r3,p3->r2,sub sp,#24 — tightly-coupled allocator decision). Hand-transcribed 340B, 0 diffs. Semantics: early check uses a8, a4 is u8, *p|=1 at +424, pool 0x1B3.
+ChipSlot_IncUse	0x0800D9EC	2	MATCHED	src/chipslot.c	main agbcc; wrapper: sub_08004258(s+0x70, idx); 216 callers (#1 most-called); coordinator-verified 16/16 B in built ROM
+ChipSlot_Setup	0x0800D6E0	2	MATCHED	src/chipslot.c	main agbcc; wrapper: sub_0800D800(s, 0, b, c, 0); 34 B + 2 B pad; coordinator-verified 36/36 B in built ROM
+ChipSlot_Tick	0x0800D9FC	2	BLOCKED	(worker A)	BLOCKED: name proposed, semantics fully mapped (302 B per-slot state update); hard blocker: ROM explicit (u8) truncation unproducible — compilers range-analyze it away; 15+ variants x both compilers; see docs/match_notes_wave2.md
+NoopStub	0x080057FC	3	MATCHED	src/wave3_c.c	2 B code + 2 B 00 pad; main agbcc; empty stub; sole caller EntryMgr_HookA; entrymgr.c .set dropped on landing (alias .set sub_080057FC,NoopStub kept in wave3_c.c)
+SetU32_4	0x08003130	3	MATCHED	src/wave3_c.c	4 B; main agbcc; *(u32*)(s+4)=v; 5 callers in 0x3154-0x3FC8 cluster
+GetU8_0	0x08025A0C	3	MATCHED	src/wave3_c.c	4 B; main agbcc; return s[0]; 2 callers
+GetU8_12	0x08017460	3	MATCHED	src/wave3_c.c	4 B; main agbcc; return s[0x12]; 0x080174xx struct family
+ToU8	0x08024724	3	MATCHED	src/wave3_c.c	6 B + 2 B 00 pad; main agbcc; return (u8)v; 8 callers
+SetU32Pair	0x0802617C	3	MATCHED	src/wave3_c.c	6 B + 2 B 00 pad; main agbcc; p[0]=p[1]=v
+G05130_SetU16_12	0x0800EE38	3	MATCHED	src/wave3_c.c	12 B incl pool; main agbcc; *(u16*)(g_02005130+0x12)=v via ((u16*)p)[9]; NEW IDIOM: copy absolute base to local before indexing (assembler folds g+const into pool)
+SetU8_0_FF1	0x080256D4	3	MATCHED	src/wave3_c.c	8 B; main agbcc; s[0]=v; s[1]=0xFF
+GetS16_78_3	0x080174EC	3	MATCHED	src/wave3_c.c	8 B; main agbcc; s16 *p=(s16*)(s+0x78); return p[3]; NEW IDIOM: two-statement base defeats nested address folding (single-expr folds to adds #0x7E)
+Wrap_ChipSlotTick	0x08021290	3	MATCHED	src/wave3_c.c	10 B + 2 B 00 pad; main agbcc; forwarder to sub_0800D9FC (BLOCKED ChipSlot_Tick); agbcc emits no sibling-call opt (push{lr}/bl/pop{r0}/bx r0)
+G0BD10_Zero2	0x0804A2CC	3	MATCHED	src/wave3_c.c	16 B incl pool; main agbcc; g_0200BD10[0]=g_0200BD10[1]=0
+IncU8_11	0x08017488	3	MATCHED	src/wave3_c.c	10 B + 2 B 00 pad; main agbcc; s[0x11]++; return s[0x11] (explicit reload, not return ++s[0x11])
+G05130_GetS8_0A	0x0800EAB4	3	MATCHED	src/wave3_c.c	16 B incl pool; main agbcc; return (s8)g_02005130[0x0A]; same absolute-base idiom
+Text_SelectBlobU16	0x08002FC4	3	MATCHED	src/wave3_c.c	14 B + 2 B 00 pad; main agbcc; Text_SelectBlob((u16)idx) wrapper; u16-param vs u32+cast byte-identical (ambiguous, landed u16)
+G0CE08_IndirectCall	0x0804CA08	3	MATCHED	src/wave3_c.c	20 B incl pool; main agbcc; g_0200CE08(a) via ldr r1,[pc]; ldr r1,[r1]; bl _call_via_r1; fn-ptr global at 0x0200CE08
+TailCallR3	0x0804C278	3	MATCHED	src/wave3_b.c	2 B + 2 B 00 pad; naked+asm (bx r3); text-window dispatch trampoline via r3
+SetU8_Off1	0x080256DC	3	MATCHED	src/wave3_b.c	4 B; main agbcc; p[1]=v
+ArmTrampoline	0x0804B970	3	MATCHED	src/wave3_b.c	4 B; naked+asm (adr r2; bx r2 -> ARM at 0x0804B974)
+GetU16_Off14	0x080257B8	3	MATCHED	src/wave3_b.c	4 B; main agbcc; return *(u16*)(p+14)
+EwGet16_18	0x08024760	3	MATCHED	src/wave3_b.c	12 B incl pool; main agbcc; return ew02007090.f18; 14 callers; NEW IDIOM: struct-view for absolute addresses (u8 _00[18]; u16 f18) reproduces strh [r1,#18]
+EwSet16_14	0x0800EDF0	3	MATCHED	src/wave3_b.c	12 B incl pool; main agbcc; ew02005130.f14=v
+EwSet16_16	0x0800EE2C	3	MATCHED	src/wave3_b.c	12 B incl pool; main agbcc; ew02005130.f16=v
+ListPushFront	0x08004170	3	MATCHED	src/wave3_b.c	8 B; main agbcc; node->next=*head; *head=node
+EwSet8_68	0x0800EE44	3	MATCHED	src/wave3_b.c	12 B incl pool; main agbcc; ew02005160.f68=v
+TickWrapper	0x08011F7C	3	MATCHED	src/wave3_b.c	10 B + 2 B 00 pad; main agbcc; forwarder to ChipSlot_Tick (BLOCKED wave2; temporary .set in wave3_b.c)
+SetHalf8000	0x080082CC	3	MATCHED	src/wave3_b.c	10 B + 2 B 00 pad; naked+asm (redundant r2->r1 copy unproducible in C); NEW IDIOM: GAS 2.42 rejects s-suffixed Thumb mnemonics in inline asm (unsuffixed encode identically)
+EwSet8_72	0x08010364	3	MATCHED	src/wave3_b.c	16 B incl pool; main agbcc; ew02005160.f72=1
+EwSet16_128	0x0804A3FC	3	MATCHED	src/wave3_b.c	16 B incl pool; main agbcc; ew0200BD20.f128=0
+TblGet11	0x08026710	3	MATCHED	src/wave3_b.c	16 B incl pool; main agbcc; rom0822740C[a].f11 (16-byte ROM table entries); 6 callers
+EwSet8Ret1_20	0x08010DDC	3	MATCHED	src/wave3_b.c	16 B incl pool; main agbcc; ew020051B0.f20=(u8)v; return 1; NEW IDIOM: (u8)(v|1)&1 forces back redundant truncation while folding return to 1
+NullCallback	0x08005208	3	MATCHED	src/wave3_d.c	2 B + 2 B 00 pad; main agbcc; no-op bx lr callback stub; 1 caller
+GetU16_10	0x080257F8	3	MATCHED	src/wave3_d.c	4 B; main agbcc; *(u16*)(s+0x10)
+GetU32_38	0x08023E30	3	MATCHED	src/wave3_d.c	4 B; main agbcc; *(u32*)(s+0x38)
+GetU8_19	0x08026550	3	MATCHED	src/wave3_d.c	4 B; main agbcc; s[0x19]
+EwramGet_02005238	0x08011BC8	3	MATCHED	src/wave3_d.c	12 B (6 code+00 00+pool); main agbcc; *(u32*)(0x02005230+8); local base keeps two literal loads split
+EwramSet_020070F7	0x08026DB0	3	MATCHED	src/wave3_d.c	12 B incl pool; main agbcc; *(u8*)(0x020070F0+7)=v
+IncU8_12	0x08017458	3	MATCHED	src/wave3_d.c	8 B; main agbcc; s[0x12]++; 12 callers; 0x080174xx accessor family
+GetS16_7C	0x080174E4	3	MATCHED	src/wave3_d.c	8 B; main agbcc; ((s16*)(s+0x78))[2]; p[2] form required (direct (s+0x7C) folds to adds #0x7C)
+EwramSet2_02005138	0x0800EA08	3	MATCHED	src/wave3_d.c	12 B incl pool; main agbcc; two EWRAM byte stores at 0x02005138/39
+OrU8_1F	0x0800B6E8	3	MATCHED	src/wave3_d.c	12 B (10+0000); main agbcc; s[0x1F]|=4; NEW IDIOM: u8 v=4 first puts constant in r1 (constant-first allocation)
+SetU32_200	0x08004158	3	MATCHED	src/wave3_d.c	12 B (10+0000); main agbcc; *(u32*)(s+0x200)=v (movs/lsls materialization)
+Script_NextOp	0x0804BE44	3	MATCHED	src/wave3_d.c	12 B (10+0000); ASM-STAGED (agbcc cannot emit trailing b: no TCO, appends safety bx lr); script-interpreter opcode fetch, b to ROM-ptr validator 0x0804BE2A
+TableU32_0820B6A4	0x08011CC4	3	MATCHED	src/wave3_d.c	16 B (12+pool); main agbcc; gTbl0820B6A4[(u16)idx]
+EwramInit_02005260	0x08011C04	3	MATCHED	src/wave3_d.c	16 B; main agbcc; p[0]=p[1]=v; p[2]=v+0x10 at 0x02005260
+DivZeroStub	0x0804DE64	3	MATCHED	src/wave3_d_noiw.c	10 B + 2 B 00 pad; agbcc WITHOUT -mthumb-interwork (new angle from batch E); push{lr}; bl 0x0804DD9C; movs r0,#0; pop{pc}; UNBLOCKED by coordinator (was wave-2-style blocker)
+EmptyStub_0A18	0x08000A18	3	MATCHED	src/wave3_e.c	2 B + 2 B 00 pad; main agbcc; empty stub, no bl callers
+GetByte1_25A08	0x08025A08	3	MATCHED	src/wave3_e.c	4 B; main agbcc; return p[1]
+ConstZero_4005C	0x0804005C	3	MATCHED	src/wave3_e.c	4 B; main agbcc; return 0
+GetLimit_11C50	0x08011C50	3	MATCHED	src/wave3_e.c	8 B (4+pool); main agbcc; return 0x4867 (capacity bound)
+ConstZeroS16_2472C	0x0802472C	3	MATCHED	src/wave3_e_old.c	6 B + 2 B 00 pad; OLD_agbcc (main agbcc DCEs the kept lsls r0,r0,#24); NEW IDIOM: probe old_agbcc when a kept-but-unused computation blocks
+StoreTwoHalves_030BC	0x080030BC	3	MATCHED	src/wave3_e.c	6 B + 2 B 00 pad; main agbcc; p[4]=a; p[5]=b (u16)
+TeardownWrap_361DC	0x080361DC	3	MATCHED	src/wave3_e.c	8 B; main agbcc; EntryMgr_Teardown() wrapper (extern, matched in entrymgr.c)
+SetXY_174CC	0x080174CC	3	MATCHED	src/wave3_e.c	8 B; main agbcc; o+=0x78; *(u16*)(o+4)=x; *(u16*)(o+6)=y (0x7C/0x7E); 0x080174xx sprite-attribute block
+WriteEwramHalf_1007C	0x0801007C	3	MATCHED	src/wave3_e.c	12 B (8+pool); main agbcc; *(u16*)(0x02005160+0x46)=v via u32 base local (anti-fold)
+DivZeroStub_4DEDE	0x0804DEDE	3	MATCHED	ldscript BYTE (src/wave3_e_noiw.c)	10 B; agbcc WITHOUT -mthumb-interwork; sub_0804DD9C(); return 0; pop{pc} epilogue; emitted via BYTE() (ROM has 00 29 after — unmatched code, no pad correct); SUBALIGN(1) does not pin 2-aligned BYTE sections reliably
+SetField204_04164	0x08004164	3	MATCHED	src/wave3_e.c	10 B + 2 B 00 pad; main agbcc; *(u32*)(p+0x204)=v
+InitTriple_03090	0x08003090	3	MATCHED	src/wave3_e.c	16 B (10+2+pool); main agbcc; p[0]=a; p[1]=0x0816E2CC; p[2]=c; struct-init family with StoreTwoHalves_030BC/SetField204_04164
+InitRec8_267B4	0x080267B4	3	MATCHED	src/wave3_e.c	12 B; main agbcc; 8-byte record init (0x13/kind/0); explicit u32 v temp pins zero to r2; 19 callers
+TableGet_24734	0x08024734	3	MATCHED	src/wave3_e.c	16 B (12+pool); main agbcc; gTbl_0822D69C[i] (0x080Fxxxx code-pointer table)
+SetPairZero_28874	0x08028874	3	MATCHED	src/wave3_e.c	12 B; main agbcc; p[0]=(u8)v; p[1]=0
+BxR3_ThunkDup	0x0804BDA2	3	ASM	ldscript BYTE	2 B; duplicate libgcc-style bx r3 thunk (no pad); unproducible in C under -mthumb-interwork (agbcc routes via bl _call_via_r3)
+GetField17_U8	0x08017474	3	MATCHED	src/wave3_a.c	4 B; main agbcc; return s[17]; 49 callers (hot accessor)
+GetField22_U16	0x080265F4	3	MATCHED	src/wave3_a.c	4 B; main agbcc; return *(u16*)(s+22)
+GetField24_U8	0x0802654C	3	MATCHED	src/wave3_a.c	4 B; main agbcc; return s[24]
+SetEwram5130_12	0x0800EDE4	3	MATCHED	src/wave3_a.c	12 B incl pool; main agbcc; *(u16*)(0x02005130+12)=v (base via local)
+GetEwramBD20_130	0x0804A3F0	3	MATCHED	src/wave3_a.c	12 B incl pool; main agbcc; return *(u8*)(0x0200BD20+130)
+SetField120_U16Pair	0x080174C4	3	MATCHED	src/wave3_a.c	8 B; main agbcc; s+=120 required (else base stays r3); *(u16*)(s+120)=b; *(u16*)(s+122)=c
+GetIndexedU8	0x080258F8	3	MATCHED	src/wave3_a.c	12 B (10+0000); main agbcc; return *(u8*)(a+((u16)b<<2)+21); NEW IDIOM: ((u16)b)<<2 -> lsls #16; lsrs #14 (vs (u16)(b<<2) -> lsls #18; lsrs #16)
+CopyMosaicReg	0x08002EE0	3	MATCHED	src/wave3_a.c	20 B incl pool; main agbcc; *(u16*)0x0400004C = *(u16*)0x02003240 (REG_MOSAIC from EWRAM mirror)
+GetRomTableU16	0x080266F0	3	MATCHED	src/wave3_a.c	16 B (12+pool); main agbcc; *(u16*)(0x0822740C+(idx<<4)+6); 16-byte ROM table
+InitLinkedNode	0x0800440C	3	MATCHED	src/wave3_a.c	16 B; main agbcc; *0x0200081C=s; *(s+12)=s+20; t=s; t+=20 idiom for split adds
+Frag_0803D9EC	0x0803D9EC	3	INTERIOR	-	Wave 5: proven interior — fallthrough from 0x0803D9E8 (bl EntryMgr_Teardown), zero incoming edges; bl EntryMgr_Setup + b 0x0803DA92 shared epilogue. See docs/func_list_v2_7_addendum.txt
+Frag_0802C6E6	0x0802C6E6	4	INTERIOR	-	host sub_080298FC (0x080298FC-0x0802C7B2); intra-function long-branch target (was BLOCKED as mid-function fragment; resolved by batch J)
+Wrap_0804DF9E	0x0804DF9E	4	MATCHED	ldscript BYTE (src/wave4_j_noiw.c)	MATCHED via no-interwork TU (predicted pop{pc} candidate — cf. DivZeroStub); 8 B emitted via BYTE(), GAS pad absent in ROM
+Frag_0804C558	0x0804C558	3	BLOCKED	(worker A)	BLOCKED: ROM does ldrb r3,[r2] (result in r3, not ABI r0); compiler consistently uses r0; see docs/match_notes_wave3_a.md
+Task_3531C	0x0803531c	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_367E0	0x080367e0	7	MATCHED	src/wave7_b.c	9-mode task state machine on p[5]; old_agbcc; 564B; corrected 3 Wave-5 constants (p[0x469f], tbl 0x0822FCA4, mask 0xFFFFFC3F)
+Task_36F34	0x08036f34	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_3719C	0x0803719c	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_37B4C	0x08037b4c	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_385A8	0x080385a8	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_3AFFC	0x0803affc	17	BLOCKED	(staging)	W17-B: best 351 diffs (was 363), 936/928B old_agbcc. TAIL-SHARING SOLVED (8/10 insns exact): mid-switch tail_c + function-scope u8 z deferred-zero + explicit u8 *q ordering reproduces ROM pattern (case3: bl;ldr r0;adds r1;movs r2,#0;movs r0,#9;b shared; case13: fallthrough; shared strb r0,[r1]; shared tail ldr r1;adds r0;strb r2,[r0];movs r5,#1). Only diff: case13 pool reg r0 vs r2. w15 288-diff REPRODUCED (287). Literal pinning NOT viable (probe). Modes 2/4 lsls;ldr;lsrs interleave resists. See docs/match_notes_wave17_B.md
+Task_3B3A0	0x0803b3a0	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_3E144	0x0803e144	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_47860	0x08047860	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_47CE4	0x08047ce4	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_48400	0x08048400	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_48658	0x08048658	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Task_49AB0	0x08049ab0	4	BLOCKED	(worker F)	BLOCKED: whole-function register allocation; task mode-dispatch template; see docs/match_notes_wave4_f.md
+Dispatch_0816E2C0_2	0x08001D98	4	MATCHED	src/wave4_i_old.c	32 B; old_agbcc; tbl[((u8*)0x02002F80)[2]]((u8*)0x02002F80); two pools + 0000 pad
+SelBlob_Ret	0x0800303C	4	MATCHED	src/wave4_i.c	28 B (26+2pad); main agbcc; Text_SelectBlob(v); return (s16)v; static 0000 pad
+Dispatch_0816E304	0x0800330C	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; tbl[((s[0x18]<<1)|s[0x19])&3](s,b) via _call_via_r2
+CpuFastSet_Vram	0x080045F8	4	MATCHED	src/wave4_i_old.c	44 B; old_agbcc; CpuFastSet(0x0805633C,0x06007000+((*(u16*)0x020031E4&0xC)<<12),0x200)
+Dispatch_081705A4_0	0x08004BC0	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; s8; r=tbl[s[0]](s); s[4]=(u8)r; return (s8)s[4]
+Dispatch_08173064_1	0x0800AC70	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; tbl[s[1]](s); return 5
+Dispatch_081734F4_0	0x0800CD38	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; s[8]=(u8)tbl[s[0]](s)
+CallEwSet8_72	0x0800EE8C	4	MATCHED	src/wave4_i.c	12 B (10+2pad); main agbcc; EwSet8_72(); static 0000 pad
+Dispatch_08223D08_10	0x080120F0	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08223E94_10	0x08015A48	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226A24_10	0x0801D3A8	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226DD8_10	0x0801F224	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226EDC_10	0x08020588	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226F2C_10	0x0802103C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226FEC_10	0x08021564	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_0822701C_10	0x0802181C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_0822709C_10	0x08021E34	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08227140_10	0x08022680	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08227168_10	0x0802295C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_082271C8_10	0x08023070	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_StkTbl	0x08023278	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; struct-copy 3-word tbl to stack; tbl[s[0xD]](s)
+Dispatch_082271F4_10	0x0802372C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Wrap_GetRomTableU16	0x08024634	4	MATCHED	src/wave4_i.c	20 B (18+2pad); main agbcc; return GetRomTableU16(idx); static 0000 pad
+Wrap_TblGet11	0x0802465C	4	MATCHED	src/wave4_i.c	20 B (18+2pad); main agbcc; return TblGet11(idx); static 0000 pad
+GetEnt_U16_14	0x08024F08	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; b=*(0x02007090+0x14); return GetU16_Off14(b+b[0x1B0]*144)
+GetEnt_U16_10	0x08024F48	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; b=*(0x02007090+0x14); return GetU16_10(b+b[0x1B0]*144)
+GetEnt_U8_24	0x08024FF4	4	MATCHED	src/wave4_i.c	24 B; main agbcc; return GetField24_U8(base+0x18)
+GetEnt_U8_19	0x0802500C	4	MATCHED	src/wave4_i.c	24 B; main agbcc; return GetU8_19(base+0x18)
+GetEnt_U16_22	0x08025024	4	MATCHED	src/wave4_i.c	24 B; main agbcc; return GetField22_U16(base+0x18)
+GetEnt_IdxByte1	0x080251B8	4	MATCHED	src/wave4_i_old.c	32 B (30+2pad); old_agbcc; return GetByte1_25A08(s+s[0x1B0]*144); static 0000 pad
+AddTbl_S14	0x0802588C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; return GetRomTableU16(s[1])+*(u16*)(s+14); call-first operand order
+AddTbl_S14_Idx	0x080258A4	4	MATCHED	src/wave4_i_old.c	28 B (26+2pad); old_agbcc; return GetRomTableU16(idx)+*(u16*)(s+14); static 0000 pad
+SetSlot_IfLE29	0x08025934	4	MATCHED	src/wave4_i.c	36 B; main agbcc; if(a>29) return 1; SetU8_0_FF1(s+(a*4+0x14),b)
+Sub80_Field22	0x080265F8	4	MATCHED	src/wave4_i.c	20 B; main agbcc; return 0x80-GetField22_U16(s); no u16 local
+Dispatch_0822DC84_1	0x08027718	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+EntMgr_Reinit1	0x08027730	4	MATCHED	src/wave4_i.c	24 B; main agbcc; u8 zero idiom; s[1]=1,s[3]=0,s[2]=0; Teardown; Setup
+EntMgr_Reinit2	0x08027748	4	MATCHED	src/wave4_i.c	28 B; main agbcc; u8 zero idiom; Teardown; s[1]=2,s[3]=0,s[2]=0; Setup
+EntMgr_ClearBit3	0x08027CFC	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; int mask=-7; p[3]&=mask; Teardown
+Dispatch_0822EA6C_4	0x080350B4	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+EntMgr_Reinit45	0x0803510C	4	MATCHED	src/wave4_i.c	28 B; main agbcc; u8 zero idiom; Teardown; s[4]=2,s[5]=0; Setup; ret 0
+Dispatch_0822EB58_1	0x08035DF4	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+EntMgr_Reinit12	0x08035E40	4	MATCHED	src/wave4_i.c	28 B; main agbcc; u8 zero idiom; Teardown; s[1]=2,s[3]=0,s[2]=0; Setup
+Set469F_Dispatch0	0x080365F8	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; s[0x469F]=0; tbl[s[1]](s)
+Set469F_Dispatch1	0x0803661C	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; s[0x469F]=1; tbl[s[1]](s)
+Set469F_Dispatch2	0x08036640	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; s[0x469F]=2; tbl[s[1]](s)
+Dispatch_08230D94_1	0x08037958	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+Dispatch_08231098_1	0x08038E70	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+Dispatch_08232330_1	0x0803AE2C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+sub_0803C20E	0x0803C20E	4	INTERIOR	-	Wave 5: proven interior — fallthrough from 0x0803C20A (bl 0x0804A2DC), zero incoming edges; bl EntryMgr_Setup then epilogue pop/bx r1. See docs/func_list_v2_7_addendum.txt
+Dispatch4_R3	0x080400D0	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; return (u8)_call_via_r3(s,b,c,tbl[s[4]])
+Dispatch_08232D2C_4	0x08042AC8	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+Dispatch_08232E48_4	0x08045EA0	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+Dispatch_08233A44_2	0x080468EC	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[2]](s)
+CopyHdr_Dispatch	0x08047600	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; s8; *(u16*)s=*(u16*)(p+4); tbl[p[0]](p), p=0x0200B7A8
+Dispatch_08233C54_4	0x08047CA4	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+sub_08047CC0	0x08047CC0	4	BLOCKED	n/a	32 B; movs r3,#0 scheduling not reproducible; see match_notes_wave4_i.md
+Dispatch_08234314_2	0x08048260	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[2]](s)
+EntMgr_Reinit23	0x080482BC	4	MATCHED	src/wave4_i.c	28 B; main agbcc; u8 zero idiom; Teardown; s[2]=2,s[3]=0; Setup; ret 0
+Dispatch_08234B74_4	0x080499EC	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+Dispatch_08234D4C_0	0x0804AF90	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; s8 return; tbl[s[0]](s)
+Dispatch_08234D60_0	0x0804B334	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; s8 return; tbl[s[0]](s)
+CallVia_Mem1	0x0804CA1C	4	MATCHED	src/wave4_i.c	20 B; main agbcc; (*(u32*)0x0200CE0C)(s) via _call_via_r1
+Dispatch_PostInc	0x0804DA00	4	MATCHED	src/wave4_i.c	32 B; main agbcc; tbl[*b->ptr++](a,b) via _call_via_r2
+CallVia_Mem2	0x0804DA20	4	MATCHED	src/wave4_i.c	20 B; main agbcc; (*(u32*)0x0200CD80)(a,b) via _call_via_r2
+List_UnlinkPushHead	0x080044F4	4	MATCHED	src/wave4_j_old.c	old_agbcc; 36 B; doubly-linked-list unlink+push-head; 29 table refs
+Obj_SetFromTableA	0x08011E98	4	MATCHED	src/wave4_j_old.c	old_agbcc; 24 B; table 0x08223CC0
+Obj_SetFromTableB	0x08017084	4	MATCHED	src/wave4_j_old.c	old_agbcc; 24 B; table 0x082243D8
+Obj_SetFromTableC	0x08020F58	4	MATCHED	src/wave4_j_old.c	old_agbcc; 24 B; table 0x08226EF0
+sub_0804C4FC	0x0804C4FC	4	BLOCKED	(worker J)	BLOCKED: lr-push quirk; compilers push lr, ROM push{r4,r5}/bx lr; see docs/match_notes_wave4_j.md
+sub_0802BCE2	0x0802BCE2	4	INTERIOR	-	host sub_080298FC (0x080298FC-0x0802C7B2); intra-function long-branch target; 3 BL callers all intra-function
+sub_0802BCF8	0x0802BCF8	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802BD14	0x0802BD14	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802BD66	0x0802BD66	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 31 BL callers intra-function
+sub_0802BD72	0x0802BD72	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802BDEE	0x0802BDEE	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802BDF6	0x0802BDF6	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 15 BL callers intra-function
+sub_0802BEA2	0x0802BEA2	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 3 BL callers intra-function
+sub_0802C010	0x0802C010	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C068	0x0802C068	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C196	0x0802C196	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C23C	0x0802C23C	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C2CE	0x0802C2CE	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C344	0x0802C344	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C3C0	0x0802C3C0	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C4C0	0x0802C4C0	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C5C0	0x0802C5C0	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C5F6	0x0802C5F6	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C618	0x0802C618	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C64A	0x0802C64A	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C686	0x0802C686	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C6B8	0x0802C6B8	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C6EC	0x0802C6EC	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C71E	0x0802C71E	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 26 BL callers intra-function
+sub_08033962	0x08033962	4	INTERIOR	-	host sub_08030AD4 (0x08030AD4-0x08033AC2); intra-function long-branch target; 1 BL caller (0x08030B0C) intra-function
+Memcpy16	0x08000758	4	MATCHED	src/wave4_h.c	120B; agbcc; 16-bit memcpy via CpuFastSet/CpuSet; barriers for prologue order; cnt temp for exact `movs r2,#31; ands r2,r4; lsrs r2,r2,#1`
+Copy8_28D0	0x080028D0	4	MATCHED	src/wave4_h.c	46B; agbcc; copy 8B via CpuFastSet if *(u16*)(s+4)!=0 and s[6]==0; dst=0x03002420+(b<<5), src=s+*(u32*)s+(a<<5); b5 hoisted for `lsls #24; lsrs #19`
+Init_216A8	0x080216A8	4	MATCHED	src/wave4_h.c	42B; agbcc; init with ChipSlot_Setup(s, 0x1600, 0); two-step `v=2; v|=s[0xA]; v|=1` for exact orr sequence
+TableLookup_11C80	0x08011C80	4	MATCHED	src/wave4_h.c	44B; agbcc; table lookup 32B entries at 0x0817A9C4; NULL if idx==0 or idx>=GetLimit_11C50() (0x4867)
+Reinit_350D0	0x080350D0	4	MATCHED	src/wave4_h.c	46B; agbcc; zeroes s+0x46A8/0x46AC, sets s[4]=1, then EntryMgr_Teardown/Setup; returns 0
+Memset16	0x080006DC	4	BLOCKED	n/a	124B; agbcc+old_agbcc; 16-bit fill val-first; prologue `lsrs r1; adds r7,r1` (live-range split) not reproducible — compiler emits `lsrs r7` directly; see match_
+TaskMgr_Update	0x08000CD4	4	MATCHED	src/wave4_g.c	130 B; main agbcc; task/object manager, 3x0x18 entries at 0x030023C8; calls Task_Register + sub_080002dc (unmatched fwd-ref); inline asm for (s0&4) dest-reg
+HBlank_VCountUpdate	0x08000978	5	MATCHED	src/wave5_blk_old.c	UNBLOCKED Wave 5 (was BLOCKED): old_agbcc (instruction ORDER: movs-before-ldrb); split-adds anti-folding (p=base; p+=0x167); wave4_g inline-asm dest-r0 for AND/OR; coordinator-verified 0 diffs over 160 B in built ROM
+ObjInit_TypeA	0x08017F8C	7	MATCHED	src/wave7_d_old.c	Dual-branch s[0x10]==2; old_agbcc/GAS naturally splits literal pools; idx<<=2 in-place
+ObjInit_TypeB	0x0801DCC0	7	MATCHED	src/wave7_d_old.c	Double-OR (2|t|1) via v=2;v|=s[0xA];v|=1; combiner dest fixed by pinning m41->r0
+Task_35E0C	0x08035e0c	4	MATCHED	src/wave4_k.c	52 bytes, main agbcc; task init: p[1]=2, zero p[2..4]/p[0x4699]/p[0x46B7]; sub_0804A2DC(6); Teardown/Setup
+Task_35EB0	0x08035eb0	4	MATCHED	src/wave4_k_old.c	92 bytes, OLD_AGBCC; switch p[2]: case0 sub_08004E24(0), p[2]++; case1 Teardown, if sub_08004E0C(3): p[1]=4,p[3]=0,p[2]=0, *(u16*)0x020031E0 &= 0xEDFF &= 0xDBFF
+Task_35F0C	0x08035f0c	4	MATCHED	src/wave4_k.c	66 bytes (68 built, +2 pad stripped), main agbcc; if p[0x46B7]==8: sub_0804A328, sub_080267B4, p[0x4698]=0; else p[1]=1; Teardown/Setup
+Task_35F50	0x08035f50	4	BLOCKED	-	352 bytes; big switch on p[3] with 4 cases + default; case0 table-index idiom + fallthrough to case1; case2 flag logic on *(u16*)0x02002F50, Text_SelectBlobIdx,
+Task_360B0	0x080360b0	4	MATCHED	src/wave4_k.c	18 bytes (20 built, +2 pad stripped), main agbcc; return (u8)sub_080400D0(p,0,0)
+Task_36664	0x08036664	4	MATCHED	src/wave4_k.c	68 bytes exact, main agbcc; task init with *(u32*)(p+0x4698)=0, *(u32*)(p+0x469C)=0; literal-0 trick forces pool loads; sub_0804A2DC(7); Teardown/Setup
+Task_366A8	0x080366a8	5	MATCHED	src/wave5_blk.c	UNBLOCKED Wave 5 (was BLOCKED): s32 v=(s8)sub_08004E0C(0) forces lsls+asrs; condition is if(!v) not if(v) (wave4_k notes had it inverted); coordinator-verified 0 diffs over 64 B in built ROM
+Task_36724	0x08036724	4	MATCHED	src/wave4_k_old.c	92 bytes, OLD_AGBCC; twin of Task_35EB0; u8 z declared at if-body top with z=0 placed mid-ands-block gets movs scheduling right
+Task_36780	0x08036780	4	MATCHED	src/wave4_k.c	96 bytes exact, main agbcc; sub_080267B4, sub_0804A328; if/else chain on p[0x469F] (not switch) for linear cmp/bne; p[0x4698]=1/2/3; Teardown/Setup
+Task_36BA8	0x08036ba8	4	BLOCKED	-	256 bytes; Teardown; gEwram_02004E40[0x14]|=1; switch p[5]: case0 ROM fn-table dispatch via 0x082300D4/0x0822FF4C; case1 sub_0800B308 poll, g[8] check, sub_0804
+Task_36CA8	0x08036ca8	4	BLOCKED	-	260 bytes; near-twin of Task_36BA8; table 0x0822FF58, *(u16*)(gRom_0822FE60+2+idx*6), p[0x4699]=6; same prologue allocation issue; not attempted in detail
+Task_37440	0x08037440	6	MATCHED	src/wave6_blkb_old.c	UNBLOCKED Wave 6 (was BLOCKED): block-scope r1 pinning for g[0x14]|=1; goto-beq dispatch; inline-asm for p[5]++ and strb; old_agbcc; coordinator-verified 0 diffs over 120 B in built ROM
+TableCall_BB78	0x0800BB78	5	MATCHED	src/wave5_h1.c	main agbcc; indirect call via ROM tables 0x081731A0/0x0817313C guarded by *(s16*)(s+0x14)!=-1; tbl/idx locals-in-if idiom; coordinator-verified 0 diffs over 52 B in built ROM
+ListIterate_D568	0x0800D568	5	MATCHED	src/wave5_h1.c	main agbcc; linked-list traversal via InitLinkedNode, _call_via_r1 per node to s+0x14 sentinel; literal-in-if idiom; coordinator-verified 0 diffs over 46 B in built ROM
+TableDispatch_9380	0x08009380	5	MATCHED	src/wave5_h1_old.c	old_agbcc (r0/r1 allocation); 6-entry 0x34-stride loop at 0x02004CE0, dispatch via 0x0817212C[(v>>6)&0xf]; ((u32)v<<22)>>28 idiom; coordinator-verified 0 diffs over 76 B in built ROM
+Task_360C4	0x080360C4	5	MATCHED	src/wave5_g2.c	main agbcc; Teardown, switch p[3] 5 cases (poll fns sub_0800B148/B2D8/B320/B308/B2B4/B2F0, ROM table 0x0822EB44), Setup; literal-0 stack-arg idiom; coordinator-verified 0 diffs over 200 B in built ROM
+Task_40798	0x08040798	5	MATCHED	src/wave5_g2.c	main agbcc; 7x Gfx_BlitRequest(ptr[i],0x2f,1/3/5/7/9/11/13,8,0), ROM ptrs 0x082325E4..0x0823261C; coordinator-verified 0 diffs over 156 B in built ROM
+Task_45200	0x08045200	5	MATCHED	src/wave5_g2.c	main agbcc; 7x Gfx_BlitRequest(ptr[i],1,1/3/5/7/9/11/13,8,0), ROM ptrs 0x08232C04..0x08232C3C; coordinator-verified 0 diffs over 156 B in built ROM
+Task_4529C	0x0804529C	5	MATCHED	src/wave5_g2.c	main agbcc; 7x Gfx_BlitRequest(ptr[i],0x2f,1/3/5/7/9/11/13,8,0), same 0x08232C04 table; coordinator-verified 0 diffs over 156 B in built ROM
+sub_08003154	0x08003154	6	MATCHED	src/wave6_blka.c	UNBLOCKED Wave 6 (was BLOCKED): opaque OR-constants defeat value-fold (movs #16 via asm); pool 0x0800330d correction; coordinator-verified 0 diffs over 100 B in built ROM
+StructInit_031B8	0x080031B8	7	MATCHED	src/wave7_d.c	Struct-init family; pinned va1->r6/va2->r8, pinned asm mov r1,r8; m->r2/z->r5 anti-r9-spill
+StructInit_0322C	0x0800322C	7	MATCHED	src/wave7_d.c	Struct-init variant; true size 100B+8B pool; z->r3, 0x100 via (0x80<<1), m|=3 opaque asm OR
+sub_08003298	0x08003298	6	MATCHED	src/wave6_blka.c	UNBLOCKED Wave 6 (was BLOCKED): fresh -0x3f via opaque movs+negate, m&=-4, m|=1; coordinator-verified 0 diffs over 106 B in built ROM
+sub_0800288C	0x0800288C	5	BLOCKED	-	Wave 5 H1: regalloc — ROM copies both args at start (s->r2,a->r3), reloads v in else; see docs/match_notes_wave5_h1.md
+sub_08017D50	0x08017D50	6	MATCHED	src/wave6_blka_old.c	UNBLOCKED Wave 6 (was BLOCKED): ObjInit ands dest-reg via pinned idx (r1) + opaque asm (movs/and); old_agbcc; family key for 15 ObjInit fns; coordinator-verified 0 diffs over 116 B in built ROM
+sub_080129F8	0x080129F8	5	BLOCKED	-	Wave 5 H1: else-branch regalloc (tbl first into r0); see docs/match_notes_wave5_h1.md
+sub_080351D8	0x080351D8	5	BLOCKED	-	Wave 5 G2: tail-merging divergence (146 diffs); compilers merge case2 inline (u8) check into shared block; see docs/match_notes_wave5_g2.md
+sub_08037600	0x08037600	5	BLOCKED	-	Wave 5 G2: regalloc (214 diffs); ROM base 0x02002F50 in r1; branchless (b&0x40)?0x40:0 reproduced; see docs/match_notes_wave5_g2.md
+sub_080374B8	0x080374B8	5	BLOCKED	-	Wave 5 G2: ROM p in r4, compiler r5 (112 diffs, old_agbcc); see docs/match_notes_wave5_g2.md
+sub_08049A08	0x08049A08	5	BLOCKED	-	Wave 5 G2: ROM p in r3, compiler r2 (122 diffs); see docs/match_notes_wave5_g2.md
+sub_0804C8EC	0x0804C8EC	5	BLOCKED	-	Wave 5 G2: structural scheduling (223 diffs); script magic 0x68736D53 at *(0x03007FF0), EWRAM ctx 0x0200CD80; see docs/match_notes_wave5_g2.md
+ObjInit_207EC	0x080207EC	5	MATCHED	src/wave5_g1_old.c	old_agbcc; ChipSlot_Setup(s,0x411a,0)+IncUse; idx clamp via register-var+opaque asm; int mask=-13; coordinator-verified 0 diffs over 132 B in built ROM
+ObjInit_22EBC	0x08022EBC	5	MATCHED	src/wave5_g1_old.c	old_agbcc; table-driven ChipSlot_Setup via 0x08227174[s[17]*3]; mask r1 reused; coordinator-verified 0 diffs over 140 B in built ROM
+Task_35128	0x08035128	5	MATCHED	src/wave5_h2_old.c	old_agbcc; table poll via sub_0804dcd0; u32*tbl first for pool order; coordinator-verified 0 diffs over 72 B
+Task_35BC8	0x08035BC8	5	MATCHED	src/wave5_h2.c	s8 clamp + Text_SelectBlobIdx(0x66); coordinator-verified 0 diffs over 84 B
+Task_35C1C	0x08035C1C	5	MATCHED	src/wave5_h2.c	3x GatedDispatch; literal-0 idiom; coordinator-verified 0 diffs over 64 B
+Task_35DA4	0x08035DA4	5	MATCHED	src/wave5_h2.c	sibling of 35BC8; coordinator-verified 0 diffs over 80 B
+Task_366E8	0x080366E8	5	MATCHED	src/wave5_h2_old.c	old_agbcc; s8 table+poll; u32 z=0 in-if idiom; coordinator-verified 0 diffs over 60 B (worker size 68 corrected)
+Task_37598	0x08037598	5	MATCHED	src/wave5_h2.c	GatedDispatch+Gfx_BlitRequest; coordinator-verified 0 diffs over 48 B
+Task_37A30	0x08037A30	5	MATCHED	src/wave5_h2_old.c	old_agbcc; goto-beq branches; coordinator-verified 0 diffs over 76 B
+Task_37AD8	0x08037AD8	5	MATCHED	src/wave5_h2.c	mode dispatcher v==4/9/8; coordinator-verified 0 diffs over 116 B
+Task_38F3C	0x08038F3C	5	MATCHED	src/wave5_h2_old.c	old_agbcc; sibling of 37A30; coordinator-verified 0 diffs over 76 B
+Task_38FE4	0x08038FE4	5	MATCHED	src/wave5_h2.c	sibling of 37AD8 (v==7/0xb/0xc); coordinator-verified 0 diffs over 116 B
+Task_45EBC	0x08045EBC	5	MATCHED	src/wave5_h2.c	simple init; coordinator-verified 0 diffs over 48 B
+Task_4827C	0x0804827C	5	MATCHED	src/wave5_h2.c	u32 off + p[off-2] runtime subs; coordinator-verified 0 diffs over 52 B
+SramInit_496A8	0x080496A8	5	MATCHED	src/wave5_h2.c	SRAM via CpuFastSet/CpuSet; (0xdc<<2) shift idiom; coordinator-verified 0 diffs over 52 B
+ObjInit_1D3C0	0x0801D3C0	9	MATCHED	src/wave9_a_old.c	W9-A: coordinator independently verified byte-identical (164/164 in built ROM, dd/cmp). Single volatile asm ordered movs + memory barrier vs combiner fold. See docs/match_notes_wave9_A.md
+ObjInit_205B8	0x080205B8	7	MATCHED	src/wave7_d_old.c	Double-OR const forced to r1 via pinned asm; mask regs swapped vs TypeA; explicit u16 pad
+ObjInit_21E64	0x08021E64	16	MATCHED	src/w16d_08021e64.c	W16-D: 112 B (100+12 pool); old_agbcc; opaque zero defeats r5 zero-CSE; idx clamp; s[69] mask; coordinator-verified 0 diffs in built ROM
+sub_080230A0	0x080230A0	6	MATCHED	src/wave6_blkb_old.c	UNBLOCKED Wave 6 (was BLOCKED 2-byte): inline-asm 'add %0,%1,#0' forces redundant movs; old_agbcc; coordinator-verified 0 diffs over 112 B in built ROM
+sub_08025958	0x08025958	5	BLOCKED	-	Wave5 H2: loop regalloc; see docs/match_notes_wave5_h2.md
+sub_080281F0	0x080281F0	5	BLOCKED	-	Wave5 H2: branch regalloc; see docs/match_notes_wave5_h2.md
+sub_08035E5C	0x08035E5C	5	BLOCKED	-	Wave5 H2: s8-indexed table + nested if/else; 60 diffs; see docs/match_notes_wave5_h2.md
+sub_0804C288	0x0804C288	5	BLOCKED	-	Wave5 H2: linked-list walk with bx r3; 61 diffs; see docs/match_notes_wave5_h2.md
+sub_0804CC64	0x0804CC64	5	BLOCKED	-	Wave5 H2: magic-guarded init; 78 diffs; see docs/match_notes_wave5_h2.md
+Task_38AD4	0x08038AD4	6	MATCHED	src/wave6_l1_old.c	Wave 6 L1: bit-test priority ladder on EWRAM 0x02002F50 -> Text_SelectBlobIdx(0x66/0x67/0x68) -> EWRAM 0x02004CE0 setup; old_agbcc (r1/r3 ladder); coordinator-verified 0 diffs over 316 B in built ROM (bl to Text_SelectBlobIdx confirmed correct in full build)
+Ent_TblInit_08021000	0x08021000	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; t1=s[9] entry->+4 to s+20, s+12=1, tbl2[s[16]](s), Dispatch_08226F2C_10(s)
+ObjInit_0801AE00	0x0801ae00	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Setup(s,0x22B,0), IncUse(s,0), idx=tblbyte&3 clamp, s[0x45]=(s[0x45]&-13)|(idx<<2), s[0x22]=13, 0x600/8 pairs, Text_Sele
+ObjInit_0801DAD4	0x0801dad4	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; *(s+108)=0, t=2|t|=s[10]|1 double-OR, Setup(s,0x1400,0), IncUse(s,0), idx clamp, s[0x45]=(s[0x45]&-13)|(idx<<2) in-place
+FlagToggle_080481FC	0x080481fc	9	MATCHED	src/wave9_f_old.c	W9-F cracked (was W6-L4 BLOCKED 3-byte near-miss); pinned r4/r5/r6, tied-opaque pools, asm XOR/ands-dest; int return; coordinator to verify full build (toolchain outage at landing). See docs/match_notes_wave9_F.md
+ObjInit_08017E6C	0x08017e6c	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Setup(s,0x20C,1), IncUse(s,1), idx clamp (sh-var form), p-=0x23 reuse, scoped u32 zero for r1
+ObjInit_0801DB9C	0x0801db9c	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; 0x1dad4 variant: IncUse(s,10), Setup(s,0x501,0), s[0x22]=0 via q+z with inline-asm movs (breaks zero CSE)
+ObjInit_0801BC04	0x0801bc04	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Setup(s,0x224,0), IncUse(s,0), idx clamp, s[0x45] mask, s[0x22]=13, Vec2_AddMirrored(s,-15360,0), Text_SelectBlobIdx(0x9
+ObjInit_0801ACF4	0x0801acf4	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Setup(s,0x226,0), IncUse(s,0), idx clamp, p-=0x23, scoped zero, *(s+88)=0x700, *(s+96)=-8, *(s+92/100)=0
+Copy3_08011CD4	0x08011cd4	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs in 94B extent; u16 a, 3 outputs; TableU32_0820B6A4(a); copies up to 3 nonzero u32s via s16 i loop; +94 0000 is inter-fn gap
+HwSetup_0804CCB8	0x0804ccb8	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; double-indirect via 0x03007FF0, early-return, 2x REG bit-test/set, 2x strh 0x400, CpuSet(zero,p+0x350,0x05000318)
+TextShape_0804C58C	0x0804c58c	6	BLOCKED	-	Wave 6 L4 blocker: 57-byte diff; complex regalloc (ROM uses ip/r12 for s, r4-r7 for t2/v1/i/sh). Natural C gives r7/r3/r5. Needs register-pressure engineering.
+ObjInit_0801AFE4	0x0801afe4	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Setup(s,0x242,0), IncUse(s,2), idx clamp, p-=0x23, scoped zero, *(s+88/96)=0, *(s+92)=0x200, *(s+100)=80
+Ent_TblInit_080217E0	0x080217e0	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; tbl2=0x08227018, Dispatch_0822701C_10
+Ent_TblInit_08022920	0x08022920	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x0822715C Dispatch_08227168_10
+Ent_TblInit_0801D36C	0x0801d36c	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x082243D8 t2=0x08226A04 Dispatch_08226A24_10
+Ent_TblInit_08021DF8	0x08021df8	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x08227088 Dispatch_0822709C_10
+Ent_TblInit_0802054C	0x0802054c	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x082243D8 t2=0x08226EC8 Dispatch_08226EDC_10
+Ent_TblInit_08023034	0x08023034	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x082271BC Dispatch_082271C8_10
+Ent_TblInit_08021528	0x08021528	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x08226FE4 Dispatch_08226FEC_10
+Ent_TblInit_0801F1E8	0x0801f1e8	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x082243D8 t2=0x08226DC0 Dispatch_08226DD8_10
+Ent_TblInit_08022644	0x08022644	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x08227138 Dispatch_08227140_10
+Ent_TblInit_080236F0	0x080236f0	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x082271F0 Dispatch_082271F4_10
+ObjInit_0801B6C4	0x0801b6c4	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Setup(s,0x25B,0), IncUse(s,0), idx clamp, p-=0x23, scoped zero, *(s+88/96/92)=0, *(s+100)=80
+ObjInit_0801AEF4	0x0801aef4	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Setup(s,0x22D,0), IncUse(s,0), idx clamp, p-=0x23, scoped zero, *(s+88/96/92/100)=0
+ObjInit_0801B81C	0x0801b81c	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Setup(s,0x313,0), IncUse(s,0), idx clamp, p-=0x23, scoped zero, *(s+88/96/92/100)=0
+ObjInit_08016DAC	0x08016dac	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; tbl[0x08223CF0][s[13]](s) dispatch, idx clamp, s[0x45] mask, s[0x22]=16
+LoopSet_0804C8A4	0x0804c8a4	6	BLOCKED	-	Wave 6 L4 blocker: 51-byte diff; bit-test regalloc: ROM adds r0,r7,#0; ands r0,r1 (mask->r0), mine adds r0,r1,#0; ands r0,r7 (v->r0). Loop structure matches.
+Get_0802503C	0x0802503c	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; return Sub80_Field22(gEwram_02007090+24)
+Copy_08007BEC	0x08007bec	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; Memcpy16(src, gEwram_03002420+((u16)n<<5), 32)
+Lists_0800E204	0x0800e204	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; ListIterate_D568(*(u8**)0x02005270); ListIterate_D568(*(u8**)0x020053C0)
+Wrap_08002904	0x08002904	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs; Copy8_28D0(s, a, b+0x10)
+Sram_08001E30	0x08001e30	6	BLOCKED	-	Wave 6 L4 blocker: 37-byte diff; regalloc: ROM a in r6 + base 0xE0000000 in r5 (kept across calls), mine a in r5 + base recomputed. Logic matches.
+Dispatch_0803B998	0x0803b998	6	BLOCKED	-	Wave 6 L4 blocker: bl target 0x0803C20E is INTERIOR (not a matched function); complex r8/r9 + jump-table switch, needs RE
+Tick_08028244	0x08028244	6	MATCHED	src/wave6_l4_old.c	Wave 6 L4 (old_agbcc, coordinator-verified 0 diffs): 0 diffs code+pools; s[1] 0/1 state machine, s[6]++ tick, call InitRec8_267B4(0x020070F0,9) if s[6]>180 or flag; struct-offset defeats pool f
+ObjInit_186F4	0x080186f4	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family template (opaque copy + mask block); pool-forced 0x1401
+ObjInit_1B3AC	0x0801b3ac	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family; branch layout: bne to out-of-line true branch + b over inline pool
+ObjInit_22320	0x08022320	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family; pool-forced 0x3B16; avoid u16 zero-ext (u32 local for callee)
+ObjInit_20D54	0x08020d54	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family; block zero-CSE into r5 via movs asm
+ObjInit_223E4	0x080223e4	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family template
+ObjInit_22E14	0x08022e14	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family template
+ObjInit_1ABE4	0x0801abe4	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family template
+ObjInit_1D658	0x0801d658	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family template
+ObjInit_1D828	0x0801d828	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family; pinned sh to r1 (register __asm__) for tail-call allocation
+ObjInit_1F930	0x0801f930	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family template
+ObjInit_19090	0x08019090	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): ObjInit family template
+Sram_VerifySlot	0x08001db8	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): SRAM slot verify w/ retry (3x2); key idiom: volatile asm adds/subs (GAS needs add/sub w/o 's') to defeat LICM+CSE; p computed afte
+Gfx_Blit3	0x08042ec0	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs (Gfx_Blit3 pool constants fixed by coordinator)): 3x Gfx_BlitRequest via double-deref tables; local u32 decl for callee avoids u16 zext; tB as local assigned pre-call for ldr-befor
+Mem1_AllocInit	0x0804cd70	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): Allocator init; magic 0x68736D53 (not 0x08046D53); p as u32* (counter, not ptr); 0x80000000 via movs 0x80+lsls 24; do-while with i
+Task_3AF98	0x0803af98	6	MATCHED	src/wave6_l3_old.c	Wave 6 L3 (old_agbcc, coordinator-verified 0 diffs): If/elif/else on s[0x469C]; duplicate pool entries (use separate externs); interleaved pool layout from old_agbcc; pinned r1/r0 for
+Mem1_TaskChain	0x0804b980	6	BLOCKED	-	Wave 6 L3 blocker: Early bx lr before frame, hi-reg save block, bl to hardcoded 2-byte bx-r3 stub at 0x0804BDA2, tail bx r3 to IWRAM 0x03000001. Natural C gives simple push{lr} frame; cannot reproduc
+Rank_FromValue	0x08047538	7	MATCHED	src/wave7_e_old.c	s8 switch JT (0,5,10,15,20,25 -> 0-5); old_agbcc omits push {lr} for true-leaf switch
+FilterCopy	0x08025578	7	MATCHED	src/wave7_e.c	u8 filter-copy fwd/bwd modes; pool 0x082297E8; n-- before src++/src-- ordering
+Script_StepState	0x0803f480	7	MATCHED	(worker B, wave9)	964B, 0 diffs, old_agbcc. 22-case script stepper; see docs/match_notes_wave9_B.md. Landed mmbcc/src/wave9_b_old.c.
+GetTableEntry_08173FAC	0x08011cac	7	MATCHED	src/wave7_g2_old.c	24 B (20+pool); return idx?&table[idx]:0 (address, not value)
+GetMaskedByte	0x08025324	7	MATCHED	src/wave7_g2_old.c	24 B; idx>248?0:p[idx]&0x7f
+FlagCheck_0200BCE8_4	0x080363d4	7	MATCHED	src/wave7_g2_old.c	24 B; opaque movs #1 idiom for ldr-first order; v=1;v&=p[4]
+InRange3B0_3B1	0x0803fcc4	7	MATCHED	src/wave7_g2_old.c	28 B (24+pool); int w=v + lim var for signed bgt/blt + subs #1
+TryConsume	0x08040060	7	MATCHED	src/wave7_g2_old.c	24 B; if/else (not goto) for bcs layout; *p<n?1:(*p-=n,0)
+AddTableEntry_082344CC	0x080496e8	7	MATCHED	src/wave7_g2_old.c	28 B (24+pool); return table[a]+b (u8)
+Clear126_127_Set156	0x0804aa78	7	MATCHED	src/wave7_g2_old.c	28 B (24+pool); p[127]=p[126]=0,*(u32*)(p+156)=*src
+Clear126_127_160_Set161	0x0804ac48	7	MATCHED	src/wave7_g2_old.c	28 B (24+pool); direct indexes let compiler build walking ptr
+FlagCheck_0200B7E0_3	0x08027e44	7	MATCHED	src/wave7_g2_old.c	24 B; same idiom, ldrb [r1,#3]
+SetTaskField0_030023C8	0x08000e64	7	MATCHED	src/wave7_g2_old.c	28 B (22+2pad+pool); task slots 24B stride; if(p[0]!=1)p[0]=1
+CopyBlendRegs_04000052	0x08002e50	7	MATCHED	src/wave7_g2_old.c	32 B (22+2pool); pinned r2=dst,r1=src; explicit dst+=1/dst-=2 walking
+SetDiffSum	0x080110c8	7	MATCHED	src/wave7_g2_old.c	24 B (22+00 pad); explicit int bb=b,aa=a for order; (aa-bb)<<12,(bb+aa)<<11
+Check119_Minus3_Le1	0x08011f50	7	MATCHED	src/wave7_g2_old.c	24 B (22+00 pad); (u8)(s[119]-3)<=1
+GetBoundedByte_6	0x080252d0	7	MATCHED	src/wave7_g2_old.c	24 B (22+00 pad); idx>=lim?0xff:ptr[idx]; lim@+6,ptr@+0
+GetBoundedByte_18	0x08025478	7	MATCHED	src/wave7_g2_old.c	24 B (22+00 pad); idx>=lim?0:ptr[idx]; lim@+18,ptr@+8
+GetStride4Byte20	0x080258c0	7	MATCHED	src/wave7_g2_old.c	24 B (22+00 pad); idx>29?0:*(s+idx*4+20)
+Clear126_127_Set131	0x0804a494	7	MATCHED	src/wave7_g2_old.c	28 B (24+pool); p[127]=p[126]=0,p[131]=v
+sub_0804BE2A	0x0804be2a	7	BLOCKED	src/wave7_g2.c	alternate-entry fragment of 0x0804be28 (which has ldrb r3,[r2,#0] at 0x0804be28); push{r0}/pop{r0} + r3 in/out contract 
+SwapPtr	0x08004188	7	MATCHED	src/wave7_g2_old.c	20 B; off=(y<<2)+(x<<7); tmp=*r;*q=tmp;*r=q
+Init_08004244	0x08004244	7	MATCHED	src/wave7_g2_old.c	20 B; *(void**)s=pp (not *pp!); s[6]=(*pp)[1]+1
+GetPtr_08008610	0x08008610	7	MATCHED	src/wave7_g2_old.c	24 B (20+2pool); asymmetric: s[11]?0x02004aa0:*0x02003674
+IsZero_02005160	0x08010088	7	MATCHED	src/wave7_g2_old.c	20 B; goto-ladder for beq layout; 6 identical copies
+IsZero_02005160	0x08010124	7	MATCHED	src/wave7_g2_old.c	20 B; identical copy
+IsZero_02005160	0x08010248	7	MATCHED	src/wave7_g2_old.c	20 B; identical copy
+IsZero_02005160	0x080102f4	7	MATCHED	src/wave7_g2_old.c	20 B; identical copy
+IsZero_02005160	0x080103cc	7	MATCHED	src/wave7_g2_old.c	20 B; identical copy
+IsZero_02005160	0x080104f4	7	MATCHED	src/wave7_g2_old.c	20 B; identical copy
+IsOne_020051B0_4	0x0801109c	7	MATCHED	src/wave7_g2_old.c	20 B; goto-ladder + opaque movs (compiler outsmarted ladder for ==1)
+SetBytes_08011F68	0x08011f68	7	MATCHED	src/wave7_g2_old.c	20 B; volatile opaque movs barrier for scheduling; p=s+124,p[5]=v
+ClampAdd200	0x08024500	7	MATCHED	src/wave7_g2_old.c	20 B; v>48?200:(u8)(v+200)
+Sub200	0x08024514	7	MATCHED	src/wave7_g2_old.c	20 B; v<=199?0:(u16)(v-200)
+GetClampedTable	0x0802453c	7	MATCHED	src/wave7_g2_old.c	24 B (20+pool); v>48?v=48; table[v]
+SetByte432	0x08026108	7	MATCHED	src/wave7_g2_old.c	20 B; v>2?v=2; s[432]=v (216*2 codegen)
+Is208or217	0x0803fe1c	7	MATCHED	src/wave7_g2_old.c	20 B; r=0; if(v==208||v==217)r=1
+InRange224_230	0x0803fe30	7	MATCHED	src/wave7_g2_old.c	20 B; int w=v + lo var to defeat <= transform; signed bgt/blt
+Clear126_127_160	0x0804ad24	7	MATCHED	src/wave7_g2_old.c	24 B (20+pool); p[127]=p[126]=p[160]=0
+ClearSignBit	0x0804c5f4	7	MATCHED	src/wave7_g2_old.c	28 B (20+2pool); pinned r3; if(*(s+52)==0x68736d53)*(s+4)&=0x7fffffff
+Clear16_02003090	0x08002a04	7	MATCHED	src/wave7_g2_old.c	24 B (18+2pad+pool); int p,q for signed bge; z=0 init before q
+SetBit2	0x08007cdc	7	MATCHED	src/wave7_g2_old.c	24 B (18+2pad+pool); p=g+v*8; p[7]|=4
+OrBit	0x0800b29c	7	MATCHED	src/wave7_g2_old.c	24 B (18+2pad+pool); if(g[7]!=0)g[7]=v|g[7]
+Byte19_Bits3F_Set	0x08021d84	7	MATCHED	src/wave7_g2_old.c	20 B (18+00 pad); mask&=s[19] idiom for movs-before-ldrb
+Clamp48	0x08024528	7	MATCHED	src/wave7_g2_old.c	20 B (18+00 pad); v>48?0:(u8)v
+SetIfGt199	0x0802571c	7	MATCHED	src/wave7_g2_old.c	20 B (18+00 pad); if(a>199){s[1]=a;s[0]=b}
+sub_08033AB2	0x08033ab2	7	BLOCKED	src/wave7_g2.c	shared epilogue fragment: ldr r0,[sp,#64];add sp,#80;pop{r3-r5};mov r8-r10;pop{r4-r7};pop{r1};bx r1 (not bx lr); no prol
+sub_0803DA92	0x0803da92	7	BLOCKED	src/wave7_g2.c	shared epilogue fragment: ldr r0,[sp,#20];add sp,#100;pop{r3-r5};mov r8-r10;pop{r4-r7};pop{r1};bx r1; no prologue
+CmpH6	0x08046de4	7	MATCHED	src/wave7_g2_old.c	20 B (18+00 pad); (*(s+6)==b)?1:0
+GetPtr_0800DCF8	0x0800dcf8	7	MATCHED	src/wave7_g2_old.c	16 B; manual order: t=s,u=b<<24,s+=12,s+=*(t+12),u>>=19,s+=u
+Inc4_Clear5_7	0x080112bc	7	MATCHED	src/wave7_g2_old.c	16 B; v=s[4]+1,z=0 for reg order
+Byte128_IsZero	0x08016f88	7	MATCHED	src/wave7_g2_old.c	16 B; s+=124; goto-ladder; s[4]==0
+TestBit16	0x08017494	7	MATCHED	src/wave7_g2_old.c	16 B; (1<<bit)&s[16]
+SetBit16	0x080174a4	7	MATCHED	src/wave7_g2_old.c	16 B; s[16]|=(1<<bit)
+GetPtr_0802365C	0x0802365c	7	MATCHED	src/wave7_g2_old.c	16 B; identical to 0800dcf8
+IncMod128	0x080252e8	7	MATCHED	src/wave7_g2_old.c	16 B; v=0x7f;v&=s[0];v++;w=0x80;v|=w (decls at top for C89)
+Clear20_Set21_FF	0x08025994	7	MATCHED	src/wave7_g2_old.c	16 B; pinned r1; (u)p+(u)s for adds r1,r1,r0 order
+Gt199	0x08026700	7	MATCHED	src/wave7_g2_old.c	16 B; v>199?1:0
+sub_0802C7A4	0x0802c7a4	7	BLOCKED	src/wave7_g2.c	shared epilogue fragment: add sp,#88;pop{r3-r5};mov r8-r10;pop{r4-r7};pop{r1};bx r1; no prologue
+Eq2260000	0x0803fef8	7	MATCHED	src/wave7_g2_old.c	20 B (16+pool); x=(u)v<<16 first for order; r=(x==0x02260000)
+sub_0804427C	0x0804427c	7	BLOCKED	src/wave7_g2.c	shared epilogue fragment (T): add sp,#4;pop{r3-r5};mov r8-r10;pop{r4-r7};pop{r1};bx r1; no prologue
+SetIfXZero	0x08008bb8	7	MATCHED	src/wave7_g2_old.c	16 B (14+00 pad); if((x<<24)==0)*s=v
+SetByte620_FF	0x08009640	7	MATCHED	src/wave7_g2_old.c	20 B (14+2pad+pool); g[620]=0xff (155*4 codegen)
+SetByte20_Clear21to23_02005130	0x0800e1f0	7	MATCHED	src/wave7_g2.c	20 B (14+2pad+pool); explicit zero local for reg order
+GetRomTableEntry_082240B8	0x08016f98	7	MATCHED	src/wave7_g2_old.c	20 B (14+2pad+pool); off=idx*8 computed before base+=4
+Byte12_Gt1	0x080170c4	7	MATCHED	src/wave7_g2_old.c	16 B (14+00 pad); explicit u16 pad=0; 5 identical copies
+DecIfNonZero_18	0x08017464	7	MATCHED	src/wave7_g2_old.c	16 B (14+00 pad); if(s[18]!=0)s[18]--
+MaxAssign_17	0x08017478	7	MATCHED	src/wave7_g2_old.c	16 B (14+00 pad); if(s[17]<v)s[17]=v
+Byte12_Gt1	0x0801cdd8	7	MATCHED	src/wave7_g2_old.c	16 B; identical copy
+Byte12_Gt1	0x0801d34c	7	MATCHED	src/wave7_g2_old.c	16 B; identical copy
+Byte12_Gt1	0x0801f1d8	7	MATCHED	src/wave7_g2_old.c	16 B; identical copy
+Byte12_Gt1	0x08022634	7	MATCHED	src/wave7_g2_old.c	16 B; identical copy
+GetBit80	0x080252f8	7	MATCHED	src/wave7_g2_old.c	16 B (14+00 pad); return s[0]&0x80
+SetHalfs_0800EDFC	0x0800edfc	7	MATCHED	src/wave7_g2_old.c	24 B (14+2pool); g5130[6]=v,g5168[0]=v
+SetHalfs_0800EE14	0x0800ee14	7	MATCHED	src/wave7_g2_old.c	24 B (14+2pool); g5130[7]=v,g517c[0]=v
+ClearHalf0_SetByte14_02003230	0x08002e70	7	MATCHED	src/wave7_g2.c	16 B (12+pool); *(u16*)p=0,p[14]=0xff
+ClearByte0_Half2_02002F80	0x08001d88	7	MATCHED	src/wave7_g2.c	16 B (10+2pad+pool); dead param shifts alloc; p[0]=0,*(u16*)(p+2)=0
+ClearWord_02002ED4	0x08000c9c	7	MATCHED	src/wave7_g2.c	12 B (8+pool); *(u32*)0x02002ed4=0
+ClearHalf_02003220	0x08002e44	7	MATCHED	src/wave7_g2.c	12 B (8+pool); *(u16*)0x02003220=0
+ClearHalf_02003240	0x08002ed4	7	MATCHED	src/wave7_g2.c	12 B (8+pool); *(u16*)0x02003240=0
+sub_0804DD9C	0x0804dd9c	7	BLOCKED	src/wave7_g2.c	2-byte padding: single 'mov pc,lr' (0x46f7); not a function
+Gfx_PaletteModeSet	0x0800d3a0	7	MATCHED	src/wave7_f.c	EWRAM/IWRAM control-byte writer
+Entry_IsInactive	0x08010fb4	7	MATCHED	src/wave7_f_old.c	12-byte entry check; inline-asm ldrsb
+ContextSwitch	0x08000300	7	ASM	mmbcc/asm/crt0.s	Part of crt0_thumb_helpers asm-verified region; worker C matches but cannot land separately
+List_RemoveHead	0x08004424	7	MATCHED	src/wave7_f_old.c	Linked-list remove head
+List_RemoveHead2	0x08004454	7	MATCHED	src/wave7_f_old.c	Linked-list remove head (offset-20)
+TableLookup_U16	0x08011c58	9	MATCHED	src/wave9_f_old.c	W9-F cracked (was W7-F/W8-B BLOCKED mask/copy fusion); pinned r3/r0, hardcoded-r1 b-mask asm, goto dual-bhi, pinned r2 pool; coordinator to verify full build (toolchain outage at landing). See docs/match_notes_wave9_F.md
+FlagByte_CopyOrNeg1	0x08010374	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+ClearSlot_10F88	0x08010f88	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+FillU16_C8BC	0x0800c8bc	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+CopyU16x4_4A660	0x0804a660	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+ProcByte_DB40	0x0800db40	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+SetNibbleAndLookup_B6F4	0x0800b6f4	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+ObjInit_TypeC	0x08021594	7	MATCHED	src/wave7_c_old.c	r0-pinned clamp, int mask=-13, nested u8 four=4
+ObjInit_2184C	0x0802184c	7	MATCHED	src/wave7_c_old.c	barrier-forced table loads; s16 table at 0x08227036 (corrected)
+Init_080021C4	0x080021C4	8	MATCHED	src/wave8_r.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Clr8_08004B94	0x08004B94	8	MATCHED	src/wave8_r.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+FlagSet_08026F98	0x08026F98	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+SubClamp_0802C7B4	0x0802C7B4	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Clr36_080475D4	0x080475D4	8	MATCHED	src/wave8_r.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+CheckAndSet_B2B4	0x0800B2B4	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+Test_08010454	0x08010454	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Fill_0802520C	0x0802520C	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Append_0802526C	0x0802526C	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Clr20_4B310	0x0804B310	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+crt0_thumb_helpers	0x080002DC	7	BLOCKED	(worker G1)	W7G1: context-switch helper (saves r8-r11, switches sp/lr); hand-written asm, not C; needs .s implementation
+Init_08000CA8	0x08000CA8	7	BLOCKED	(worker G1)	W7G1: regalloc: ROM pool->r3,zero->r2; mine swapped; pinned regs cause push{lr}; tried main/old
+Cmp_08004E0C	0x08004E0C	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Tst_0800B2D8	0x0800B2D8	8	MATCHED	src/wave8_b_old.c	W8-B blocked-revisit crack; coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_B.md
+Tst_0800B2F0	0x0800B2F0	8	MATCHED	src/wave8_b_old.c	W8-B blocked-revisit crack; coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_B.md
+Clr_0800B4C8	0x0800B4C8	8	MATCHED	src/wave8_r.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+PairDiffMid_110B0	0x080110B0	8	MATCHED	src/wave8_u_old.c	W8-U cracked (was BLOCKED); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_U.md
+Clr_08010478	0x08010478	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Zero_0801052C	0x0801052C	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Set_08004E24	0x08004E24	8	MATCHED	src/wave8_r_old.c	W8-R re-derived from docs/match_notes_wave7_g1.md; coordinator independently verified byte-identical (full-extent cmp)
+Audio_MixFragment	0x0804bcdc	8	MATCHED	src/wave8_xl.c	W8-XL: ARM sound-driver mixer fragment (naked+asm); coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_XL.md
+LoadHalfTables	0x0800b520	8	BLOCKED	(worker XL)	W8-XL BLOCKED: Best 164B, first 99B identical. Divergences: (1) pool->r3+mov ip vs pool->r4 (p must be in ip w/ r3 copy for [r3,#19] byte access; pinning p to ip breaks ldrb addressing); (2) ROM hoists r6=i*12, r5=& See docs/match_notes_wave8_XL.md
+HwInit2	0x080007d0	8	BLOCKED	(worker XL)	W8-XL BLOCKED: Best 220B, first 99B identical (prologue: pinned r4=0x080001bc, r3=src, r2=dst, scoped dma). Blockers: (1) two dead ldrb (ldrb r0,[r2] before strb r3; ldrb r2,[r0] before strb r1) - dummy expr stmts o See docs/match_notes_wave8_XL.md
+DmaSetupBits	0x08000a1c	8	BLOCKED	(worker XL)	W8-XL BLOCKED: Best 172B. DMA setup with bitfield adjustments. Structure matches but 6B short with scattered diffs. Likely codegen differences in bit-test ordering and spin-wait loop. Tried: temp vars for CSE, scope See docs/match_notes_wave8_XL.md
+BoundsCheck	0x08006014	8	BLOCKED	(worker XL)	W8-XL BLOCKED: Best 196B (20B over). Complex bounds validation with s8 arithmetic. Logic structure not matching; needs detailed re-derivation. See docs/match_notes_wave8_XL.md
+ComputeFields	0x0804cfd4	10	MATCHED	src/wave10_H_old.c	W10-H: Block 2 closed (180B, old_agbcc, 0 diffs). Key: separate t = x & 4 statement before b = x forces scheduler order ldrb r1; movs r0,#4; ands r0,r1; adds r3,r1,#0; pinned p0->r0/p1->r1 + volatile add asm for body adds r1,r1,r0.
+sub_08001400	0x08001400	8	BLOCKED	(worker XL)	W8-XL BLOCKED: Complex multi-stage init (206B): pool stores, byte clears, 2-iter loop, conditional bit sets. High-register pressure. Not attempted; requires detailed re-derivation. See docs/match_notes_wave8_XL.md
+sub_080015b4	0x080015b4	8	BLOCKED	(worker XL)	W8-XL BLOCKED: Complex init (226B): halfword shuffling loop with sl/r9/r8/ip allocation, conditional DMA setup. Not attempted. See docs/match_notes_wave8_XL.md
+sub_08001ca8	0x08001ca8	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 190B function with 7 branches. Not triaged in detail; complex control flow. See docs/match_notes_wave8_XL.md
+sub_08003330	0x08003330	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 214B complex loop function (0x080033xx region, likely related to 0x080039a4 family). Not attempted. See docs/match_notes_wave8_XL.md
+sub_08003408	0x08003408	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 252B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_08003508	0x08003508	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 252B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_08003608	0x08003608	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 280B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_08003724	0x08003724	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 330B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_080039a4	0x080039a4	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 456B fixed-point sprite/OAM transform loop (analyzed in detail): 12-byte record array, per-record math with muls/asrs, write cursor. Extremely intricate scheduler; not attempted beyond analysis. See docs/match_notes_wave8_XL.md
+sub_08003cb8	0x08003cb8	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 452B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_080042b8	0x080042b8	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 222B function with 11 branches. Not attempted. See docs/match_notes_wave8_XL.md
+sub_0800561c	0x0800561c	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 228B switch-like dispatcher (4 branches). Not attempted. See docs/match_notes_wave8_XL.md
+sub_08008510	0x08008510	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 254B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_080086ac	0x080086ac	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 306B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_0800d480	0x0800d480	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 218B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_0800df8c	0x0800df8c	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 218B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_080027d9c	0x08027d9c	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 166B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_080349f8	0x080349f8	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 338B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_0803fbcc	0x0803fbcc	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 188B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_0803fe44	0x0803fe44	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 174B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+SMod_0804DDA0	0x0804dda0	10	ASM	asm/div.s	W10-S: signed __modsi3 (196B) hand-transcribed; 0 diffs. C impossible.
+UMod_0804DEE8	0x0804dee8	10	ASM	asm/div.s	W10-S: unsigned __umodsi3 (182B) hand-transcribed; 0 diffs. C impossible.
+sub_080024bc	0x080024bc	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 166B fixed-point loop with muls/bitmanip (analyzed): struct-based position update with pool 0x040000d4 region. Intricate; not attempted beyond analysis. See docs/match_notes_wave8_XL.md
+sub_08000f28	0x08000f28	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 266B complex function. Not attempted. See docs/match_notes_wave8_XL.md
+sub_0800b818	0x0800b818	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 178B function with high-register (ip/sl/r9/r8) allocation, bitfield ops. Not attempted beyond triage. See docs/match_notes_wave8_XL.md
+sub_0800d04c	0x0800d04c	8	BLOCKED	(worker XL)	W8-XL BLOCKED: 172B switch-like init with nested loops (analyzed in triage). Complex; not attempted. See docs/match_notes_wave8_XL.md
+sub_0804D088	0x0804d088	8	BLOCKED	(worker L)	W8-L BLOCKED: Palette fade/blend. Dead mov ip,r2 forced via volatile asm; literal [0] gives reg-indexed ldrsh; unpinned gives temp-form clamp. BLOCKED on register allocation permutation (r3/r4/r6/r7 vs r2/r3/r1/r6) See docs/match_notes_wave8_L.md
+sub_0800C600	0x0800c600	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_080014F8	0x080014f8	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0800B0A4	0x0800b0a4	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0800C6B0	0x0800c6b0	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08028154	0x08028154	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0800DEF8	0x0800def8	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08034D18	0x08034d18	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0800CA10	0x0800ca10	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08004078	0x08004078	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08034B4C	0x08034b4c	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0803F998	0x0803f998	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08028880	0x08028880	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0800C50C	0x0800c50c	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_080107CC	0x080107cc	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08034CA0	0x08034ca0	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0800244C	0x0800244c	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0804D6C4	0x0804d6c4	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0800DD74	0x0800dd74	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0803F920	0x0803f920	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+UDiv_0804DE70	0x0804de70	10	ASM	asm/div.s	W10-S: unsigned __udivsi3 (110B) hand-transcribed; 0 diffs. C impossible (proven W9). Renamed T_0804DE70 -> UDiv_0804DE70.
+sub_080030C4	0x080030c4	8	BLOCKED	(worker L)	W8-L BLOCKED: Struct copy with fixed-point. Prologue matches with s pinned to r3. BLOCKED on body allocation (r3 reuse for s[1], (s16)r5+120 computation order). See docs/match_notes_wave8_L.md
+sub_0802FCFC	0x0802fcfc	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0804D180	0x0804d180	8	BLOCKED	(worker L)	W8-L BLOCKED: Byte struct manipulation with (u8) dance (lsls/lsrs). Compiler optimizes to 84-92 bytes vs 104 expected. BLOCKED on preventing optimization / matching branch structure. See docs/match_notes_wave8_L.md
+sub_080083F8	0x080083f8	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08009654	0x08009654	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08029504	0x08029504	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_080016C0	0x080016c0	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08002DCC	0x08002dcc	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_08042A64	0x08042a64	8	BLOCKED	(worker L)	W8-L BLOCKED: Bounds check, byte-identical to 0x080459f8. Pools: 0x02007036, 0x0000ac11. BLOCKED on register allocation (b in r4/d in r5/base in r7 vs b in r5/d in r3/base in r6). See docs/match_notes_wave8_L.md
+sub_080459F8	0x080459f8	8	BLOCKED	(worker L)	W8-L BLOCKED: Byte-identical to 0x08042A64 (verified via cmp). Same BLOCKED status. See docs/match_notes_wave8_L.md
+sub_0804D65C	0x0804d65c	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+sub_0804D738	0x0804d738	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+SyncObjFlagBits_BEE0	0x0800bee0	13	MATCHED	src/wave13_B.c	W13-B: SyncObjFlagBits_BEE0, main agbcc; flag-bit setter @0x02004F40; pinned-r0 accumulator + asm 128 materialization; coordinator-verified 0 diffs over 100 B in built ROM
+sub_0800BF6C	0x0800bf6c	8	BLOCKED	(worker L)	W8-L BLOCKED: Not attempted in depth. See docs/match_notes_wave8_L.md
+Ewram_BumpAlloc	0x0800069c	8	MATCHED	src/wave8_m_old.c	W8-M; coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_M.md
+EntList_Add1	0x08002568	8	MATCHED	src/wave8_m.c	W8-M; coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_M.md
+EntList_Add2	0x080025c4	8	MATCHED	src/wave8_m.c	W8-M; coordinator independently verified byte-identical (full-extent cmp). See docs/match_notes_wave8_M.md
+ChipSlot_StateUpdate	0x08004258	8	BLOCKED	(worker M)	W8-M BLOCKED: Near-match: r5 reload OK with old_agbcc but tail-merging commons p[7] strbs (ROM has separate strb per branch); strb r1 vs r0 in c==2; blt vs bge See docs/match_notes_wave8_M.md
+TblHash_Combine	0x08001754	8	BLOCKED	(worker M)	W8-M BLOCKED: Table-hash combiner; pool 0x0816e240 at +72; shift-mask sequences and table lookup order differ; tried main/old See docs/match_notes_wave8_M.md
+FillPairs_0C5B8	0x0800c5b8	8	BLOCKED	(worker M)	W8-M BLOCKED: Shift-add-shift loop idiom needs asm; register allocation (p1->r4 vs r1, v2->r1 vs r4) won't match; twin at 0x0800cbf0 identical See docs/match_notes_wave8_M.md
+FillPairs_0CBF0	0x0800cbf0	8	BLOCKED	(worker M)	W8-M BLOCKED: Identical twin of 0x0800c5b8 See docs/match_notes_wave8_M.md
+Lookup_02D574	0x0802d574	8	BLOCKED	(worker M)	W8-M BLOCKED: Branch-chain lookup; register allocation r1/r2 swapped vs ROM; pins cause frame; tried main/old See docs/match_notes_wave8_M.md
+TblValidate_300C	0x0800300c	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+FlagA_8628	0x08008628	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+FlagA_8654	0x08008654	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+FlagA_8680	0x08008680	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblInit_960C	0x0800960c	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+FillPairs_C92C	0x0800c92c	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f00	0x08024554	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f04	0x08024570	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f02	0x0802458c	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f0A	0x080245c4	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f08	0x080245e0	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f0C	0x080245fc	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f0D	0x08024618	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f0E	0x08024670	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGet_f0F	0x0802468c	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGetW_BB8C	0x080246a8	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGetW_BF74	0x080246c4	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+TblGetW_C35C	0x080246e0	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+EwGet8_A8	0x080247a8	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+Cmp8_2637C	0x0802637c	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+CheckId_FA1C	0x0803fa1c	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+EwCopy_4A3C4	0x0804a3c4	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+CtrTick_4AD4C	0x0804ad4c	8	MATCHED	src/wave8_s_old.c	W8-S; coordinator independently verified byte-identical (full-extent cmp, true extent). See docs/match_notes_wave8_S.md
+sub_0802FBF0	0x0802fbf0	8	BLOCKED	(worker S)	W8-S BLOCKED: compiler CSE: 0x18B emitted as 0x18A+1 (adds), not pool ldr See docs/match_notes_wave8_S.md
+sub_0803FB9C	0x0803fb9c	8	BLOCKED	(worker S)	W8-S BLOCKED: mid-function pool 0x2201 in dead code; GCC deletes .word in unreachable code See docs/match_notes_wave8_S.md
+sub_0803FC8C	0x0803fc8c	8	BLOCKED	(worker S)	W8-S BLOCKED: mid-function pool 0x1021 in dead code + outside pools See docs/match_notes_wave8_S.md
+sub_0804CD34	0x0804cd34	8	BLOCKED	(worker S)	W8-S BLOCKED: r4 pin needs opaque asm (works); qb+=12 folds to strh offset; dead ldrb See docs/match_notes_wave8_S.md
+Memcpy_4DFA8	0x0804dfa8	9	MATCHED	src/wave9_c_noiw.c	W9-C MATCHED (94B, worker C, 2026-10-21): optimized memcpy; 16B-unrolled ldmia/stmia word loop, 4B tail, byte tail (len-1 vs -1). no-interwork (pop{r4,r5,pc}); sw pinned r3; dw from dst; explicit d/s assignment order. Linked ELF == ROM.
+DivZeroStub_4DD90	0x0804dd90	9	MATCHED	src/wave9_c_noiw.c	W9-C MATCHED (12B: 10+2pad, worker C, 2026-10-21): push{lr}; bl sub_0804DD9C; movs r0,#0; pop{pc}. Twin of DE64/DEDE/DF9E stubs. no-interwork. Linked ELF == ROM.
+SDiv_0804DD08	0x0804dd08	10	ASM	asm/div.s	W10-S: signed __divsi3 (136B) hand-transcribed; 0 diffs. C impossible (mid-prologue push, mov pc,lr).
+DupThunks_0804DCEC	0x0804dcec	10	ASM	asm/div.s	W10-S: 7 hi-reg bx-thunks (bx r8,r9,sl,fp,ip,sp,lr + nop each, 28B) hand-transcribed; 0 diffs. Correction: NOT bx r0-r6 duplicates.
+ShiftPair_Copy_800C	0x0800800c	36	MATCHED	src/wave9_d_old.c	W9-D MATCHED (worker D, 2026-10-21)
+Ewram5160_Init_10508	0x08010508	36	MATCHED	src/wave9_d_old.c	W9-D MATCHED (worker D, 2026-10-21)
+CheckPair_258D8	0x080258d8	32	MATCHED	src/wave9_d_old.c	W9-D MATCHED (worker D, 2026-10-21)
+StoreIdx2_25638	0x08025638	28	MATCHED	src/wave9_d_old.c	W9-D MATCHED (worker D, 2026-10-21)
+Ewram4E40_Init_0B4E4	0x0800b4e4	60	MATCHED	src/wave9_d_old.c	W9-D MATCHED (worker D, 2026-10-21)
+Buf_RemoveAt_25290	0x08025290	64	MATCHED	src/wave9_d_old.c	W9-D MATCHED (worker D, 2026-10-21)
+Check_2D440	0x0802d440	32	MATCHED	src/wave9_d_old.c	W9-D MATCHED (worker D, 2026-10-21)
+Scramble_400A8	0x080400a8	9E	MATCHED	src/wave9_e_old.c	u16 scramble/hash step at EWRAM 0x020070F0+8; old_agbcc
+Classify_3FD68	0x0803fd68	9E	MATCHED	src/wave9_e_old.c	classifier with mid-function pool; old_agbcc
+TblGet_25654	0x08025654	9E	MATCHED	src/wave9_e_old.c	table lookup with bounds; old_agbcc
+TblSet_11DD0	0x08011dd0	9E	MATCHED	src/wave9_e_old.c	table set 1<=x<=7; old_agbcc
+Check_B308	0x0800b308	9E	MATCHED	src/wave9_e_old.c	(gEwram_02004E40[4] & 15)==0 check; old_agbcc
+sub_0800B368	0x0800b368	10	MATCHED	src/wave10_T_old.c	W10-T: gate controller for 0x02004E40 state block (72B, old_agbcc, 0 diffs). Inverted if ((x&128)==0) for beq-to-else layout; explicit store order 0,3,2,1. One of Task_3AFFC callees.
+FlagBit_Get_11D34	0x08011d34	10	MATCHED	src/wave10_R_old.c	W10-R: bitfield get from gEwram02005260 (52B, old_agbcc, 0 diffs). Idiom: empty barrier on pinned xr before pinned copy defeats mask/copy fusion.
+FlagBit_Set_11D68	0x08011d68	10	MATCHED	src/wave10_R_old.c	W10-R: bitfield set/clear (72B, old_agbcc, 0 diffs). Idioms: hardcoded-r1 v-mask asm with xr dummy input; tied-opaque pool load; volatile mvn defeats ~ fusion into bic.
+BitCtl_520C	0x0800520c	10	MATCHED	src/wave10_R_old.c	W10-R: bit ctl at gEwram_02003670+0x11ae + hword init at gEwram_020031f0 (92B true extent, not 84B; wave layers miscounted trailing pools — fix layer). old_agbcc, 0 diffs.
+S8TableLookup_0C248	0x0800c248	10	MATCHED	src/wave10_L_old.c	W10-L: s8 table via gTbl_0817313C (28B, old_agbcc, 0 diffs). Goto preserves redundant idx==-1 check.
+PairBonus_2D460	0x0802d460	10	MATCHED	src/wave10_L_old.c	W10-L: 6 if (y,x) pair checks (40B, old_agbcc, 0 diffs). if/else-if (not ||) avoids r4 codegen.
+Clamp_26720	0x08026720	10	MATCHED	src/wave10_L_old.c	W10-L: clamp ladder >84->239, >48->+150, else +200 (32B, old_agbcc, 0 diffs). Result-var fixes branch order.
+EwramLookup_26D94	0x08026d94	10	MATCHED	src/wave10_L_old.c	W10-L: EWRAM gEwram020070F0 lookup (26B, old_agbcc, 0 diffs). Early-return form; pool embedded mid-function.
+TableByte_16FAC	0x08016fac	10	MATCHED	src/wave10_L_old.c	W10-L: ROM table 0x082240B8 8B entries (34B, old_agbcc, 0 diffs). Explicit tbl var fixes ldr/lsrs order.
+Rank_49934	0x08049934	10	MATCHED	src/wave10_L_old.c	W10-L: rank map 254->2,255->3,253->1 (54B, old_agbcc, 0 diffs). Goto decision-tree; int v=*(u16*) gives ldrh+bgt.
+Xor_23CE4	0x08023ce4	10	MATCHED	src/wave10_L_old.c	W10-L: XOR-fold 14B with ((i*2)&7) key (44B, old_agbcc, 0 diffs).
+DecisionTree_3FACC	0x0803facc	11	MATCHED	src/wave11_D_old.c	W11-D: MATCHED (76B incl. trailing pool, old_agbcc, 0 diffs). Rejected W10-L different-vintage hypothesis: pool @0x0803FB04 is 0x2030 not 0x3020 (W10-L misread). New idioms: late empty-asm copy barrier keeps b-copy in r3; int lo=0x30 variable-constant defeats cmp/blt frontend fold. Main agbcc excluded (push{lr}/pop{pc} shape).
+sub_08004398	0x08004398	10	BLOCKED	-	W10-L: Struct init + fixed-point loop; ROM keeps stride re-extension and 0xFFFF0000 pool load INSIDE loop; old_agbcc hoists both (LICM)
+sub_080244B0	0x080244b0	12	BLOCKED	-	W12-B: pinning fixes allocation (a->r2, b->r3, single lsrs r0,r2,#12) but scheduler orders c-normalize before b-copy, swaps ands regs, uses r4 for idx*20 temp; scheduler-level, resistant; best b3_v23.c staged; see docs/match_notes_wave12_B.md
+sub_08011DB0	0x08011db0	12	MATCHED	src/wave12_B_old.c	"W12-B: TblByte_11DB0, 32/32 B, old_agbcc; pinned COPY register (register u16 c __asm__(""r1"")) forces ROM in-place allocation; pool via gEwram02005260 abs .set; coordinator-verified 0 diffs in built ROM"
+sub_0804D7A0	0x0804d7a0	12	MATCHED	src/wave12_B_old.c	W12-B: FlagClear_4D7A0, 30/30 B, old_agbcc; pinned p->r1, z->r2, w->r0 + volatile dead-init keep; .align 1,0 tail fix (tools/fix_tail_align.py); coordinator-verified 0 diffs in built ROM
+sub_0802518C	0x0802518c	12	MATCHED	src/wave12_B_old.c	W12-B: Copy4_2518C, 44/44 B, old_agbcc; pinned off->r3 + dummy live-range asm keeps off live forcing p+off temp into r2; pools literal; coordinator-verified 0 diffs in built ROM
+sub_0802D8F4	0x0802d8f4	12	MATCHED	src/wave12_B_old.c	W12-B: TblPtr_2D8F4, 50/50 B, old_agbcc; pinned p->r2, t->r3, idx4->r1 + dummy uses force join accumulator into r0; pinning t->r3 defeats 392-56 combiner rewrite; pool 393 literal in dead code; .align 1,0 tail fix; coordinator-verified 0 diffs in built ROM
+F_20230	0x08020230	11	MATCHED	src/wave11_A_old.c	W11-A: q[5]/q[6]=x by *(a+0x23)&15; explicit 00 00 pad idiom
+F_24744	0x08024744	11	MATCHED	src/wave11_A_old.c	W11-A: t=x-50; (u8)t>6?-1:t; barrier-before-copy idiom; explicit pad
+F_3FE00	0x0803fe00	11	MATCHED	src/wave11_A_old.c	W11-A: switch defeats <C→<=C-1 folding; x in {0x60,0xD3,0xD4}→1
+F_4C53C	0x0804c53c	11	MATCHED	src/wave11_A_old.c	W11-A: sig (u8 dummy,u8 *p); p[22]=p[26]=0; p[0]|=(p[24]==0?12:3); explicit pad; 2nd-param-in-r1 idiom
+F_EE50	0x0800ee50	11	MATCHED	src/wave11_A_old.c	W11-A: P[0x44]=(P[0x44]==1)?0:1; tied-opaque pool 0x02005160
+F_D104	0x0800d104	11	MATCHED	src/wave11_A_old.c	W11-A: *(u16*)P&=m1&m2; p[9]&=-3; (u32)-3 emits movs;negs naturally; pools 0x020031e0/0xedff/0xdbff
+F_3F440	0x0803f440	11	MATCHED	src/wave11_A_old.c	W11-A: byte-swap t[i]↔t[j], t=base+0x45C4; tied-opaque pool
+F_3F460	0x0803f460	11	MATCHED	src/wave11_A_old.c	W11-A: byte-swap t[i]↔t[j], t=base+0x464C; tied-opaque pool
+F_3FD9C	0x0803fd9c	11	MATCHED	src/wave11_A_old.c	W11-A: x==0x222||x==0x3000→1; tied-opaque pool
+F_4C610	0x0804c610	11	MATCHED	src/wave11_A_old.c	W11-A: if *(u32*)(p+52)==0x68736d53: set u16s at +38/+36/+40=0x100; pin v to free r1 idiom
+F_11054	0x08011054	11	MATCHED	src/wave11_A_old.c	W11-A: if g[4]==1{q[0]=g[12];return 1;}return 0; mid-function pool 0x020051b0
+F_173FC	0x080173fc	11	MATCHED	src/wave11_A_old.c	W11-A: split offset var gives adds r0,r0,r1 (not r1,r0); two-step offset+base idiom
+F_21C0C	0x08021c0c	11	MATCHED	src/wave11_A_old.c	W11-A: u32 param + explicit asm lsl/lsr for deferred-extend pattern (lsls@entry, lsrs#19@end)
+F_25308	0x08025308	11	MATCHED	src/wave11_A_old.c	W11-A: s16 do-while zero loop; i<=0xF8
+F_1D68	0x08001d68	11	MATCHED	src/wave11_A_old.c	W11-A: struct zero via u16/u32 stores; explicit 00 00 pad
+F_4BDC0	0x0804bdc0	11	MATCHED	src/wave11_A_old.c	W11-A: linked-list unlink; pin p to r0 prevents copy idiom
+F_EF8	0x08000ef8	11	MATCHED	src/wave11_A_old.c	W11-A: dual-array zero loop; explicit pad
+F_23B64	0x08023b64	11	MATCHED	src/wave11_A_old.c	W11-A: u16 array transform; inverted if gives bhi; q[i]=t+1 avoids r4 spill; explicit pad
+F_23D10	0x08023d10	11	MATCHED	src/wave11_A_old.c	W11-A: checksum: sum+=q[i] for i<=13; return -sum; explicit pad
+F_25490	0x08025490	11	MATCHED	src/wave11_A_old.c	W11-A: byte swap base[a]↔base[b]; block-scoped b2 forces r0 reload; explicit pad
+F_4ACDC	0x0804acdc	11	MATCHED	src/wave11_A_old.c	W11-A: base+0x7f/0x7e=0; base+0xa0++; base+0xa1=x; u32 param avoids extend; pool 0x0200bd20
+F_36318	0x08036318	11	MATCHED	src/wave11_A_old.c	W11-A: if x>6 return 0; *(base+2)|=(1<<x); return 1; pool 0x0200bce8
+F_3FA48	0x0803fa48	11	MATCHED	src/wave11_A_old.c	W11-A: if x<pool→0; elif x<=pool+1→1; elif x==0x13a0→1; signed pool (blt not bcc); pool 0x3a1
+F_2FC4C	0x0802fc4c	14	MATCHED	src/wave14_D_old.c	W14-D MATCHED. W11-A: 3-byte regalloc diff: final RMW uses r0/r2 not r3/r0 (ldrh r3,[r1,#10]; adds r0,r3,r2)
+F_25230	0x08025230	11	BLOCKED	-	W11-A: Complex nested loop structure not matching; needs control-flow analysis
+GetByte1_26554	0x08026554	11	MATCHED	src/wave11_B_old.c	W11-B: u8 (void *ctx, s16 idx); 28-byte table entries at *(ctx+4); returns entry[1], 0 if idx>127 or entry[25]==0. Priority pick for Task_3AFFC path (called from sub_080241F8 case 2).
+GetByte0_265B0	0x080265b0	11	MATCHED	src/wave11_B_old.c	W11-B: u8 (void *ctx, s16 idx); twin of 26554; returns entry[0], 49 if invalid. Called from sub_08024384 case 2.
+GetPtr14_265D0	0x080265d0	11	MATCHED	src/wave11_B_old.c	W11-B: u8 *(void *ctx, s16 idx); returns &entry[14], NULL if idx>127 or entry[25]==0.
+Poke_4AC88	0x0804ac88	11	MATCHED	src/wave11_B_old.c	W11-B: void (u8 a); byte pokes at pool 0x0200BD20: p[127]=0, p[126]=0, p[160]++, p[161]=a.
+Memset_11C14	0x08011c14	11	MATCHED	src/wave11_B_old.c	W11-B: void (void); two memset loops via pp base 0x02005260: 16B at pp[1], 8B at pp[2].
+Decode_23B88	0x08023b88	11	MATCHED	src/wave11_B_old.c	W11-B: void (u16 *str); 24-element decoder: if (u16)(v-1)<=9 decrement, else if (u16)(v-94)<=26 subtract 84. CSE beats temp idiom.
+Init_1E74	0x08001e74	11	MATCHED	src/wave11_B_old.c	W11-B: int (u8 a, u32 b, u32 c); guarded init at 0x02002F80; -1 if a>1/*p!=0/c>0x2010. Pool-load hoisting idiom (block-scoped p).
+TblGetU8_26574	0x08026574	14	MATCHED	src/wave14_D_old.c	W14-D: W11-B: u8 (void*, s16 idx, u8 sel); 52/60 match. Prologue zero-extend order: ROM extends idx then se
+sub_08047510	0x08047510	14	MATCHED	src/wave14_D_old.c	W14-D: W11-B: Pool-forcing works via .set idiom; remaining: regalloc (s in r1 vs r0 in ldrsb→lsls→adds→pool
+FlagBitClear_10498	0x08010498	14	MATCHED	src/wave14_D_old.c	W14-D: W11-B: 39/52 match; remaining: `& -2` allocates r3 vs ROM r0 (movs r0,#2; negs r0; ands r0,r1).
+Copy4Words_4A884	0x0804a884	14	MATCHED	src/wave14_D_old.c	W14-D MATCHED. W11-B: 4-word copy; remaining: ldmia/stmia reg choice (ROM r2,r3,r4 vs builds r4,r5,r6).
+sub_0804D634	0x0804d634	14	MATCHED	src/wave14_D_old.c	W14-D MATCHED. W11-B: Remaining: r4 allocation for a[28] ldrh (vs r0).
+Checksum_23D34	0x08023d34	14	MATCHED	src/wave14_D_old.c	W14-D MATCHED. W11-B: 46/52 match; remaining: 6-byte prologue scheduler interleaving (lsl r1 / add r4,r0,#0 / lsr r1 order).
+BuildU32_4DA34	0x0804da34	14	MATCHED	src/wave14_D_old.c	W14-D MATCHED. W11-B: u32-from-4-bytes builder; s param in r1 (not r0); v in r4 (not r3). Regalloc stubborn across variants.
+sub_080047EC	0x080047ec	11	BLOCKED	-	W14-D: 43-byte diff (store addr computation); see docs/match_notes_wave14_D.md
+sub_08002E80	0x08002e80	11	BLOCKED	-	W14-D: 4-byte scheduling diff (pp pool-load vs mov sp order); see docs/match_notes_wave14_D.md
+ObjSlotInit_05FC0	0x08005fc0	16	MATCHED	src/w16d_08005fc0.c	W16-D: 84 B (80+4 pool); main agbcc; 32B slot init, p[30]=0, p[31] flags, 12x u16 zero; divided-syntax adds order; coordinator-verified 0 diffs in built ROM
+TblGetByte_241F8	0x080241f8	13	MATCHED	src/wave13_B.c	W13-B: TblGetByte_241F8, main agbcc; u8 lookup on a>>12; pinned-r0 in-place u16 truncation cracked the wave12 fatal blocker; coordinator-verified 0 diffs over 176 B in built ROM
+TblGetByte_24384	0x08024384	13	MATCHED	src/wave13_B.c	W13-B: TblGetByte_24384, main agbcc; twin of 241F8 (default 50); emitted via BYTE() in ldscript (GAS pads C section); coordinator-verified 0 diffs over 174 B in built ROM
+sub_0800B148	0x0800b148	15	BLOCKED	(staging)	W15-A: best 191 diffs (was 230), 348/340B old_agbcc. R1 solved byte-exact: pinned-r0 bf + duplicate-pin r3 mh + volatile add-copy; R2 solved: swapped t21=(u32)-16;t21&=v21, mov r7,ip c24 reuse, |= for orrs r0,r1; R3 sh-path + tm copy solved. Residual: prologue save-set (r7), t30/t31 regalloc, join-base9 mov r7,r9, c1/c3, (cc&4) branchless. See docs/match_notes_wave15_A.md
+SyncEwramFlagBits_0CD00	0x0800cd00	12	MATCHED	src/wave12_C_old.c	W12-C: 56/56 B, old_agbcc; (gEwram_02000EC0[9]&4)==0 ? bits 11-13 of gEwram_020031E0[0] &=0xC7FF : |=0x3800; coordinator-verified 0 diffs in built ROM
+TblFindClear_02C74	0x08002c74	12	MATCHED	src/wave12_C_old.c	W12-C: 60/60 B, old_agbcc; search 16-byte table at 0x02003090 for (a+1), zero found entry; coordinator-verified 0 diffs in built ROM
+MapTableVal_499AC	0x080499ac	12	MATCHED	src/wave12_C_old.c	W12-C: 64/64 B, old_agbcc; u16 at (0x020070F0+a*12+0x152); 0xFF->3, 0xFE->2, 0xFD->1, else 0; coordinator-verified 0 diffs in built ROM
+ObjInit_C4B4	0x0800c4b4	12	MATCHED	src/wave12_C_old.c	W12-C: 68/68 B, old_agbcc; object struct init (cond u16 fields 0xFFF8/0, OR 0xFFFF, clear byte); coordinator-verified 0 diffs in built ROM
+FillTilemap_C3A0	0x0800c3a0	12	MATCHED	src/wave12_C_old.c	W12-C: 68/68 B, old_agbcc; fill 28x32 u16 tilemap with ((b+col)|0x1000); coordinator-verified 0 diffs in built ROM
+sub_0802FBA4	0x0802fba4	12	BLOCKED	(worker C)	W12-C: 76B; ROM push{r4,r5,lr}, r5 offset temp; subs r5,#24 vs separate constants; regalloc mismatch; see docs/match_notes_wave12_C.md
+sub_080225B4	0x080225b4	12	BLOCKED	(worker C)	W12-C: 42B; ROM keeps a<<16 in r0, ours spills a to r3; table-value regalloc; see docs/match_notes_wave12_C.md
+sub_0804A450	0x0804a450	12	BLOCKED	(worker C)	W12-C: 56B; ROM loads both pools upfront, ours defers one past early return; pool scheduling; ldrsh [r1,r4] idiom found (int i=0; ((short*)q)[i]); see docs/match_notes_wave12_C.md
+sub_0804C2CC	0x0804c2cc	12	BLOCKED	(worker C)	W12-C: 48B; uses r4/r5 without push - non-standard convention or interior fragment; not matchable via standard C; see docs/match_notes_wave12_C.md
+ChipSlot_InitEntry	0x08046ca0	13	MATCHED	src/wave13_D_old.c	W13-D: ChipSlot_InitEntry, old_agbcc; struct+array init; coordinator-verified 0 diffs over 92 B in built ROM
+DispCntRestore_Dma3	0x08002d20	13	MATCHED	src/wave13_D_old.c	W13-D: DispCntRestore_Dma3, old_agbcc; DISPCNT save/mask/merge/restore via volatile u16; DMA3; coordinator-verified 0 diffs over 100 B in built ROM
+PalDmaInit_02678	0x08002678	13	MATCHED	src/wave13_D_old.c	W13-D: PalDmaInit_02678, old_agbcc; palette DMA init via 0x03002420 and 0x05000000; coordinator-verified 0 diffs over 108 B in built ROM
+DrawText_048B4	0x080048b4	13	MATCHED	src/wave13_D_old.c	W13-D: DrawText_048B4, old_agbcc; string-to-tilemap; explicit .byte 0,0 trailing pad; coordinator-verified 0 diffs over 84 B in built ROM
+TblMapFF_05338	0x08005338	14	MATCHED	src/wave14_D_old.c	W14-D: W13-D: TblMapFF (104 B); 3-byte diff at 56/57/59; 4th if loads 0x11B3 into r0 (clobbers tbl) vs ROM 
+sub_08004E008	0x08004e008	13	BLOCKED	-	W13-D: memset (82 B); stmia word loops + pop{r4,r5,pc} match; byte-loop epilogue resists (pre-decrement check vs post-decrement wrap); 88 vs 82 B
+sub_0800D420	0x0800d420	13	BLOCKED	-	W13-D: shift-first 16-bit increment (96 B); old_agbcc emits add-first for u16 i++; regalloc differs (5-reg push)
+sub_08004208	0x08004208	13	BLOCKED	-	W13-D: nested 4x32 clear (58 B); ROM i*128 via (r1<<16)>>9; ours i*32 or mismatched regs; 2-byte size diff
+sub_0800A094	0x0800a094	13	BLOCKED	-	W13-D: same shift-increment pattern as 0x0800d420 (244-byte clear, bound 243); idiom established resistant
+sub_0803FDBC	0x0803fdbc	13	BLOCKED	-	W13-D: non-standard prologue (58 B); no push at entry, ends bx lr without pop; interior fragment or custom convention
+sub_08002620	0x08002620	13	BLOCKED	-	W13-D: DMA setup with ip spill (72 B); ROM mov r4,ip; adds r4,#0xCC; ours add r4,r4,#4; 30+ byte diffs
+sub_080255F4	0x080255f4	13	BLOCKED	-	W13-D: counter-register clobber (66 B); ROM reuses r1 for ldrb (clobbers counter); ours extra add r1,r2,#0; 68 vs 66 B
+sub_0804BFD4	0x0804bfd4	13	BLOCKED	-	W13-D: far pools (66 B); references pools at 0x804c280/0x804c284 (680-byte pc offset); cannot match standalone
+sub_0800291C	0x0800291c	13	BLOCKED	-	W13-D: multiply-accumulate loop (68 B); 256-iter muls, 3-word struct; ours 92-108 B vs 68 B
+sub_080045AC	0x080045ac	13	BLOCKED	-	W13-D: linked-list init (68 B); base in r5 vs r0; 0x400 via 0x410-16 vs 0x80<<3
+sub_0800410C	0x0800410c	13	BLOCKED	-	W13-D: same 4x32 clear pattern as 0x08004208 (74 B); resistant regalloc
+MemsetAligned_4E008	0x0804e008	7	MATCHED	src/wave14_B_noiw.c	82 B (BYTE); no-interwork pop{r4,r5,pc}; u32 t=n-- defeats -1 loop; *pw++ x4 -> stmia
+IoRegWrite_4D130	0x0804d130	7	MATCHED	src/wave14_B_old.c	80 B; old_agbcc true-leaf switch omits push{lr}
+SearchFF_2567C	0x0802567c	7	MATCHED	src/wave14_B_old.c	86 B (BYTE); i=1;p=a+2 order for instruction order
+List_InsertAfter_4484	0x08004484	7	MATCHED	src/wave14_B_old.c	56 B; if(nw!=0){...}return nw falls through (no mov r0,#0)
+List_InsertBefore_44BC	0x080044bc	7	MATCHED	src/wave14_B_old.c	56 B; same idiom
+CopyTables_47C4C	0x08047c4c	7	MATCHED	src/wave14_B_old.c	88 B; i=0 init before pointer loads
+PalModeSet_4DFC	0x08004dfc	7	MATCHED	src/wave14_B.c	14 B (BYTE); wrapper of sub_0800D3A0
+Call4E60_4E44	0x08004e44	7	MATCHED	src/wave14_B.c	12 B; wrapper passing 0 to sub_08004E60 (.set)
+LoadCallClear_4A328	0x0804a328	7	MATCHED	src/wave14_B.c	24 B; calls sub_08002FD4 (.set)
+TblLookup_25730	0x08025730	7	MATCHED	src/wave14_B.c	36 B; calls TblGet_25654; 0xFF sentinel; tbl[v*4+20]
+RangeCheckClear_2FC28	0x0802fc28	7	MATCHED	src/wave14_B.c	34 B (BYTE); (u8)InRange3B0_3B1==0 via lsls#24
+Wrapper_D770	0x0800d770	7	MATCHED	src/wave14_B.c	36 B; 5-param sub_0800D800 (a,0,b,c,1) (.set)
+Wrapper_D728	0x0800d728	7	MATCHED	src/wave14_B.c	36 B; 5-param sub_0800D800 (a,2,b,c,0) (.set)
+F_08000F1C	0x08000f1c	14	MATCHED	src/wave14_C.c	W14-C: F_08000F1C, 10 B, main
+F_08002F40	0x08002f40	14	MATCHED	src/wave14_C.c	W14-C: F_08002F40, 10 B, main
+F_08002F4C	0x08002f4c	14	MATCHED	src/wave14_C.c	W14-C: F_08002F4C, 10 B, main
+F_08005610	0x08005610	14	MATCHED	src/wave14_C.c	W14-C: F_08005610, 10 B, main
+F_0800D55C	0x0800d55c	14	MATCHED	src/wave14_C.c	W14-C: F_0800D55C, 10 B, main
+F_08010ACC	0x08010acc	14	MATCHED	src/wave14_C.c	W14-C: F_08010ACC, 10 B, main
+F_08011BD4	0x08011bd4	14	MATCHED	src/wave14_C.c	W14-C: F_08011BD4, 10 B, main
+F_0804C6A8	0x0804c6a8	14	MATCHED	src/wave14_C.c	W14-C: F_0804C6A8, 10 B, main
+F_08001C4C	0x08001c4c	14	MATCHED	src/wave14_C.c	W14-C: F_08001C4C, 14 B, main
+F_080050E0	0x080050e0	14	MATCHED	src/wave14_C.c	W14-C: F_080050E0, 14 B, main
+F_0802616C	0x0802616c	14	MATCHED	src/wave14_C.c	W14-C: F_0802616C, 14 B, main
+F_0804C84C	0x0804c84c	14	MATCHED	src/wave14_C.c	W14-C: F_0804C84C, 14 B, main
+F_08004EE0	0x08004ee0	14	MATCHED	src/wave14_C.c	W14-C: F_08004EE0, 18 B, main
+F_0801025C	0x0801025c	14	MATCHED	src/wave14_C.c	W14-C: F_0801025C, 18 B, main
+F_08002F24	0x08002f24	14	MATCHED	src/wave14_C.c	W14-C: F_08002F24, 28 B, main
+F_0800C4F8	0x0800c4f8	14	MATCHED	src/wave14_C.c	W14-C: F_0800C4F8, 20 B, main
+F_08016F74	0x08016f74	14	MATCHED	src/wave14_C.c	W14-C: F_08016F74, 20 B, main
+F_08025378	0x08025378	14	MATCHED	src/wave14_C.c	W14-C: F_08025378, 20 B, main
+F_08025464	0x08025464	14	MATCHED	src/wave14_C.c	W14-C: F_08025464, 20 B, main
+F_08025564	0x08025564	14	MATCHED	src/wave14_C.c	W14-C: F_08025564, 20 B, main
+F_08005704	0x08005704	14	MATCHED	src/wave14_C.c	W14-C: F_08005704, 22 B, main
+F_08004548	0x08004548	14	MATCHED	src/wave14_C.c	W14-C: F_08004548, 36 B, main
+Wrap_07818	0x08007818	14	MATCHED	src/wave14_C.c	W14-C: Wrap_07818, 40 B, main
+F_080429BC	0x080429bc	14	MATCHED	src/wave14_C.c	W14-C: F_080429BC, 36 B, main
+F_08025790	0x08025790	14	MATCHED	src/wave14_C_old.c	W14-C: F_08025790, 38 B, old
+Count_08042A38	0x08042a38	14	MATCHED	src/wave14_C.c	W14-C: Count_08042A38, 42 B, main+old
+F_0800456C	0x0800456c	14	MATCHED	src/wave14_C.c	W14-C: F_0800456C, 64 B, main
+FlagInit	0x08011070	14	MATCHED	src/wave14_C.c	W14-C: FlagInit, 44 B, main
+DecByte	0x080254b4	14	MATCHED	src/wave14_C_old.c	W14-C: DecByte, 44 B, old
+F_08024F88	0x08024f88	14	MATCHED	src/wave14_C_old.c	W14-C: F_08024F88, 52 B, old
+F_0802663C	0x0802663c	14	MATCHED	src/wave14_C.c	W14-C: F_0802663C, 48 B, main+old
+F_080251D8	0x080251d8	14	MATCHED	src/wave14_C_old.c	W14-C: F_080251D8, 50 B, old
+F_0802533C	0x0802533c	14	MATCHED	src/wave14_C_old.c	W14-C: F_0802533C, 60 B, old
+F_08022FE4	0x08022fe4	14	MATCHED	src/wave14_C_old.c	W14-C: F_08022FE4, 62 B, old
+F_0800B448	0x0800b448	15	BLOCKED	(staging)	"W15-D: NEW idiom — empty-asm ""+r""(t) barrier defeats pool fold AND forces shift-split (lsls#24@def, ldr-between, adds#36, pool 0x02004E40 exact). Residual: allocator swaps t/bb r0<->r3 (+1 insn). 13 variants. Park."
+F_08024878	0x08024878	15	BLOCKED	(staging)	W15-D: confirmed second-vintage (dead-param extends: adds r2,r1,#0; lsls/lsrs r2 on dead 2nd param). Park per wave14_C idiom 5. Not retried.
+Task_ActivateSlot	0x08000dc0	15	MATCHED	src/wave15_D.c	W15-D: task-slot init at 0x030023C8+cnt*24 (68B, main agbcc, 0 diffs). Idioms: split-shift t=(t<<1)+t; t<<=3; t1 pin-r1 + t free for arithmetic; if-scope beq fix. Callee ContextSwitch (0x08000300, ASM). Coordinator-verified.
+F_080260D4	0x080260d4	15	BLOCKED	(staging)	W15-D: loop-top s16 extend hoist resists (LICM). Tried pin r4, init-at-decl, explicit s16 copy, asm extend, int/s16 split counters. Wave14_C best (4 diffs) stands.
+TblCall_08040364	0x08040364	15	BLOCKED	(staging)	W15-D: indexed ldrsb r4,[r1,r4] resists. Variable index gives ldrsb r0,[r1,r0]; pin+asm gives ldrsb r4,[r1,r4] but surrounding alloc wrong. Park.
+TblCall_080437D4	0x080437d4	15	BLOCKED	(staging)	W15-D: twin of 0x08040364. Not attempted separately; same blocker.
+F_08043630	0x08043630	15	BLOCKED	(staging)	W15-D: near-miss best v7: only movs r0,#0/strb r0 vs ROM movs r3,#0/strb r3 (2-byte allocator diff). Barrier defeats pool fold, u32 temp avoids extend. Park.
+F_08006124	0x08006124	15	BLOCKED	(staging)	W15-D: 6-arg wrapper: dead pool load (0x0200483C) + 12B-over stack codegen. Likely compiler version difference. Park.
+F_08006578	0x08006578	15	BLOCKED	(staging)	W15-D: twin of 0x08006124. Not attempted separately.
+Tbl_ClearEntries	0x08011170	15	MATCHED	src/wave15_D.c	W15-D: table-entry clear loop (68B, main agbcc, 0 diffs). Widened u16 increment via u32 t=(u32)i<<16; t+=(0x80<<9) defeats 0x10000 fold. Callees GetRomTableEntry_082240B8/TableByte_16FAC/TblFindClear_02C74 (all MATCHED). Coordinator-verified.
+ResetStateBlock_3618c	0x0803618c	16	MATCHED	src/w16d_0803618c.c	W16-D: 80 B (68+12 pool); main agbcc; zeroes 8B@0x200BCE8, init call seq; tied-opaque pool anti-fold; coordinator-verified 0 diffs in built ROM
+F_080052DC	0x080052dc	15	BLOCKED	(staging)	W15-D: 6-pool fold; barrier forces r8 (120B). Pool-fold needs barrier but barrier breaks allocation. Park.
+BlendMasked_2960	0x08002960	14	BLOCKED		W14-B: 74 diffs; old
+BlendMasked_29B0	0x080029b0	14	BLOCKED		W14-B: - diffs; old
+InitRegs_0CC24	0x0800cc24	14	BLOCKED		W14-B: 70 diffs; old
+ObjInit_10AD8	0x08010ad8	14	BLOCKED		W14-B: 59 diffs; old
+TblChecksum_17A0	0x080017a0	14	BLOCKED		W14-B: 75 diffs; old
+QueuePush_483C	0x0800483c	14	BLOCKED		W14-B: 61 diffs; old
+SetInsert_27D4C	0x08027d4c	14	BLOCKED		W14-B: 62 diffs; old
+BigMul_23DD8	0x08023dd8	14	BLOCKED		W14-B: 73 diffs; old
+TblInterleave_C784	0x0800c784	14	BLOCKED		W14-B: 86 diffs; old
+AbsScale_52A0	0x080052a0	14	BLOCKED		W14-B: 39 diffs; main
+TblStride_24818	0x08024818	15	MATCHED	src/wave15_D.c	W15-D: stride lookup (48B, main agbcc, 0 diffs). pin q->r3 forces 216 const into r2, k->r4; size corrected 46->48 (42 code+2 pad+4 pool). Callee GetStride4Byte20 (MATCHED). Coordinator-verified.
+F_08000624	0x08000624	15	MATCHED	src/wave15_B.c	W15-B: trivial wrapper (10B, main agbcc, coordinator-verified 0-diff).
+F_08025070	0x08025070	15	MATCHED	src/wave15_B.c	W15-B: symbol-derived pointer arithmetic (28B, main agbcc, coordinator-verified 0-diff).
+F_08024EE0	0x08024ee0	15	MATCHED	src/wave15_B_old.c	W15-B: entity-array stride idiom (40B, old_agbcc agbcc, coordinator-verified 0-diff).
+F_08002FD4	0x08002fd4	15	MATCHED	src/wave15_B_old.c	W15-B: empty-asm barrier forces pool loads (56B, old_agbcc agbcc, coordinator-verified 0-diff).
+F_0802478C	0x0802478c	15	MATCHED	src/wave15_B.c	W15-B: wrapper (28B, main agbcc, coordinator-verified 0-diff).
+F_080248AC	0x080248ac	15	MATCHED	src/wave15_B.c	W15-B: struct field for +20 (24B, main agbcc, coordinator-verified 0-diff).
+F_08024648	0x08024648	15	MATCHED	src/wave15_B.c	W15-B: wrapper (18B, main agbcc, coordinator-verified 0-diff).
+F_0801E87C	0x0801e87c	15	MATCHED	src/wave15_B.c	W15-B: pass-through wrapper (18B, main agbcc, coordinator-verified 0-diff).
+F_080247C4	0x080247c4	15	MATCHED	src/wave15_B.c	W15-B: barrier forces pool load before branch (34B, main agbcc, coordinator-verified 0-diff).
+F_0802D5A8	0x0802d5a8	15	MATCHED	src/wave15_B.c	W15-B: divided-syntax asm for adds order (44B, main agbcc, coordinator-verified 0-diff).
+F_08024848	0x08024848	15	MATCHED	src/wave15_B_old.c	W15-B: entity-array stride idiom (48B, old_agbcc agbcc, coordinator-verified 0-diff).
+F_0802476C	0x0802476c	15	MATCHED	src/wave15_B.c	W15-B: wrapper (32B, main agbcc, coordinator-verified 0-diff).
+F_08024918	0x08024918	15	MATCHED	src/wave15_B.c	W15-B: split || into two ifs (34B, main agbcc, coordinator-verified 0-diff).
+F_08040078	0x08040078	15	MATCHED	src/wave15_B.c	W15-B: variable pointer prevents +8 fold (48B, main agbcc, coordinator-verified 0-diff).
+F_080104CC	0x080104cc	15	MATCHED	src/wave15_B.c	W15-B: early return (38B, main agbcc, coordinator-verified 0-diff).
+F_0804A340	0x0804a340	15	MATCHED	src/wave15_B.c	W15-B: early returns (42B, main agbcc, coordinator-verified 0-diff).
+F_0802660C	0x0802660c	15	MATCHED	src/wave15_B.c	W15-B: constant materialization (48B, main agbcc, coordinator-verified 0-diff).
+F_08016E4C	0x08016e4c	15	MATCHED	src/wave15_B.c	W15-B: direct store from r1 (54B, main agbcc, coordinator-verified 0-diff).
+F_0801039C	0x0801039c	15	MATCHED	src/wave15_B.c	W15-B: early extension + barrier (48B, main agbcc, coordinator-verified 0-diff).
+F_08026A48	0x08026a48	15	MATCHED	src/wave15_B.c	W15-B: shared zero + explicit temps (60B, main agbcc, coordinator-verified 0-diff).
+F_080242A8	0x080242a8	15	BLOCKED	(staging)	W15-B: complex switch; prologue aa in r2 not r0; needs prologue-idiom work. See docs/match_notes_wave15_B.md.
+F_0804990C	0x0804990c	15	BLOCKED	(staging)	W15-B: needs ldr r2/ldr r3 up front + re-extension; barrier gives r0/r1. See docs/match_notes_wave15_B.md.
+F_08001C5C	0x08001c5c	15	BLOCKED	(staging)	W15-B: compiler caches consts in r8/r9; ROM uses r4-r7 only. See docs/match_notes_wave15_B.md.
+F_0802538C	0x0802538c	15	BLOCKED	(staging)	W15-B: loop needs r0 clobber/restore; compiler uses r3/r4. See docs/match_notes_wave15_B.md.
+F_080112CC	0x080112cc	15	BLOCKED	(staging)	W15-B: loop needs i in r1 + r4=i<<24; compiler folds. See docs/match_notes_wave15_B.md.
+Fwd_08000630	0x08000630	15	MATCHED	src/w15c_08000630.c	W15-C: Fwd_08000630, main agbcc; pure forwarder; Forwards to F_08002F4C
+Fwd_0804C814	0x0804c814	15	MATCHED	src/w15c_0804c814.c	W15-C: Fwd_0804C814, main agbcc; pure forwarder; Forwards to ClearSignBit
+SetFlag_0800EB24	0x0800eb24	15	MATCHED	src/w15c_0800eb24.c	W15-C: SetFlag_0800EB24, main agbcc; const arg call; SetByte20_Clear21to23_02005130(3)
+FillWrap_0800C5EC	0x0800c5ec	15	MATCHED	src/w15c_0800c5ec.c	W15-C: FillWrap_0800C5EC, main agbcc; arg shuffle + (u16) cast; FillTilemap_C3A0(base, (u16)c)
+FillWrap_0800C69C	0x0800c69c	15	MATCHED	src/w15c_0800c69c.c	W15-C: FillWrap_0800C69C, main agbcc; arg shuffle + (u16) cast; FillTilemap_C3A0(base, (u16)c); twin of 0800c5ec
+NotZero_08003078	0x08003078	15	MATCHED	src/w15c_08003078.c	W15-C: NotZero_08003078, main agbcc; early-return branchy bool; callee declared u32 return (int-decl idiom); return TblValidate_300C(x)==0 ? 0 : 1 via early return
+F_0800ECD8	0x0800ecd8	15	MATCHED	src/w15c_0800ecd8.c	W15-C: F_0800ECD8, main agbcc; u32 temp for s8 call result; bne skips past movs; if ((u32)(s8)F_0801025C(a,(s8)b)==1) SetByte20(13); return 1 else return r
+TaskScan_08000D6C	0x08000d6c	15	MATCHED	src/w15c_08000d6c.c	W15-C: TaskScan_08000D6C, main agbcc; do-while(i<=2) with int i; i++ before p+=24; Scans 3 task slots, calls SetTaskField0_030023C8(i) if slot byte != 1
+FlagByteSet_0800EC18	0x0800ec18	15	MATCHED	src/w15c_0800ec18.c	W15-C: FlagByteSet_0800EC18, main agbcc; u32 addr=(u32)g_02005130 extern array blocks const-fold -> ldr r0; adds r2,r0,#0; adds r2,#37; Sets byte at 0x02005130+37; u32 b=(u8)a forces early narrowing
+ChipInit_0801C3FC	0x0801c3fc	15	MATCHED	src/w15c_0801c3fc.c	W15-C: ChipInit_0801C3FC, old_agbcc agbcc; u8 temp blocks &252 folding: b=p[10]; b&=253; b&=254; Wrapper_D770(p,0x82a,0); ChipSlot_IncUse(p,0); mask byte 10
+ChipInit_0801C540	0x0801c540	15	MATCHED	src/w15c_0801c540.c	W15-C: ChipInit_0801C540, old_agbcc agbcc; u8 temp blocks folding; twin of 0801c3fc; Same as 0801c3fc, different pool
+IdxLookup_080246FC	0x080246fc	15	MATCHED	src/w15c_080246fc.c	W15-C: IdxLookup_080246FC, main agbcc; if (x>248) return 0; return (u8)DerefIdx_08025564(pp,(u8)x); Range-checked table lookup
+CopyBytes_0800EAC4	0x0800eac4	15	MATCHED	src/w15c_0800eac4.c	W15-C: CopyBytes_0800EAC4, main agbcc; direct g_02005168[] access loads pool late (not via local); Copies bytes between 0x02005130 and 0x02005168 regions
+CondCopy_0800EAF4	0x0800eaf4	15	MATCHED	src/w15c_0800eaf4.c	W15-C: CondCopy_0800EAF4, old_agbcc agbcc; || short-circuit; y kept in r3 via adds; Conditional copy if p[4]!=x || p[5]!=y
+Store5_0800EBA0	0x0800eba0	15	MATCHED	src/w15c_0800eba0.c	W15-C: Store5_0800EBA0, main agbcc; 5 args (4 regs + stack); ip reused for pool; Stores 5 bytes to 0x02005130 offsets
+FlagStore_0800EB70	0x0800eb70	15	MATCHED	src/w15c_0800eb70.c	W15-C: FlagStore_0800EB70, main agbcc; pool ptr q in r3 reused: p=q; p+=37 and r=q; r+=36; Sets bytes at +37/+36 of 0x02005130
+GuardedListInit_0800E400	0x0800e400	15	MATCHED	src/w15c_0800e400.c	W15-C: GuardedListInit_0800E400, main agbcc; u8 z=0 temp reused for strh and call arg; Flag-guarded list init; template for family
+GuardedListInit_0800E650	0x0800e650	15	MATCHED	src/w15c_0800e650.c	W15-C: GuardedListInit_0800E650, main agbcc; same template, IsZero_02005160_080103cc; Same as 0800e400
+GuardedListInit_0800E690	0x0800e690	15	MATCHED	src/w15c_0800e690.c	W15-C: GuardedListInit_0800E690, main agbcc; same template, IsZero_02005160_080104f4; Same as 0800e400
+GuardedListInit_0800E7C8	0x0800e7c8	15	MATCHED	src/w15c_0800e7c8.c	W15-C: GuardedListInit_0800E7C8, main agbcc; same template, IsZero_02005160_08010124; Same as 0800e400
+GuardedListInit_0800E808	0x0800e808	15	MATCHED	src/w15c_0800e808.c	W15-C: GuardedListInit_0800E808, main agbcc; same template, IsZero_02005160_08010248; Same as 0800e400
+GuardedListInit_0800E848	0x0800e848	15	MATCHED	src/w15c_0800e848.c	W15-C: GuardedListInit_0800E848, main agbcc; same template, IsZero_02005160_080102f4; Same as 0800e400
+GuardedListInit_0800E888	0x0800e888	15	MATCHED	src/w15c_0800e888.c	W15-C: GuardedListInit_0800E888, main agbcc; same template, IsZero_02005160_080102f4; Same as 0800e400
+GuardedListInit_0800E8C8	0x0800e8c8	15	MATCHED	src/w15c_0800e8c8.c	W15-C: GuardedListInit_0800E8C8, main agbcc; template + u8 *q=(u8*)p; q+=10; FlagByte_CopyOrNeg1(q); Variant with pointer arg to checker
+GuardedListInit_0800E90C	0x0800e90c	15	MATCHED	src/w15c_0800e90c.c	W15-C: GuardedListInit_0800E90C, main agbcc; template + q+=43; Test_08010454(*q); Variant with byte arg to checker
+GuardedListInit_0800E950	0x0800e950	15	MATCHED	src/w15c_0800e950.c	W15-C: GuardedListInit_0800E950, main agbcc; template + q+=43; FlagBitClear_10498(*q); Variant with byte arg to checker
+ObjInit_08019B64	0x08019b64	15	MATCHED	src/w15c_08019b64.c	W15-C2: ObjInit_08019B64, old_agbcc agbcc; wave5 idx/mask/sh pattern; (0x80<<2) setup; Vec2_AddMirrored tail; ChipSlot_Setup(s,0x200,s[17]); no Text_SelectBlobIdx
+FlagApply_08011A0C	0x08011a0c	15	MATCHED	src/w15c_08011a0c.c	W15-C2: FlagApply_08011A0C, old_agbcc agbcc; s8 ldrsb flag logic; r1-pinned increment temp; zero-var return; Returns zero-1 via subs
+ObjInit_0801A6AC	0x0801a6ac	15	MATCHED	src/w15c_0801a6ac.c	W15-C2: ObjInit_0801A6AC, old_agbcc agbcc; wave5 pattern; gTbl_082265C0 global .set for r0-first pool load; ChipSlot_Setup(s,594,0); Text_SelectBlobIdx(0xa3) discarded
+MaskWrite23_0804D7C0	0x0804d7c0	15	MATCHED	src/w15c_0804d7c0.c	W15-C2: MaskWrite23_0804D7C0, old_agbcc agbcc; pinned r6/sl/r8/r9 + asm prologue; r0-pinned am; u32 rb/rv; Pool 0x68736D53 guard; strb [r4,#23]
+MaskWrite25_0804D834	0x0804d834	15	MATCHED	src/w15c_0804d834.c	W15-C2: MaskWrite25_0804D834, old_agbcc agbcc; twin of 0804d7c0; strb [r4,#25] instead of #23
+ObjInit_0801F9EC	0x0801f9ec	15	MATCHED	src/w15c_0801f9ec.c	W15-C2: ObjInit_0801F9EC, old_agbcc agbcc; r5/z r0-pinned prologue; global .set for idx pools; Wrapper_D728(s,15639,0); r5[7]=0 tail
+ObjInit_08018310	0x08018310	15	MATCHED	src/w15c_08018310.c	W15-C2: ObjInit_08018310, old_agbcc agbcc; wave5 pattern; (0xA0<<3)=0x500; Vec2 pools; ChipSlot_Setup(s,541,s[17]); ChipSlot_IncUse(s,1)
+ObjInit_08018E1C	0x08018e1c	15	MATCHED	src/w15c_08018e1c.c	W15-C2: ObjInit_08018E1C, old_agbcc agbcc; twin of 08018310; ChipSlot_Setup(s,553,s[17]); IncUse(s,0); (0x80<<3)=0x400
+ObjInit_080200EC	0x080200ec	15	MATCHED	src/w15c_080200ec.c	W15-C2: ObjInit_080200EC, old_agbcc agbcc; p2 pinned r2; inlined shift; conditional Wrapper_D728 arg; W_D728(s, s[18]?0x3f18:0x3e18, 0); s[18]=(v<<28)>>28
+ObjInit_080181AC	0x080181ac	15	MATCHED	src/w15c_080181ac.c	W15-C2: ObjInit_080181AC, old_agbcc agbcc; wave5 pattern; ((u32)s[17]<<25)>>24; (u32)-0x80; ChipSlot_Setup(s,543,((s[17]<<25)>>24))
+SlotCopy_0801E14C	0x0801e14c	15	BLOCKED	(staging)	W15-C: 6 diffs; scheduler orders ldrb/lsls before ldr pool; ROM has ldr pool first; Tried: single-expr, split statements, asm barrier, array-index &g[p[9]], old_agbcc. 6 diffs at bytes 14-16.
+TblSlotInit_080173D4	0x080173d4	15	BLOCKED	(staging)	W15-C: 4 diffs; scheduler: ROM ldr pool BEFORE ldrb; mine does ldrb first; Tried u32 array index. 4 diffs.
+ClearLoop_0804C820	0x0804c820	15	BLOCKED	(staging)	W15-C: 29 diffs; ROM loads pool const 7 as u32 then (u16)-extends; source of pooled 7 unknown; Tried ldrh, (u16)7 (gives movs). 29 diffs.
+SlotClear_0801787C	0x0801787c	15	BLOCKED	(staging)	W15-C: 20 diffs; scheduler ldr/ldrb order (same as 0801e14c); 20 diffs.
+TestStore_0800EDB0	0x0800edb0	15	BLOCKED	(staging)	W15-C: 26 diffs; agbcc booleanizes (a<<24)==0 to negs/orrs/lsrs; ROM is branchy; Tried if/else, braces, ternary, goto, temp u32, old_agbcc. 26 diffs.
+ListWalk_0804BDE0	0x0804bde0	15	BLOCKED	(staging)	W15-C: 30 diffs; ROM uses tst (not ands) and orrs r1,r0 (not r0,r1); Tried temp u8, (u32) cast. 30 diffs.
+sub_08016D2C	0x08016d2c	15	BLOCKED	(staging)	W15-C2: 26 diffs; r2=s allocation not reproduced; tried pinning (broke), reorder (worse)
+sub_08025108	0x08025108	15	BLOCKED	(staging)	W15-C2: 74 diffs; loop over-optimized; do-while attempt shorter; complex r7 loop
+TblLookup_0804C7B4	0x0804c7b4	16	MATCHED	src/w16d_0804c7b4.c	W16-D: 52 B (44+8 pool); main agbcc; volatile-barrier shift/pool interleave; ClearSignBit_0804C5F4 call; coordinator-verified 0 diffs in built ROM
+RecInit_08027C84	0x08027c84	16	MATCHED	src/w16d_08027c84.c	W16-D: 48 B (36+12 pool); main agbcc; s8 v=*(p+0x4698); InitRec8_267B4; u32-prototype extern forces word ldr; coordinator-verified 0 diffs in built ROM
+F_0802FD68	0x0802fd68	16	MATCHED	src/w16d_0802fd68.c	W16-D: 56 B; main agbcc; p[3] state machine; goto branch layout; coordinator-verified 0 diffs in built ROM
+sub_0800B3B0	0x0800b3b0	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_080379F0	0x080379f0	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_08038EFC	0x08038efc	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_0803AE90	0x0803ae90	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_0800B6A4	0x0800b6a4	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_080226B0	0x080226b0	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_0802278C	0x0802278c	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_08027C28	0x08027c28	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_08035170	0x08035170	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_08037A7C	0x08037a7c	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_08038F88	0x08038f88	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_0803AF3C	0x0803af3c	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_08048380	0x08048380	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_0801BD7C	0x0801bd7c	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+sub_0802316C	0x0802316c	15	UNMATCHED	-	W15-C1: worker-verified 0-diff but sources lost to /tmp VM wipe; re-derivation candidate, see docs/match_notes_wave15_C.md
+Node_PopAndInit	0x08017000	16	MATCHED	src/w16b_08017000.c	W16-B: 132 B; main agbcc; pops node via sub_08004424/54, inits fields; pinned regs
+Node_PopAndInit_20ED4	0x08020ed4	16	MATCHED	src/w16b_08020ed4.c	W16-B: 132 B; main agbcc; twin of 17000
+CountNonzeroStride	0x0804580c	16	MATCHED	src/w16b_0804580c.c	W16-B: 42 B; main agbcc; counts non-zero TblStride_24818(i)
+SumStrides_25754	0x08025754	16	MATCHED	src/w16b_08025754.c	W16-B: 60 B; main agbcc; sums GetRomTableU16
+Dispatch_24434	0x08024434	16	MATCHED	src/w16b_08024434.c	W16-B: 124 B; main agbcc; switch on (a>>12)
+Fwd_25054	0x08025054	16	MATCHED	src/w16b_08025054.c	W16-B: 28 B; main agbcc; forwards to F_0802660C
+Fwd_10BA0	0x08010ba0	16	MATCHED	src/w16b_08010ba0.c	W16-B: 20 B; main agbcc; Tbl_ClearEntries forward
+Count_467DC	0x080467dc	16	MATCHED	src/w16b_080467dc.c	W16-B: 52 B; main agbcc; counts non-zero F_080247C4
+Set_0EA30	0x0800ea30	16	MATCHED	src/w16b_0800ea30.c	W16-B: 28 B; main agbcc; SyncObjFlagBits_BEE0 call
+Fwd_EBF0	0x0800ebf0	16	MATCHED	src/w16b_0800ebf0.c	W16-B: 36 B; main agbcc; cond SetByte20 call
+Sub_1AB34	0x0801ab34	16	MATCHED	src/w16b_0801ab34.c	W16-B: 64 B; old_agbcc; idx table dispatch
+Fill_253BC	0x080253bc	16	MATCHED	src/w16b_080253bc.c	W16-B: 60 B; main agbcc; Fill + Append loop
+Sub_257FC	0x080257fc	16	MATCHED	src/w16b_080257fc.c	W16-B: 62 B; main agbcc; GetRomTableU16 compare/store
+Sub_2666C	0x0802666c	16	MATCHED	src/w16b_0802666c.c	W16-B: 62 B; main agbcc; Buf_RemoveAt + Append
+Sub_266AC	0x080266ac	16	MATCHED	src/w16b_080266ac.c	W16-B: 66 B; main agbcc; loop variant of 2666C
+TwoTblOps_0804B110	0x0804b110	16	MATCHED	src/w16c_0804b110.c	W16-C: 20 B; main agbcc; F_08002FD4 + TblFindClear
+Flag17Init_0804B954	0x0804b954	16	MATCHED	src/w16c_0804b954.c	W16-C: 26 B; main agbcc; Flag17Init; fix_tail_align
+CondSet7_0800EBD0	0x0800ebd0	16	MATCHED	src/w16c_0800ebd0.c	W16-C: 30 B; main agbcc; cond SetByte20; fix_tail_align
+ChipFlagSet_08037914	0x08037914	16	MATCHED	src/w16c_08037914.c	W16-C: 64 B; main agbcc; u32 decl for u8 callee
+ChipInit_0801BD7C	0x0801bd7c	16	MATCHED	src/w16c_0801bd7c.c	W16-C: 104 B; old_agbcc; ChipInit pattern
+ChipInit_0802316C	0x0802316c	16	MATCHED	src/w16c_0802316c.c	W16-C: 100 B; old_agbcc; ChipInit variant
+ChipInit_0801BEA0	0x0801bea0	16	MATCHED	src/w16c_0801bea0.c	W16-C: 110 B; old_agbcc; + Text_SelectBlobIdx
+ChipInit_08019E0C	0x08019e0c	16	MATCHED	src/w16c_08019e0c.c	W16-C: 112 B; old_agbcc; q-=0x23 + Vec2
+ChipInit_0801962C	0x0801962c	16	MATCHED	src/w16c_0801962c.c	W16-C: 110 B; old_agbcc; Setup(0x233) + SetBit16
+ChipInit_0801974C	0x0801974c	16	MATCHED	src/w16c_0801974c.c	W16-C: 110 B; old_agbcc; twin, pool0=0x236
+ChipInit_08019A3C	0x08019a3c	16	MATCHED	src/w16c_08019a3c.c	W16-C: 112 B; old_agbcc; twin + Text_SelectBlobIdx
+StateMachine_08011B64	0x08011b64	16	MATCHED	src/w16c_08011b64.c	W16-C: 100 B; main agbcc; 2-state p[5] machine
+sub_0800B148	0x0800b148	17	MATCHED	src/w17a_0800b148.c	W17-A: 340 B; old_agbcc; 0 diffs (was 95 BLOCKED). EWRAM 0x02004E40 state update. Idioms: t30-reuse mask, pinned bit/one regs, inline-asm r6 loads. See docs/match_notes_wave17_A.md
+ChipInit_080178A8	0x080178A8	MATCHED	wave17_C	2026-10-22	84	main	Node_PopAndInit(0,1,b,3)+Vec2_SetMirrored+IncU8_12; u16*(n+120) stores
+ChipInit_0801AA70	0x0801AA70	MATCHED	wave17_C	2026-10-22	92	main	Node_PopAndInit(0,1,c,6); 6 params; a pinned r8
+ChipInit_0801B98C	0x0801B98C	MATCHED	wave17_C	2026-10-22	92	main	Node_PopAndInit(0,1,c,8)
+ChipInit_0801709C	0x0801709C	MATCHED	wave17_C	2026-10-22	40	main	Node_PopAndInit(0,0,0,0) leaf
+ChipInit_0801EBF0	0x0801EBF0	MATCHED	wave17_C	2026-10-22	82	main	Node_PopAndInit(0,1,c,15); 5 params no tail
+ChipInit_0801CD50	0x0801CD50	MATCHED	wave17_C	2026-10-22	92	main	Node_PopAndInit(0,1,c,10)
+ChipInit_0801AB94	0x0801AB94	MATCHED	wave17_C	2026-10-22	78	main	Node_PopAndInit(0,1,b,7); no +120 stores
+ChipInit_08017A44	0x08017A44	MATCHED	wave17_C	2026-10-22	78	main	Node_PopAndInit(0,1,b,4)
+ChipInit_0801BBB4	0x0801BBB4	MATCHED	wave17_C	2026-10-22	78	main	Node_PopAndInit(0,1,b,9)
+ChipInit_0801E990	0x0801E990	MATCHED	wave17_C	2026-10-22	82	main	Node_PopAndInit(0,1,c,14)
+TblState_0804A2DC	0x0804A2DC	MATCHED	wave17_C	2026-10-22	70	main	TblValidate_300C + Text_Select/F_08002FD4; pool 0x0200BD10
+Search_080112FC	0x080112FC	MATCHED	wave17_C	2026-10-22	248	main	Flag-init + table walk; plain a+3==i; negative-s8 reload+negate
+TableWalk_080113F4	0x080113F4	MATCHED	wave17_C	2026-10-22	194	main	Same walk returns u8*
+F_080254E0	0x080254E0	MATCHED	wave17_C	2026-10-22	66	old	GetMaskedByte/Append; old_agbcc regalloc
+F_08025A10	0x08025A10	MATCHED	wave17_C	2026-10-22	84	main	TblLookup+SumStrides/AddTbl; u32-decl avoids (u16) ext
+F_0802541C	0x0802541C	MATCHED	wave17_C	2026-10-22	70	old	F_0802533c loop + Fill_253BC; old_agbcc
+Sub_08002300	0x08002300	8	BLOCKED		Wave17-D: 41 diffs (old_agbcc) / 63 (main); spread across function (count-init coalescing; third-loop field8 reload reg)
+Sub_0801B47C	0x0801b47c	8	BLOCKED		Wave17-D: 65 diffs (old_agbcc); table `adds` dest-reg mismatch (r1 vs r0)
+Sub_080211EC	0x080211ec	8	BLOCKED		Wave17-D: 70 diffs (old_agbcc); table variant, `adds r1,r2,#4` intermediate
+Sub_0800E6D0	0x0800e6d0	8	BLOCKED		Wave17-D: 31 diffs; pool duplication (0x02005020 twice) needs full-build check
+Sub_0803AED0	0x0803aed0	8	BLOCKED		Wave17-D: 47 diffs; pool placement interleave needs full-build check
+Sub_08011AC8	0x08011ac8	8	BLOCKED		Wave17-D: 122 diffs; 3-state machine, nested branches diverge
+F_08016E0C	0x08016e0c	17	MATCHED	src/w17d_08016e0c.c	W17-D: blocked revisit (64B, old_agbcc, 0 diffs)
+F_080250A8	0x080250a8	17	MATCHED	src/w17d_080250a8.c	W17-D: bulk (14B, main, 0 diffs)
+F_0802508C	0x0802508c	17	MATCHED	src/w17d_0802508c.c	W17-D: bulk (22B, main, 0 diffs)
+F_080228BC	0x080228bc	17	MATCHED	src/w17d_080228bc.c	W17-D: bulk (34B, main+fix_tail_align, 0 diffs)
+F_0801F12C	0x0801f12c	17	MATCHED	src/w17d_0801f12c.c	W17-D: bulk Node_PopAndInit wrapper (40B, main, 0 diffs)
+F_08020514	0x08020514	17	MATCHED	src/w17d_08020514.c	W17-D: bulk Node_PopAndInit wrapper (40B, main, 0 diffs)
+F_0801D048	0x0801d048	17	MATCHED	src/w17d_0801d048.c	W17-D: bulk (40B, main, 0 diffs)
