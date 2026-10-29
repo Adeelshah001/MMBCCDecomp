@@ -1,0 +1,47 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08000F1C	F_08000F1C	MATCHED	10	0	main	void forwarder	v0(void)
+0x08002F40	F_08002F40	MATCHED	10	0	main	void forwarder	v0(void)
+0x08002F4C	F_08002F4C	MATCHED	10	0	main	void forwarder	v0(void)
+0x08005610	F_08005610	MATCHED	10	0	main	void forwarder	v0(void)
+0x0800D55C	F_0800D55C	MATCHED	10	0	main	void forwarder	v0(void)
+0x08010ACC	F_08010ACC	MATCHED	10	0	main	void forwarder	v0(void)
+0x08011BD4	F_08011BD4	MATCHED	10	0	main	void forwarder	v0(void)
+0x0804C6A8	F_0804C6A8	MATCHED	10	0	main	void forwarder	v0(void)
+0x08001C4C	F_08001C4C	MATCHED	14	0	main	2-call sequence	
+0x080050E0	F_080050E0	MATCHED	14	0	main	single call	
+0x0802616C	F_0802616C	MATCHED	14	0	main	void return; pop{r0};bx r0	callee return discarded
+0x0804C84C	F_0804C84C	MATCHED	14	0	main	u16 2nd param	
+0x08004EE0	F_08004EE0	MATCHED	18	0	main	3-call sequence	
+0x0801025C	F_0801025C	MATCHED	18	0	main	u32/s8 params; no extend	ROM does NOT extend r0 or return
+0x08002F24	F_08002F24	MATCHED	28	0	main	pinned r0 + tied-opaque	two separate pool loads
+0x0800C4F8	F_0800C4F8	MATCHED	20	0	main	adds r0,r1,#0	2nd param tested via copy
+0x08016F74	F_08016F74	MATCHED	20	0	main	single call	
+0x08025378	F_08025378	MATCHED	20	0	main	return sub(p+i)	
+0x08025464	F_08025464	MATCHED	20	0	main	sub(p+12, *(u32*)(p+8), 0xF9)	
+0x08025564	F_08025564	MATCHED	20	0	main	single call	
+0x08005704	F_08005704	MATCHED	22	0	main	4-call sequence	
+0x08004548	F_08004548	MATCHED	36	0	main	pinned r1/r0 + late opaque loads	ordering via opaque
+0x08007818	Wrap_07818	MATCHED	40	0	main	s8 params	3 s8 args to sub_08007840
+0x080429BC	F_080429BC	MATCHED	36	0	main	void(void) callees	first two callees clobber r0/r1
+0x08025790	F_08025790	MATCHED	38	0	old	u32 intermediate	not u16 (avoids extra extend)
+0x08042A38	Count_08042A38	MATCHED	42	0	main+old	do/while u8; bls on i<=0x1d	
+0x0800456C	F_0800456C	MATCHED	64	0	main	t=12; as statement	CpuFastSet via DmaCopy; 0x80<<2
+0x08011070	FlagInit	MATCHED	44	0	main	uninit u32 + if/else	bne layout (not beq)
+0x080254B4	DecByte	MATCHED	44	0	old	(*r)--; if(*r==0)	
+0x08024F88	F_08024F88	MATCHED	52	0	old	(base - 0x14)	subs CSE not pool load
+0x0802663C	F_0802663C	MATCHED	48	0	main+old	load q before t*7*4	scheduler: ldr r2 before shifts
+0x080251D8	F_080251D8	MATCHED	50	0	old	(0xD8<<1) for 0x1B0	if(w==0) w=sub(...); return w
+0x0802533C	F_0802533C	MATCHED	60	0	old	if/else dup bodies	idx>0xf8 ret; dup (p[idx]&0x7f)<=0x62 check
+0x08022FE4	F_08022FE4	MATCHED	62	0	old	p[7]&1 guard	alloc via sub_08020ED4(0,0,0,6)
+0x0800B448	F_0800B448	BLOCKED	36	3	main	shift-split resists	lsls#24 early, lsrs#20 late + pool fold 0x02004E40+0x24
+0x08024878	F_08024878	BLOCKED	46	4	main	dead param	adds r2,r1,#0; lsls/lsrs r2; 2nd-vintage, park
+0x08000DC0	F_08000DC0	BLOCKED	68	4	main	lsls dest	allocator puts shift in r1 vs ROM r0
+0x080260D4	F_080260D4	BLOCKED	56	4	main	loop hoist	s16 init extend not hoisted out of loop
+0x08040364	TblCall_08040364	BLOCKED	56	8	main	ldrsb r4,[r1,r4]	movs r4,#0 + indexed ldrsb idiom resists
+0x080437D4	TblCall_080437D4	BLOCKED	56	8	main	twin of 08040364	same ldrsb idiom; different pool/callee
+0x08043630	F_08043630	BLOCKED	62	12	main	reg lifetime	v lost? strb r0 after bl clobbers; needs investigation
+0x08006124	F_08006124	BLOCKED	64	12	main	6-arg wrapper	stack args; 76B vs 64B
+0x08006578	F_08006578	BLOCKED	64	12	main	twin of 08006124	same 6-arg wrapper issue
+0x08011170	F_08011170	BLOCKED	68	6	main	u16 incr	(x<<16)+0x10000 via 0x80<<9 resists
+0x0803618C	F_0803618c	BLOCKED	70	10	main	r5 base	base in r5 not reproduced; 76B vs 66B
+0x080052DC	F_080052DC	BLOCKED	68	24	main	pool offsets	0x11b0 as pools; 92B vs 68B

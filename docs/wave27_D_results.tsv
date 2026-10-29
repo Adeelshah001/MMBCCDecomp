@@ -1,0 +1,23 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x0801c428	ChipFxTick_0801C428	BLOCKED	280	177	main	(none — blocked)	Best v7: 284 B (4 over), 177 diffs. Prologue/dispatch/countdown/nibble/ldrsh match. Blocker: call-1 register allocation — gcc uses r2 for ldrsh dest (with r8 save), ROM uses r3 (no save). Also requires s16-param local prototype for ChipInit_0801B98C (real callee has u16; ABI-compatible but prototype differs). Staged: staging/wave27_D/w27d_0801c428_v7.c
+0x08049560	GfxSetup_08049560	BLOCKED	280	235	main	(none — blocked)	Best: 328 B (48 over), 235 diffs. Loop and call sequence match. Blocker: `local=0` dead-store eliminated by gcc; volatile forces both strh but changes register allocation (r0/r1 swapped vs ROM) and adds overhead. Staged: staging/wave27_D/w27d_08049560_v1.c
+0x0800ac8c	sub_0800AC8C	BLOCKED	296	N/A	N/A	(none)	Not attempted in depth: complex bit-manipulation state machine (296 B true extent). Calls Ewram4E40_Init_0B4E4, Clr_0800B4C8. Requires significant effort.
+0x080203e0	sub_080203E0	BLOCKED	308	N/A	N/A	(none)	Not attempted in depth: complex two-pass string parser (308 B true extent). Calls Node_PopAndInit. Heavy r8/r9/sl/ip usage.
+0x08001f1c	sub_08001F1C	BLOCKED	334	N/A	N/A	(none)	Not attempted in depth: complex SRAM state machine (334 B). Switch on p[3] (cases 0-3), calls Sram_RetryWrapper.
+0x08002070	sub_08002070	BLOCKED	340	N/A	N/A	(none)	Not attempted: time. Calls Sram_WaitcntInit.
+0x0804d8a8	sub_0804D8A8	BLOCKED	344	N/A	N/A	(none)	Not attempted: time. Calls _call_via_r2.
+0x08027400	sub_08027400	BLOCKED	358	N/A	N/A	(none)	Not attempted in depth: jump-table dispatch (cases 0-4, default). Calls NewNode_08021CAC, SelBlob_Ret, etc. Triaged only.
+0x08034f2c	sub_08034F2C	BLOCKED	390	N/A	N/A	(none)	Not attempted: time. 1 call (0x08024554).
+0x08007840	sub_08007840	BLOCKED	408	N/A	N/A	(none)	Not attempted: time. 10 calls.
+0x0803aaa8	sub_0803AAA8	BLOCKED	412	N/A	N/A	(none)	Not attempted in depth: bit-flag tests with switch, calls 0x804a378. Triaged only.
+0x080176ac	sub_080176AC	BLOCKED	462	N/A	N/A	(none)	Not attempted: time. 14 calls.
+0x08025ec8	sub_08025EC8	BLOCKED	472	N/A	N/A	(none)	Not attempted: time. 1 call.
+0x0804b124	sub_0804B124	BLOCKED	492	N/A	N/A	(none)	Not attempted: time. 8 calls.
+0x08009c7c	sub_08009C7C	BLOCKED	606	N/A	N/A	(none)	Not attempted: time. 10 calls.
+0x080099fc	sub_080099FC	BLOCKED	636	N/A	N/A	(none)	Not attempted: time. 10 calls.
+0x0801e208	sub_0801E208	BLOCKED	706	N/A	N/A	(none)	Not attempted: time. 5 calls.
+0x0800f4f8	sub_0800F4F8	BLOCKED	1188	N/A	N/A	(none)	Not attempted: time. 6 calls.
+0x0800ef40	sub_0800EF40	BLOCKED	1464	N/A	N/A	(none)	Not attempted: time. 10 calls.
+0x08046df8	sub_08046DF8	BLOCKED	832	N/A	N/A	(none)	Not attempted: time. 8 calls.
+0x080471d8	sub_080471D8	BLOCKED	810	N/A	N/A	(none)	Not attempted: time. 8 calls.
+0x08008bc8	sub_08008BC8	BLOCKED	1234	N/A	N/A	(none)	Not attempted: time. 7 calls.

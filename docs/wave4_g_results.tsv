@@ -1,0 +1,5 @@
+name	address	wave	status	source	notes
+TaskMgr_Update	0x08000CD4	4	MATCHED	src/wave4_g.c	130 B; main agbcc; task/object manager, 3x0x18 entries at 0x030023C8; calls Task_Register + sub_080002dc (unmatched fwd-ref); inline asm for (s0&4) dest-reg
+HBlank_VCountUpdate	0x08000978	4	BLOCKED	-	151/160 B match; 9-byte diff in final XOR: need movs-before-ldrb order with adds r1,r3,r0 addr; combiner won't schedule; see docs/match_notes_wave4_g.md
+ObjInit_TypeA	0x08017F8C	4	BLOCKED	-	Idx-calc duplication + pool layout; two branches (s[0x10]==2 vs !=2) with different consts; combiner dest-reg issues; see docs/match_notes_wave4_g.md
+ObjInit_TypeB	0x0801DCC0	4	BLOCKED	-	Double-OR (2|t|1) dest-reg: need orrs r0,r1 twice; combiner picks wrong dest; -0xd mask needs rsbs not imm; see docs/match_notes_wave4_g.md

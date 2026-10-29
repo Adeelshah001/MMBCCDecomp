@@ -1,0 +1,59 @@
+# func_list v2.8 addendum — 2 func-list gaps (Wave 35 Worker C, 2026-10-24)
+
+Date: 2026-10-24. Staged by Wave 35 Worker C; coordinator to fold into
+docs/match_status.tsv (2 new rows) and count. Count if accepted:
+1674 -> **1676** (51 A + 1625 B). func_list_v2.txt itself NOT rewritten,
+per convention (addenda carry additions; v2.5 is the consolidated file).
+
+Both entries were found via the Wave 34-C extent correction: 0x0800c588
+and 0x0800cbc0 are 28 B, not 48 B (both already MATCHED, W34-C — NOT
+touched here). The following 20 B are real leaf functions that
+func_list missed entirely (they sit immediately after the 28 B
+functions, and immediately before the registry-BLOCKED FillPairs
+functions at 0x0800c5b8 / 0x0800cbf0, which bound their true extents).
+
+## 0x0800C5A4 (20 B, 0x0800c5a4-0x0800c5b8)
+
+Disassembly (verified from baserom bytes, little-endian):
+```
+0800c5a4: 7d82  ldrb r2, [r0, #22]
+0800c5a6: 3a01  subs r2, #1
+0800c5a8: 233f  movs r3, #63
+0800c5aa: 401a  ands r2, r3
+0800c5ac: 7e01  ldrb r1, [r0, #24]
+0800c5ae: 3901  subs r1, #1
+0800c5b0: 4019  ands r1, r3
+0800c5b2: 82c2  strh r2, [r0, #22]
+0800c5b4: 8301  strh r1, [r0, #24]
+0800c5b6: 4770  bx   lr
+```
+Semantics: p[22..23] (u16) = (p[22]-1) & 63; p[24..25] (u16) =
+(p[24]-1) & 63. No prologue, no calls, no pool — a pure leaf.
+Neighbor: next function 0x0800c5b8 (push {r4, r5, lr}) bounds the
+extent at 20 B. No incoming-edge census needed for the extent (the
+28 B predecessor + this leaf + the FillPairs successor tile the
+region 0x0800c588-0x0800c5b8 with no gaps).
+Matched in C (Wave 35-C, main agbcc, 0 diffs on the 20 B extent):
+staging/wave35_C/w35c_0800c5a4_MATCHED.c:
+  void Sub_0800C5A4(u8 *p) { u16 a = (p[22]-1)&63; u16 b = (p[24]-1)&63;
+                             *(u16 *)(p+22) = a; *(u16 *)(p+24) = b; }
+
+## 0x0800CBDC (20 B, 0x0800cbdc-0x0800cbf0)
+
+Byte-identical twin of 0x0800c5a4 (same 10 instructions, same bytes
+827d 013a 3f23 1a40 017e 0139 1940 c282 0183 7047). Predecessor is the
+28 B twin 0x0800cbc0 (already MATCHED, W34-C); successor is
+0x0800cbf0 (push {r4, r5, lr}, registry-BLOCKED FillPairs twin).
+Matched in C (Wave 35-C, main agbcc, 0 diffs on the 20 B extent):
+staging/wave35_C/w35c_0800cbdc_MATCHED.c (same source, renamed
+symbol/section).
+
+## Related extent confirmations (no action — already MATCHED)
+
+- 0x0800c588: 28 B (0x0800c588-0x0800c5a4), MATCHED W34-C. Do NOT
+  re-extend to 48 B; the bytes at 0x0800c5a4 are the new function above.
+- 0x0800cbc0: 28 B (0x0800cbc0-0x0800cbdc), MATCHED W34-C. Same note.
+
+## Count impact
+
+1674 + 2 = **1676** (51 A + 1625 B). D-tier unchanged (45).

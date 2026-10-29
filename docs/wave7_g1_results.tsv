@@ -1,0 +1,79 @@
+Init_080021C4	0x080021C4	38	MATCHED	main	clears 2 EWRAM words, writes stack-marker/VRAM-base/0x85006000 to 0x040000D4 block, returns 0x85006000; verified 56 B incl pool
+Clr8_08004B94	0x08004B94	38	MATCHED	main	zeroes 8 B at 0x02003668 (u16 ctr, shift-add-shift incr via pinned-reg whole-loop asm), then p[4]=0; verified 44 B incl pool
+FlagSet_08026F98	0x08026F98	38	MATCHED	old_agbcc	sets bit 0x1200 in u16 at 0x020031E0, writes (x!=0?32:0) via (x|-x)>>31 to 0x02003670+0x11AC; verified 52 B incl pool
+SubClamp_0802C7B4	0x0802C7B4	38	MATCHED	old_agbcc	signed saturating subtract, returns u8 borrow; int temps; explicit 00 00 pad; verified 40 B
+Clr36_080475D4	0x080475D4	38	MATCHED	main	zeroes 36 B at 0x0200B7A8 (u16 ctr, whole-loop asm), then u16 [4]=0; verified 44 B incl pool
+Check_0800B2B4	0x0800B2B4	36	BLOCKED	-	2-byte diff: ROM ands r0,r1/cmp r0, mine ands r1,r0/cmp r1 (compiler destroys dead r1); tried main/old/-O1/-Os, operand swap, named temp, fake asm use
+Test_08010454	0x08010454	36	MATCHED	old_agbcc	if x==1 use base+20, return (p[16]&2)?1:0; mid-fn pool; verified 36 B
+Fill_0802520C	0x0802520C	36	MATCHED	old_agbcc	struct init + 0xFF fill loop; old_agbcc avoids push{lr}; verified 36 B
+Append_0802526C	0x0802526C	36	MATCHED	old_agbcc	buffer append, returns 1 if full; verified 36 B
+Clr20_0804B310	0x0804B310	36	BLOCKED	-	2-insn scheduler order: ROM lsls/lsrs before adds r3,r0; mine reversed; tried main/old, reordered C, pinned r4
+crt0_thumb_helpers	0x080002DC	34	BLOCKED	-	context-switch helper (saves r8-r11, switches sp/lr); hand-written asm, not C; needs .s implementation
+Init_08000CA8	0x08000CA8	34	BLOCKED	-	regalloc: ROM pool->r3,zero->r2; mine swapped; pinned regs cause push{lr}; tried main/old
+Cmp_08004E0C	0x08004E0C	24	MATCHED	old_agbcc	byte compare at [1], return 1/0; verified 24 B
+Tst_0800B2D8	0x0800B2D8	24	BLOCKED	-	regalloc: ROM pool->r1,mask->r0,ldrb reuses r1; mine pool->r0; tried main/old
+Tst_0800B2F0	0x0800B2F0	24	BLOCKED	-	same regalloc issue as 0x0800B2D8
+Clr_0800B4C8	0x0800B4C8	24	MATCHED	main	clear bits in p[19] via -9/-17, set p[8]=0xFF; verified 28 B
+Avg_080110B0	0x080110B0	24	BLOCKED	-	regalloc: ROM uses r4 for sum (needs push), mine reuses regs; tried main/old
+Clr_08010478	0x08010478	26	MATCHED	old_agbcc	if x==1 p+=20, p[16] &= -2, return 1; verified 32 B
+Zero_0801052C	0x0801052C	26	MATCHED	old_agbcc	zero p[28] and p[60] if nonzero; verified 32 B
+Set_08004E24	0x08004E24	26	MATCHED	old_agbcc	p[0]=(x<<7)|64, p[2]=(x==0)?1:2; verified 32 B
+sub_08000EF8	0x08000EF8	34	UNATTEMPTED	-	not attempted in this pass
+sub_08001D68	0x08001D68	30	UNATTEMPTED	-	not attempted in this pass
+sub_0800800C	0x0800800C	30	UNATTEMPTED	-	not attempted in this pass
+sub_0800B308	0x0800B308	24	UNATTEMPTED	-	not attempted in this pass
+sub_0800C248	0x0800C248	28	UNATTEMPTED	-	not attempted in this pass
+sub_0800D104	0x0800D104	26	UNATTEMPTED	-	not attempted in this pass
+sub_0800EE50	0x0800EE50	26	UNATTEMPTED	-	not attempted in this pass
+sub_08010508	0x08010508	30	UNATTEMPTED	-	not attempted in this pass
+sub_08011054	0x08011054	28	UNATTEMPTED	-	not attempted in this pass
+sub_08011DB0	0x08011DB0	28	UNATTEMPTED	-	not attempted in this pass
+sub_08011DD0	0x08011DD0	26	UNATTEMPTED	-	not attempted in this pass
+sub_08016FAC	0x08016FAC	34	UNATTEMPTED	-	not attempted in this pass
+sub_080173FC	0x080173FC	28	UNATTEMPTED	-	not attempted in this pass
+sub_08020230	0x08020230	26	UNATTEMPTED	-	not attempted in this pass
+sub_08021C0C	0x08021C0C	28	UNATTEMPTED	-	not attempted in this pass
+sub_08023B64	0x08023B64	34	UNATTEMPTED	-	not attempted in this pass
+sub_08023D10	0x08023D10	34	UNATTEMPTED	-	not attempted in this pass
+sub_08024554	0x08024554	28	UNATTEMPTED	-	not attempted in this pass
+sub_08024570	0x08024570	28	UNATTEMPTED	-	not attempted in this pass
+sub_0802458C	0x0802458C	28	UNATTEMPTED	-	not attempted in this pass
+sub_080245C4	0x080245C4	28	UNATTEMPTED	-	not attempted in this pass
+sub_080245E0	0x080245E0	28	UNATTEMPTED	-	not attempted in this pass
+sub_080245FC	0x080245FC	28	UNATTEMPTED	-	not attempted in this pass
+sub_08024618	0x08024618	28	UNATTEMPTED	-	not attempted in this pass
+sub_08024670	0x08024670	28	UNATTEMPTED	-	not attempted in this pass
+sub_0802468C	0x0802468C	28	UNATTEMPTED	-	not attempted in this pass
+sub_080246A8	0x080246A8	28	UNATTEMPTED	-	not attempted in this pass
+sub_080246C4	0x080246C4	28	UNATTEMPTED	-	not attempted in this pass
+sub_080246E0	0x080246E0	28	UNATTEMPTED	-	not attempted in this pass
+sub_08024744	0x08024744	26	UNATTEMPTED	-	not attempted in this pass
+sub_080247A8	0x080247A8	28	UNATTEMPTED	-	not attempted in this pass
+sub_0802518C	0x0802518C	34	UNATTEMPTED	-	not attempted in this pass
+sub_08025308	0x08025308	28	UNATTEMPTED	-	not attempted in this pass
+sub_08025490	0x08025490	34	UNATTEMPTED	-	not attempted in this pass
+sub_08025638	0x08025638	26	UNATTEMPTED	-	not attempted in this pass
+sub_080258D8	0x080258D8	32	UNATTEMPTED	-	not attempted in this pass
+sub_08026554	0x08026554	32	UNATTEMPTED	-	not attempted in this pass
+sub_080265B0	0x080265B0	32	UNATTEMPTED	-	not attempted in this pass
+sub_080265D0	0x080265D0	34	UNATTEMPTED	-	not attempted in this pass
+sub_08026720	0x08026720	32	UNATTEMPTED	-	not attempted in this pass
+sub_08026D94	0x08026D94	26	UNATTEMPTED	-	not attempted in this pass
+sub_0802D440	0x0802D440	32	UNATTEMPTED	-	not attempted in this pass
+sub_0802FC4C	0x0802FC4C	30	UNATTEMPTED	-	not attempted in this pass
+sub_08036318	0x08036318	32	UNATTEMPTED	-	not attempted in this pass
+sub_0803F440	0x0803F440	26	UNATTEMPTED	-	not attempted in this pass
+sub_0803F460	0x0803F460	26	UNATTEMPTED	-	not attempted in this pass
+sub_0803FA48	0x0803FA48	32	UNATTEMPTED	-	not attempted in this pass
+sub_0803FD9C	0x0803FD9C	26	UNATTEMPTED	-	not attempted in this pass
+sub_0803FE00	0x0803FE00	28	UNATTEMPTED	-	not attempted in this pass
+sub_080400A8	0x080400A8	30	UNATTEMPTED	-	not attempted in this pass
+sub_08047510	0x08047510	34	UNATTEMPTED	-	not attempted in this pass
+sub_0804A884	0x0804A884	34	UNATTEMPTED	-	not attempted in this pass
+sub_0804AC88	0x0804AC88	30	UNATTEMPTED	-	not attempted in this pass
+sub_0804ACDC	0x0804ACDC	30	UNATTEMPTED	-	not attempted in this pass
+sub_0804BDC0	0x0804BDC0	32	UNATTEMPTED	-	not attempted in this pass
+sub_0804C53C	0x0804C53C	26	UNATTEMPTED	-	not attempted in this pass
+sub_0804C610	0x0804C610	26	UNATTEMPTED	-	not attempted in this pass
+sub_0804D634	0x0804D634	34	UNATTEMPTED	-	not attempted in this pass
+sub_0804D7A0	0x0804D7A0	30	UNATTEMPTED	-	not attempted in this pass

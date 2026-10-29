@@ -1,0 +1,79 @@
+name	address	size	status	compiler	notes
+GetTableEntry_08173FAC	0x08011cac	24	MATCHED	old_agbcc	24 B (20+pool); return idx?&table[idx]:0 (address, not value)
+GetMaskedByte	0x08025324	24	MATCHED	old_agbcc	24 B; idx>248?0:p[idx]&0x7f
+FlagCheck_0200BCE8_4	0x080363d4	24	MATCHED	old_agbcc	24 B; opaque movs #1 idiom for ldr-first order; v=1;v&=p[4]
+InRange3B0_3B1	0x0803fcc4	28	MATCHED	old_agbcc	28 B (24+pool); int w=v + lim var for signed bgt/blt + subs #1
+TryConsume	0x08040060	24	MATCHED	old_agbcc	24 B; if/else (not goto) for bcs layout; *p<n?1:(*p-=n,0)
+AddTableEntry_082344CC	0x080496e8	28	MATCHED	old_agbcc	28 B (24+pool); return table[a]+b (u8)
+Clear126_127_Set156	0x0804aa78	28	MATCHED	old_agbcc	28 B (24+pool); p[127]=p[126]=0,*(u32*)(p+156)=*src
+Clear126_127_160_Set161	0x0804ac48	28	MATCHED	old_agbcc	28 B (24+pool); direct indexes let compiler build walking ptr
+FlagCheck_0200B7E0_3	0x08027e44	24	MATCHED	old_agbcc	24 B; same idiom, ldrb [r1,#3]
+SetTaskField0_030023C8	0x08000e64	28	MATCHED	old_agbcc	28 B (22+2pad+pool); task slots 24B stride; if(p[0]!=1)p[0]=1
+CopyBlendRegs_04000052	0x08002e50	32	MATCHED	old_agbcc	32 B (22+2pool); pinned r2=dst,r1=src; explicit dst+=1/dst-=2 walking
+SetDiffSum	0x080110c8	24	MATCHED	old_agbcc	24 B (22+00 pad); explicit int bb=b,aa=a for order; (aa-bb)<<12,(bb+aa)<<11
+Check119_Minus3_Le1	0x08011f50	24	MATCHED	old_agbcc	24 B (22+00 pad); (u8)(s[119]-3)<=1
+GetBoundedByte_6	0x080252d0	24	MATCHED	old_agbcc	24 B (22+00 pad); idx>=lim?0xff:ptr[idx]; lim@+6,ptr@+0
+GetBoundedByte_18	0x08025478	24	MATCHED	old_agbcc	24 B (22+00 pad); idx>=lim?0:ptr[idx]; lim@+18,ptr@+8
+GetStride4Byte20	0x080258c0	24	MATCHED	old_agbcc	24 B (22+00 pad); idx>29?0:*(s+idx*4+20)
+Clear126_127_Set131	0x0804a494	28	MATCHED	old_agbcc	28 B (24+pool); p[127]=p[126]=0,p[131]=v
+sub_0804BE2A	0x0804be2a	22	BLOCKED	-	alternate-entry fragment of 0x0804be28 (which has ldrb r3,[r2,#0] at 0x0804be28); push{r0}/pop{r0} + r3 in/out contract not reproducible from C (compilers use adds r1,r0,#0; extra cmp after lsrs); likely hand-asm or different compiler
+SwapPtr	0x08004188	20	MATCHED	old_agbcc	20 B; off=(y<<2)+(x<<7); tmp=*r;*q=tmp;*r=q
+Init_08004244	0x08004244	20	MATCHED	old_agbcc	20 B; *(void**)s=pp (not *pp!); s[6]=(*pp)[1]+1
+GetPtr_08008610	0x08008610	24	MATCHED	old_agbcc	24 B (20+2pool); asymmetric: s[11]?0x02004aa0:*0x02003674
+IsZero_02005160	0x08010088	20	MATCHED	old_agbcc	20 B; goto-ladder for beq layout; 6 identical copies
+IsZero_02005160	0x08010124	20	MATCHED	old_agbcc	20 B; identical copy
+IsZero_02005160	0x08010248	20	MATCHED	old_agbcc	20 B; identical copy
+IsZero_02005160	0x080102f4	20	MATCHED	old_agbcc	20 B; identical copy
+IsZero_02005160	0x080103cc	20	MATCHED	old_agbcc	20 B; identical copy
+IsZero_02005160	0x080104f4	20	MATCHED	old_agbcc	20 B; identical copy
+IsOne_020051B0_4	0x0801109c	20	MATCHED	old_agbcc	20 B; goto-ladder + opaque movs (compiler outsmarted ladder for ==1)
+SetBytes_08011F68	0x08011f68	20	MATCHED	old_agbcc	20 B; volatile opaque movs barrier for scheduling; p=s+124,p[5]=v
+ClampAdd200	0x08024500	20	MATCHED	old_agbcc	20 B; v>48?200:(u8)(v+200)
+Sub200	0x08024514	20	MATCHED	old_agbcc	20 B; v<=199?0:(u16)(v-200)
+GetClampedTable	0x0802453c	24	MATCHED	old_agbcc	24 B (20+pool); v>48?v=48; table[v]
+SetByte432	0x08026108	20	MATCHED	old_agbcc	20 B; v>2?v=2; s[432]=v (216*2 codegen)
+Is208or217	0x0803fe1c	20	MATCHED	old_agbcc	20 B; r=0; if(v==208||v==217)r=1
+InRange224_230	0x0803fe30	20	MATCHED	old_agbcc	20 B; int w=v + lo var to defeat <= transform; signed bgt/blt
+Clear126_127_160	0x0804ad24	24	MATCHED	old_agbcc	24 B (20+pool); p[127]=p[126]=p[160]=0
+ClearSignBit	0x0804c5f4	28	MATCHED	old_agbcc	28 B (20+2pool); pinned r3; if(*(s+52)==0x68736d53)*(s+4)&=0x7fffffff
+Clear16_02003090	0x08002a04	24	MATCHED	old_agbcc	24 B (18+2pad+pool); int p,q for signed bge; z=0 init before q
+SetBit2	0x08007cdc	24	MATCHED	old_agbcc	24 B (18+2pad+pool); p=g+v*8; p[7]|=4
+OrBit	0x0800b29c	24	MATCHED	old_agbcc	24 B (18+2pad+pool); if(g[7]!=0)g[7]=v|g[7]
+Byte19_Bits3F_Set	0x08021d84	20	MATCHED	old_agbcc	20 B (18+00 pad); mask&=s[19] idiom for movs-before-ldrb
+Clamp48	0x08024528	20	MATCHED	old_agbcc	20 B (18+00 pad); v>48?0:(u8)v
+SetIfGt199	0x0802571c	20	MATCHED	old_agbcc	20 B (18+00 pad); if(a>199){s[1]=a;s[0]=b}
+sub_08033AB2	0x08033ab2	18	BLOCKED	-	shared epilogue fragment: ldr r0,[sp,#64];add sp,#80;pop{r3-r5};mov r8-r10;pop{r4-r7};pop{r1};bx r1 (not bx lr); no prologue
+sub_0803DA92	0x0803da92	18	BLOCKED	-	shared epilogue fragment: ldr r0,[sp,#20];add sp,#100;pop{r3-r5};mov r8-r10;pop{r4-r7};pop{r1};bx r1; no prologue
+CmpH6	0x08046de4	20	MATCHED	old_agbcc	20 B (18+00 pad); (*(s+6)==b)?1:0
+GetPtr_0800DCF8	0x0800dcf8	16	MATCHED	old_agbcc	16 B; manual order: t=s,u=b<<24,s+=12,s+=*(t+12),u>>=19,s+=u
+Inc4_Clear5_7	0x080112bc	16	MATCHED	old_agbcc	16 B; v=s[4]+1,z=0 for reg order
+Byte128_IsZero	0x08016f88	16	MATCHED	old_agbcc	16 B; s+=124; goto-ladder; s[4]==0
+TestBit16	0x08017494	16	MATCHED	old_agbcc	16 B; (1<<bit)&s[16]
+SetBit16	0x080174a4	16	MATCHED	old_agbcc	16 B; s[16]|=(1<<bit)
+GetPtr_0802365C	0x0802365c	16	MATCHED	old_agbcc	16 B; identical to 0800dcf8
+IncMod128	0x080252e8	16	MATCHED	old_agbcc	16 B; v=0x7f;v&=s[0];v++;w=0x80;v|=w (decls at top for C89)
+Clear20_Set21_FF	0x08025994	16	MATCHED	old_agbcc	16 B; pinned r1; (u)p+(u)s for adds r1,r1,r0 order
+Gt199	0x08026700	16	MATCHED	old_agbcc	16 B; v>199?1:0
+sub_0802C7A4	0x0802c7a4	16	BLOCKED	-	shared epilogue fragment: add sp,#88;pop{r3-r5};mov r8-r10;pop{r4-r7};pop{r1};bx r1; no prologue
+Eq2260000	0x0803fef8	20	MATCHED	old_agbcc	20 B (16+pool); x=(u)v<<16 first for order; r=(x==0x02260000)
+sub_0804427C	0x0804427c	16	BLOCKED	-	shared epilogue fragment (T): add sp,#4;pop{r3-r5};mov r8-r10;pop{r4-r7};pop{r1};bx r1; no prologue
+SetIfXZero	0x08008bb8	16	MATCHED	old_agbcc	16 B (14+00 pad); if((x<<24)==0)*s=v
+SetByte620_FF	0x08009640	20	MATCHED	old_agbcc	20 B (14+2pad+pool); g[620]=0xff (155*4 codegen)
+SetByte20_Clear21to23_02005130	0x0800e1f0	20	MATCHED	main	20 B (14+2pad+pool); explicit zero local for reg order
+GetRomTableEntry_082240B8	0x08016f98	20	MATCHED	old_agbcc	20 B (14+2pad+pool); off=idx*8 computed before base+=4
+Byte12_Gt1	0x080170c4	16	MATCHED	old_agbcc	16 B (14+00 pad); explicit u16 pad=0; 5 identical copies
+DecIfNonZero_18	0x08017464	16	MATCHED	old_agbcc	16 B (14+00 pad); if(s[18]!=0)s[18]--
+MaxAssign_17	0x08017478	16	MATCHED	old_agbcc	16 B (14+00 pad); if(s[17]<v)s[17]=v
+Byte12_Gt1	0x0801cdd8	16	MATCHED	old_agbcc	16 B; identical copy
+Byte12_Gt1	0x0801d34c	16	MATCHED	old_agbcc	16 B; identical copy
+Byte12_Gt1	0x0801f1d8	16	MATCHED	old_agbcc	16 B; identical copy
+Byte12_Gt1	0x08022634	16	MATCHED	old_agbcc	16 B; identical copy
+GetBit80	0x080252f8	16	MATCHED	old_agbcc	16 B (14+00 pad); return s[0]&0x80
+SetHalfs_0800EDFC	0x0800edfc	24	MATCHED	old_agbcc	24 B (14+2pool); g5130[6]=v,g5168[0]=v
+SetHalfs_0800EE14	0x0800ee14	24	MATCHED	old_agbcc	24 B (14+2pool); g5130[7]=v,g517c[0]=v
+ClearHalf0_SetByte14_02003230	0x08002e70	16	MATCHED	main	16 B (12+pool); *(u16*)p=0,p[14]=0xff
+ClearByte0_Half2_02002F80	0x08001d88	16	MATCHED	main	16 B (10+2pad+pool); dead param shifts alloc; p[0]=0,*(u16*)(p+2)=0
+ClearWord_02002ED4	0x08000c9c	12	MATCHED	main	12 B (8+pool); *(u32*)0x02002ed4=0
+ClearHalf_02003220	0x08002e44	12	MATCHED	main	12 B (8+pool); *(u16*)0x02003220=0
+ClearHalf_02003240	0x08002ed4	12	MATCHED	main	12 B (8+pool); *(u16*)0x02003240=0
+sub_0804DD9C	0x0804dd9c	2	BLOCKED	-	2-byte padding: single 'mov pc,lr' (0x46f7); not a function

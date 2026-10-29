@@ -1,5 +1,6 @@
 # Build output
 /build/
+mmbcc/build/
 *.o
 *.d
 *.elf

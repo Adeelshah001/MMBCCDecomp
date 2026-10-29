@@ -1,0 +1,10 @@
+address	name	status	bytes	compiler	notes
+0x0800CD00	SyncEwramFlagBits_0CD00	MATCHED	56	old_agbcc	If (gEwram_02000EC0[9]&4)==0, gEwram_020031E0[0]&=0xC7FF else |=0x3800
+0x08002C74	TblFindClear_02C74	MATCHED	60	old_agbcc	Search 16-byte table at 0x02003090 for (a+1), zero found entry
+0x080499AC	MapTableVal_499AC	MATCHED	64	old_agbcc	Map u16 at (0x020070F0+a*12+0x152): 0xFF->3, 0xFE->2, 0xFD->1 else 0
+0x0800C4B4	ObjInit_C4B4	MATCHED	68	old_agbcc	Struct init: cond u16 fields, OR 0xFFFF, clear byte
+0x0800C3A0	FillTilemap_C3A0	MATCHED	68	old_agbcc	Fill 28x32 u16 tilemap with ((b+col)|0x1000)
+0x0802FBA4	(null)	BLOCKED	76	(old_agbcc)	Push {r4,r5,lr} vs {r4,lr}; branch0 uses r5 for 0x150, r0/r2 swapped vs mine; c-normalize scheduling. Precise diff in match_notes_wave12_C.md
+0x080225B4	(null)	BLOCKED	42	(old_agbcc)	Table lookup: mine saves a to r3 (adds r3,r0; lsls r3), ROM keeps a<<16 in r0. Register allocation differs.
+0x0804A450	(null)	BLOCKED	56	(old_agbcc)	ROM loads both pools upfront (r1=pool1, r3=pool2); mine loads pool2 first then pool1 later. Pool scheduling differs.
+0x0804C2CC	(null)	BLOCKED	48	-	Uses r4/r5 without push (non-standard); likely interior fragment or custom convention. Called via bl from 0x0804C2FC.

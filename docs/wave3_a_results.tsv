@@ -1,0 +1,16 @@
+name	address	wave	status	source	notes
+GetField17_U8	0x08017474	3	MATCHED	src/wave3_a.c	4 B; main agbcc; u8 s[17] getter; 49 bl callers; tentative name
+GetField22_U16	0x080265F4	3	MATCHED	src/wave3_a.c	4 B; main agbcc; u16 *(s+22) getter; tentative name
+GetField24_U8	0x0802654C	3	MATCHED	src/wave3_a.c	4 B; main agbcc; u8 s[24] getter; tentative name
+SetEwram5130_12	0x0800EDE4	3	MATCHED	src/wave3_a.c	12 B (6 code+2 nop+4 pool); main agbcc; *(u16*)(0x02005130+12)=v; base-in-local idiom; tentative name
+GetEwramBD20_130	0x0804A3F0	3	MATCHED	src/wave3_a.c	12 B (8 code+4 pool); main agbcc; return *(u8*)(0x0200BD20+130); tentative name
+SetField120_U16Pair	0x080174C4	3	MATCHED	src/wave3_a.c	8 B; main agbcc; *(u16*)(s+120)=b, *(u16*)(s+122)=c; s+=120 idiom; tentative name
+GetIndexedU8	0x080258F8	3	MATCHED	src/wave3_a.c	10 B code + 2 B pad (strip pad at landing); main agbcc; return *(u8*)(a+((u16)b<<2)+21); ((u16)b)<<2 idiom; tentative name
+CopyMosaicReg	0x08002EE0	3	MATCHED	src/wave3_a.c	20 B (10 code+2 nop+8 pool); main agbcc; *(u16*)0x0400004C=*(u16*)0x02003240; REG_MOSAIC from EWRAM mirror; tentative name
+GetRomTableU16	0x080266F0	3	MATCHED	src/wave3_a.c	16 B (12 code+4 pool); main agbcc; return *(u16*)(0x0822740C+(idx<<4)+6); 16-byte stride ROM table; tentative name
+InitLinkedNode	0x0800440C	3	MATCHED	src/wave3_a.c	16 B (12 code+4 pool); main agbcc; *0x0200081C=s; *(s+12)=s+20; t=s;t+=20 idiom; tentative name
+sub_0804BDA2	0x0804BDA2	3	BLOCKED	n/a	2 B `bx r3` thunk; agbcc -mthumb-interwork emits bl _call_via_r3 not bare bx r3; belongs in asm/thunks.s (duplicate of libgcc thunk w/o nop); see match_notes_wave3_a.md
+sub_0803D9EC	0x0803D9EC	3	BLOCKED	n/a	6 B fragment (fallthrough from 0x0803D9E8); bl EntryMgr_Setup; b 0x0803DA92 (shared epilogue); not a standalone function; C cannot omit push{lr}; see match_notes_wave3_a.md
+sub_0802C6E6	0x0802C6E6	3	BLOCKED	n/a	6 B mid-function fragment (tier D); uses r6/r5 live from enclosing giant function; b target 0x0802C71E also mid-function; not matchable as C; see match_notes_wave3_a.md
+sub_0804DF9E	0x0804DF9E	3	BLOCKED	n/a	8 B wrapper; ROM uses pop {pc} (0xBD00); agbcc/old_agbcc with -mthumb-interwork emit pop {r1}; bx r1; 1 of 4 such wrappers in SRAM region; see match_notes_wave3_a.md
+sub_0804C558	0x0804C558	3	BLOCKED	n/a	10 B stream-cursor advance; ROM does ldrb r3,[r2] (result in r3 not r0); compiler consistently uses r0; register allocation not reproducible; see match_notes_wave3_a.md

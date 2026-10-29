@@ -1,0 +1,112 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08000624	F_08000624	MATCHED	10	0	main	trivial wrapper	10/10 bytes; needs fix_tail_align at landing (GAS 46c0 pad)
+0x08025070	F_08025070	MATCHED	28	0	main	symbol-derived pointer arithmetic	28/28 bytes incl pool; (const u8*)&ew02007090+24 defeats fold -> ldr+adds
+0x08024EE0	F_08024EE0	MATCHED	40	0	old_agbcc	entity-array stride idiom	40/40 bytes incl pool+pad; old_agbcc register allocation
+0x08002FD4	F_08002FD4	MATCHED	56	0	old_agbcc	empty-asm barrier forces pool loads	56/56 bytes; barrier forces ldr r2/ldr r0 up front; old_agbcc gives r2/r0
+0x0802478C	F_0802478C	MATCHED	22	0	main	wrapper	22/22 bytes incl pool
+0x080248AC	F_080248AC	MATCHED	20	0	main	struct field for +20	20/20 bytes; ew02007090.f20 gives ldr+ldr
+0x08024648	F_08024648	MATCHED	18	0	main	wrapper	18/18 bytes; needs fix_tail_align at landing
+0x0801E87C	F_0801E87C	MATCHED	18	0	main	pass-through wrapper	18/18 bytes; r2 passes through to SetDiffSum; needs fix_tail_align
+0x080247C4	F_080247C4	MATCHED	34	0	main	barrier forces pool load before branch	34/34 bytes; mid-section pool; GAS pad truncated at landing
+0x0802D5A8	F_0802D5A8	MATCHED	44	0	main	divided-syntax asm for adds order	44/44 bytes; int d forces asr; __asm__("add %0,%1,%0") for adds r0,r1,r0
+0x08024848	F_08024848	MATCHED	42	0	old_agbcc	entity-array stride idiom	42/42 bytes; like 08024EE0 but CheckPair_258D8
+0x0802476C	F_0802476C	MATCHED	26	0	main	wrapper	26/26 bytes incl pool
+0x08024918	F_08024918	MATCHED	34	0	main	split || into two ifs	34/34 bytes; two early-return ifs avoid bcc inversion; needs fix_tail_align
+0x08040078	F_08040078	MATCHED	34	0	main	variable pointer prevents +8 fold	34/34 code bytes; u8 *p variable keeps strh [r0,#8]
+0x080104CC	F_080104CC	MATCHED	38	0	main	early return	38/38 bytes; 2B tail pad truncated at landing
+0x0804A340	F_0804A340	MATCHED	42	0	main	early returns	42/42 bytes; 2B tail pad truncated at landing
+0x0802660C	F_0802660C	MATCHED	48	0	main	constant materialization	48/48 bytes; (0x80<<5)=0x1000, (0x80<<6)=0x2000
+0x08016E4C	F_08016E4C	MATCHED	54	0	main	direct store from r1	54/54 bytes; *q=(u8)v without temp; needs fix_tail_align
+0x0801039C	F_0801039C	MATCHED	48	0	main	early extension + barrier	48/48 bytes; bb=b statement forces lsl/lsr; barrier prevents +66 fold
+0x08026A48	F_08026A48	MATCHED	54	0	main	shared zero + explicit temps	54/54 bytes; z=0 reused; v1=1/v2=2 temps for orr order
+0x080242A8	-	BLOCKED	220	147	-	prologue allocation	Complex 220B switch; aa->r2 not r0; bsh variable disrupts alloc; r1 pass-through for TblGetU8_26574 unresolved
+0x0804990C	-	BLOCKED	30	30	-	register allocation	Need ldr r2/ldr r3 up front + lsl/lsr re-extension; barrier gives r0/r1 not r2/r3
+0x08001C5C	-	BLOCKED	38	51	-	register allocation	Compiler caches constants in r8/r9; ROM uses r6/r7 only
+0x0802538C	-	BLOCKED	46	20	-	loop register allocation	ROM reuses r0 (clobbered/restored); compiler uses r3/r4
+0x080112CC	-	BLOCKED	46	38	-	loop register allocation	ROM keeps i in r1, i<<24 in r4; compiler keeps i<<24 in r4 directly
+0x0802FD68	-	BLOCKED	56	18	-	branch layout	Need beq+fallthrough not bne+b; v>1 case must skip via b not mov+b
+0x08017000	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08020ed4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08002300	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080247c4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0800d800	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080242a8	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0802478c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08025754	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08006ad8	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08002fd4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080112fc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08024434	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0800dde4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080113f4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08006374	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0803643c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0801e87c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080248ac	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0802d5a8	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080254e0	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08045838	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08007134	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08046df8	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0804990c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08009f78	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0801029c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08010ec4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0804af20	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080097cc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08026184	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080263a4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080460c0	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080224e4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0803f844	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08046810	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08045914	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080065bc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0800ea30	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0802476c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08024ee0	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08001c5c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080104cc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0804a340	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080112cc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0802538c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0801039c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0802660c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08016e4c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08026a48	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0802fd68	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0801ab34	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080253bc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080257fc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0802666c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08016e0c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080266ac	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08002cb0	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08010f34	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08010308	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080259a4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08011e20	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08016e84	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08016efc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08049704	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0800fff4	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0801009c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0800909c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0801d598	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080291ec	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08021b3c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08002a1c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0804a1f0	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0803ad48	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08041890	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080046b0	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x0803ac4c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080096bc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08006fe8	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08034f2c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08007840	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08025ec8	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08009c7c	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080099fc	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x080471d8	-	UNATTEMPTED	0	-	-	-	not attempted this run
+0x08008bc8	-	UNATTEMPTED	0	-	-	-	not attempted this run

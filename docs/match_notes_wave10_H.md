@@ -1,0 +1,144 @@
+# Wave 10 Worker H (TAG=H) — Match Notes
+
+Worker: Wave 10 hard targets (TAG=H). Date: 2026-10-21.
+Baserom SHA-1 verified `72309736f3820470c6f372d6a05ad1f16bc5a946` before start.
+Toolchain: `mmbcc/tools/agbcc/bin/{agbcc,old_agbcc}`; `arm-none-eabi` 2.42.
+Harness: `staging/wave10_H/build.sh` (copied from wave9_A hardened v3:
+custom ld script, non-empty assertions, offset = addr − 0x08000000,
+exact byte counts, `cmp -l` zero diffs).
+Staging: `~/workspace/mmbcc-decomp/staging/wave10_H/`.
+Results: `docs/wave10_H_results.tsv`.
+
+**Result: 2 MATCHED, 0 BLOCKED.**
+
+## MATCHED (2)
+
+### ComputeFields @0x0804CFD4 (180 B, old_agbcc, 0 diffs) — LANDED
+
+Wave 9 left this at "first 100 B match, Block 2 blocked". Closed the
+remaining 80 bytes.
+
+**Block-2 header (the hard part).** ROM:
+```
+ldrb r1, [r2, #0]
+movs r0, #4
+ands r0, r1
+adds r3, r1, #0      ; save pp[0] -> r3 before the branch
+cmp r0, #0
+beq
+```
+The `adds r3,r1,#0` is the compiler parking pp[0] in r3 because r1 is
+needed as the body accumulator and the value is live to the epilogue
+(`ands r0,r3` for `pp[0] = b & 250`). Iterations tried:
+- v2 (natural `u8 b = pp[0]`): compiler put b directly in r3
+  (`ldrb r3,[r2,#0]`), skipping the r1 load — 21 diffs.
+- v4 (b pinned r1): compiler used another reg for the body accumulator
+  instead of saving b — 24 diffs.
+- v5 (two variables `u32 x; u8 b = x`): copy emitted before the test
+  (`ldrb r0; adds r3,r0,#0; movs r0,#4; ands r0,r3`) — wrong order.
+- v6 (WINNER): `register u32 x __asm__("r1")` via opaque ldrb, then
+  **separate `t = x & 4;` statement before `b = x;`** (`register u32 b
+  __asm__("r3")`). Program order `ldrb, movs, ands, adds-copy, cmp, beq`
+  matches ROM exactly — the separate test statement forces the
+  scheduler to emit the ands before the copy.
+
+**Body `adds` dest fix.** ROM: `adds r1,r1,r0` / `lsls r1,r1,#2`.
+Natural C `((s8)pp[14]*pp[15] + (s8)pp[12]) << 2` gave `adds r0,r0,r1`
++ cross-register `lsls r1,r0,#2` (combiner dest rule). Fix: pinned
+`register int p0 __asm__("r0")` / `register int p1 __asm__("r1")` plus
+`__asm__ volatile("add %0, %0, %1" : "+r"(p1) : "r"(p0))` forces the
+dest to r1.
+
+**Landing:** `mmbcc/src/wave10_H_old.c` (old_agbcc),
+`.text.w10h_0804cfd4`; Makefile SRCS_C + override; ldscript slot
+`0x0804cfd4`. Full build green; 180/180 bytes identical in built ROM.
+
+**New idioms:**
+- Separate-statement test ordering: `t = x & N; b = x; if (t)` reproduces
+  a compiler's test-then-save schedule that a combined `if ((b=x) & N)`
+  cannot.
+- Pinned-pair + `"+r"` asm for combiner dest control on `add`.
+
+### Obj_AddEntry @0x0802D7A0 (340 B, .s transcription, 0 diffs) — LANDED
+
+**C declared IMPOSSIBLE for this instance** (not for lack of trying).
+
+**Semantics decoded** (from ROM disassembly):
+```c
+void Obj_AddEntry(u8 *work, u8 a1, u8 a2, u8 a3, u8 a4, u16 a5,
+                  u16 a6, u16 a7, u8 a8, u8 a9)
+{
+    if ((work[6] & 2) && (u8)(a8 - 106) > 3) return;  // NOTE: a8 (9th), not a1
+    // Block B/C @ work+(work[5]<<4)+420:
+    *p = (*p & -3) | ((a1 & 1) << 1);
+    *p = (*p &  3) | (a2 << 2);
+    // Block D/E @ work+(work[5]<<4)+424:
+    *q = (*q & -3) | ((a3 & 1) << 1);
+    *q = (*q &  3) | (a4 << 2);
+    *(u16*)(work+(work[5]<<4)+428) = a5;
+    *(u16*)(work+(work[5]<<4)+430) = a6;
+    *(u16*)(work+(work[5]<<4)+432) = a7;
+    *(work+(work[5]<<4)+434) = a8;
+    *(work+(work[5]<<4)+435) = a9;   // pool const 0x1B3 (odd, >255)
+    *q |= 1;
+    work[5]++;
+}
+```
+Corrections vs W8-B staging: early check uses **a8** (ROM's `adds r0,r1,#0`
+reads r1==a8 left over from the extend sequence); **a4 is u8** (ROM does
+`lsls #24; lsrs #24`); `|=1` is at +424 (not +420).
+
+**ROM register homes** (the blocker):
+work→r7, a1→r6, a2→spill[sp,#0], a3→ip, a4→spill[sp,#4], a5→spill[sp,#8],
+a6→spill[sp,#12], a7→sl, a8→r8, a9→r9, m3(-3)→r3, p3(3)→r2, `sub sp,#24`.
+
+**What was tried (all failed to reproduce the homes):**
+1. Natural C (v1, old_agbcc -O2): work→r5, a1→r4, sub sp,#32 — 227 diffs.
+2. Pinned locals (work→r7, a1→r6, a3→r12, a7→sl, a8→r8, a9→r9): copies
+   scheduled wrong, sub sp,#16 — worse.
+3. Opaque-asm work init (`add %0,%1,#0`): copy scheduled late (after
+   extends), not in prologue position.
+4. Mask pins (m3→r3, p3→r2 with late assignment): mask regs fixed
+   (`movs r3,#3; negs r3,r3` / `movs r2,#3`, `adds r0,rX,#0` at first use,
+   32-bit `ands r0,rN`), but param homes still diverged.
+5. main agbcc -O2: `sub sp,#24` ✓ and stack offsets ✓, but work→r5,
+   a1→r7, a6/a7 swapped (a6→sl instead of a7→sl).
+6. old_agbcc -O1: work→r7 ✓, but a1→ip, a2→sl, a3→spill — different
+   heuristic, worse.
+7. -Os: same as -O2.
+
+The 10-param global allocation is a single tightly-coupled decision;
+no local tweak moves one home without perturbing the others. The
+original was compiled by a compiler version whose allocator made
+exactly these choices; neither agbcc nor old_agbcc reproduces them.
+
+**Transcription:** `mmbcc/asm/objaddentry.s` (`.text.objaddentry`),
+generated by `staging/wave10_H/gen_d7a0_asm.py` from ROM bytes via
+objdump → pre-UAL GAS (labels for the 2 branch targets, `.hword 0x0000`
+for the `00 00` pad which objdump misrenders as `movs r0,r0`, `.word`
+for the 0x1B3 pool). Assembles to 340/340 bytes identical.
+ldscript slot `0x0802d7a0`. Full build green; region byte-identical in
+built ROM. Precedent: `mmbcc/asm/div.s` (C-impossible division block).
+
+## Idioms catalog additions
+
+1. **Separate-statement test ordering:** when ROM shows `test; save; cmp;
+   branch`, write `t = x & N; b = x; if (t)` — not `if ((b = x) & N)`.
+2. **Pinned-pair + `"+r"` asm for add dest:** `register int p0
+   __asm__("r0"); register int p1 __asm__("r1");`
+   `__asm__ volatile("add %0, %0, %1" : "+r"(p1) : "r"(p0));` forces
+   `adds r1,r1,r0` (defeats combiner's `adds r0,r0,r1` +
+   cross-register shift).
+3. **`.hword 0x0000` for `00 00` pads:** objdump renders them as
+   `movs r0,r0`, but GAS assembles `mov r0,r0` to different bytes;
+   emit the pad explicitly in transcriptions.
+
+## Environment note
+
+`arm-none-eabi-*` vanished from `/usr/bin` twice during this task
+(recurring VM quirk). Recovered once on its own; once via
+`sudo dpkg -i` from `http://launchpadlibrarian.net/711810096/binutils-arm-none-eabi_2.42-1ubuntu1+23_amd64.deb`
+(exact 2.42-1ubuntu1+23). A copy is cached at
+`~/workspace/mmbcc-decomp/docs/binutils-arm-none-eabi_2.42-1ubuntu1+23_amd64.deb`
+(`/tmp` gets cleaned; do not rely on it). `/tmp/wave10_H` also needed
+recreating after a tmp clean.

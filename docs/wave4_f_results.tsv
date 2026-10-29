@@ -1,0 +1,15 @@
+name	address	wave	status	source	notes
+Task_3531C	0x0803531c	4	BLOCKED	src/wave4_f.c	788B; 5-case switch on p[0x46a9]; 17 bl-callees (15 unmatched); prologue regalloc mismatch (ROM r5=p,r7=ret vs compiler r7/r8); see match_notes_wave4_f.md
+Task_367E0	0x080367e0	4	BLOCKED	(none)	556B; 9-case switch on p[5]; prologue p->r4,ret->r5 matches compiler default but body not attempted; 15 bl-callees (13 unmatched)
+Task_36F34	0x08036f34	4	BLOCKED	(none)	604B; 17-case switch on p[5]; 22 bl-callees (20 unmatched); not attempted beyond structural survey
+Task_3719C	0x0803719c	4	BLOCKED	(none)	664B; 17-case switch on p[5]; 22 bl-callees (20 unmatched); not attempted beyond structural survey
+Task_37B4C	0x08037b4c	4	BLOCKED	(none)	650B; 7-case switch on p[0]; 20 bl-callees (18 unmatched); not attempted beyond structural survey
+Task_385A8	0x080385a8	4	BLOCKED	(none)	938B; 11-case switch on p[0]; 17 bl-callees (15 unmatched); not attempted beyond structural survey
+Task_3AFFC	0x0803affc	4	BLOCKED	(none)	926B; 16-case switch on p[0x469d]; prologue p->r4,ret->r5 (simplest); 10 bl-callees (8 unmatched); not attempted beyond structural survey
+Task_3B3A0	0x0803b3a0	4	BLOCKED	(none)	1266B; 12-case switch; largest in batch; 17 bl-callees (15 unmatched); not attempted beyond structural survey
+Task_3E144	0x0803e144	4	BLOCKED	(none)	654B; NOT a switch: bit-test prelude + if-chain; only calls matched Text_SelectBlobIdx (12x); uses r8/ip; returns 0/1 in ip; not attempted beyond decode
+Task_47860	0x08047860	4	BLOCKED	(none)	990B; 6-case switch on p[1]; uses r8; 27 bl-callees (25 unmatched); not attempted beyond structural survey
+Task_47CE4	0x08047ce4	4	BLOCKED	(none)	922B; 13-case switch on p[5]; 20 bl-callees (16 unmatched, incl. BIOS CpuFastSet/CpuSet); not attempted beyond structural survey
+Task_48400	0x08048400	4	BLOCKED	src/wave4_f.c	596B; 5-case switch on p[0x46a5]; fully decoded; 3 compile attempts; prologue regalloc mismatch (ROM r5=p,r6=ret vs compiler r7/r8); see match_notes_wave4_f.md
+Task_48658	0x08048658	4	BLOCKED	(none)	1550B; 56-case switch (largest); 24 bl-callees (many 0x0804axxx text funcs); not attempted beyond structural survey
+Task_49AB0	0x08049ab0	4	BLOCKED	(none)	752B; 16-case switch on p[5]; 20 bl-callees (18 unmatched); not attempted beyond structural survey

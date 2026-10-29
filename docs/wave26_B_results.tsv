@@ -1,0 +1,3 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x080259a4	Tbl_SwapAndUpdate_080259A4	MATCHED	100	0	asm	naked-asm; prologue-save is compiler-impossible (6 C approaches failed); full 98B+2pad transcription as naked fn. Staging: staging/wave26_B/w26b_080259a4.c
+0x0800e440	ChipState_F_0800E440	MATCHED	128	0	main	sibling-shape transfer from MATCHED ChipState_Tick_0800E748 (w24c): inline-asm branchy ternary (5/3), volatile u32 S+28 store+reload, S2 second-base anti-fold, u8 z=0 idiom. True extent 128B (118+2pad+8pool). Staging: staging/wave26_B/w26b_0800e440.c

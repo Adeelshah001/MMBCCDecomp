@@ -1,0 +1,17 @@
+name	address	size	status	compiler	notes
+Gfx_Load4Tiles	0x080097cc	122	MATCHED	main	4-tile VRAM copy via Memcpy16; pools 0x06010000/0x081720B4/0x081720CC
+ObjInit_TypeC	0x08021594	132	MATCHED	main	Object initializer; ChipSlot_Setup(s,0x1600,0)
+Validate_263A4	0x080263a4	138	MATCHED	main	Field validator, returns 0/1; s8 loop i=1..9
+ObjInit_2184C	0x0802184c	144	MATCHED	main	Table-driven chip slots + s16 params; two-statement base ldrsh idiom
+ObjInit_1B47C	0x0801b47c	146	MATCHED	main	Vec2_AddMirrored variant; ChipSlot_Setup(s,0x255,0); table 0x0822672a
+ObjInit_211EC	0x080211ec	146	MATCHED	main	0x1600|table chip type; s16 params at +4/+6
+ObjInit_20B60	0x08020b60	158	MATCHED	main	ChipSlot_Setup(s,0x401B,0); conditional s[17] setup
+ObjInit_3FC8	0x08003fc8	160	MATCHED	main	4-arg bitfield init; SetU32_4(s,0x08004079); -4/-59 subs trick
+BlendPalettes_0DDE4	0x0800dde4	192	MATCHED	main	RGB555 blend loop (16x); mask=31/count=15 in r9/sl
+BlendPalettes_21B3C	0x08021b3c	206	MATCHED	main	Blend to IWRAM 0x03002620+(idx<<5)
+BlendPalettes_224E4	0x080224e4	206	MATCHED	main	Byte-identical body to 0x08021b3c (only bl encoding differs)
+Text_3AC4C	0x0803ac4c	238	MATCHED	main	Dialogue state machine; Text_SelectBlobIdx(0x66/0x67/0x68)
+ObjInit_2298C	0x0802298c	220	MATCHED	main	6-byte stride tables; s[10] OR (not double-OR idiom)
+Gfx_96BC	0x080096bc	260	MATCHED	main	Array-driven + fill tile copy; goto flow matched first try
+DmaQueue_02A1C	0x08002a1c	210	MATCHED	main	16-slot DMA queue via CpuSet
+sub_080046b0	0x080046b0	238	BLOCKED	n/a	VRAM update linked-list; dual path (CpuFastSet vs manual ldm/stm loop); not attempted - complexity

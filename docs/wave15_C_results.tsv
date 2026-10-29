@@ -1,0 +1,36 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08000624	Fwd_08000624	MATCHED	10	0	main	pure forwarder: void F(void){Callee();} -> push{lr}/bl/pop{r0}/bx r0	Forwards to F_08002F40
+0x08000630	Fwd_08000630	MATCHED	10	0	main	pure forwarder	Forwards to F_08002F4C
+0x0804c814	Fwd_0804C814	MATCHED	10	0	main	pure forwarder	Forwards to ClearSignBit
+0x0800eb24	SetFlag_0800EB24	MATCHED	12	0	main	const arg call	SetByte20_Clear21to23_02005130(3)
+0x0800c5ec	FillWrap_0800C5EC	MATCHED	16	0	main	arg shuffle + (u16) cast	FillTilemap_C3A0(base, (u16)c)
+0x0800c69c	FillWrap_0800C69C	MATCHED	16	0	main	arg shuffle + (u16) cast	FillTilemap_C3A0(base, (u16)c); twin of 0800c5ec
+0x08003078	NotZero_08003078	MATCHED	24	0	main	early-return branchy bool; callee declared u32 return (int-decl idiom)	return TblValidate_300C(x)==0 ? 0 : 1 via early return
+0x0800ecd8	F_0800ECD8	MATCHED	30	0	main	u32 temp for s8 call result; bne skips past movs	if ((u32)(s8)F_0801025C(a,(s8)b)==1) SetByte20(13); return 1 else return r
+0x08000d6c	TaskScan_08000D6C	MATCHED	32	0	main	do-while(i<=2) with int i; i++ before p+=24	Scans 3 task slots, calls SetTaskField0_030023C8(i) if slot byte != 1
+0x0800ec18	FlagByteSet_0800EC18	MATCHED	32	0	main	u32 addr=(u32)g_02005130 extern array blocks const-fold -> ldr r0; adds r2,r0,#0; adds r2,#37	Sets byte at 0x02005130+37; u32 b=(u8)a forces early narrowing
+0x0801e14c	SlotCopy_0801E14C	BLOCKED	34	6	main	scheduler orders ldrb/lsls before ldr pool; ROM has ldr pool first	Tried: single-expr, split statements, asm barrier, array-index &g[p[9]], old_agbcc. 6 diffs at bytes 14-16.
+0x080173d4	TblSlotInit_080173D4	BLOCKED	36	4	main	scheduler: ROM ldr pool BEFORE ldrb; mine does ldrb first	Tried u32 array index. 4 diffs.
+0x08027c84	RecInit_08027C84	BLOCKED	36	10	main	ROM loads all 3 pools up front (r2,r1,r3); compiler misallocates q3	Tried locals-first, old_agbcc. 10 diffs.
+0x0804c820	ClearLoop_0804C820	BLOCKED	36	29	main	ROM loads pool const 7 as u32 then (u16)-extends; source of pooled 7 unknown	Tried ldrh, (u16)7 (gives movs). 29 diffs.
+0x0801787c	SlotClear_0801787C	BLOCKED	38	20	main	scheduler ldr/ldrb order (same as 0801e14c)	20 diffs.
+0x0801c3fc	ChipInit_0801C3FC	MATCHED	38	0	old_agbcc	u8 temp blocks &252 folding: b=p[10]; b&=253; b&=254	Wrapper_D770(p,0x82a,0); ChipSlot_IncUse(p,0); mask byte 10
+0x0801c540	ChipInit_0801C540	MATCHED	38	0	old_agbcc	u8 temp blocks folding; twin of 0801c3fc	Same as 0801c3fc, different pool
+0x080246fc	IdxLookup_080246FC	MATCHED	38	0	main	if (x>248) return 0; return (u8)DerefIdx_08025564(pp,(u8)x)	Range-checked table lookup
+0x0800eac4	CopyBytes_0800EAC4	MATCHED	40	0	main	direct g_02005168[] access loads pool late (not via local)	Copies bytes between 0x02005130 and 0x02005168 regions
+0x0800eaf4	CondCopy_0800EAF4	MATCHED	42	0	old_agbcc	|| short-circuit; y kept in r3 via adds	Conditional copy if p[4]!=x || p[5]!=y
+0x0800eba0	Store5_0800EBA0	MATCHED	42	0	main	5 args (4 regs + stack); ip reused for pool	Stores 5 bytes to 0x02005130 offsets
+0x0804c7b4	TblLookup_0804C7B4	BLOCKED	42	2	main	pinned p1 to r2 for ldr; adds target wants r1 not r2	Tried unpin, explicit sum. 2 diffs at bytes 21,23 (adds r2,r2,r1 vs adds r1,r1,r2).
+0x0800eb70	FlagStore_0800EB70	MATCHED	44	0	main	pool ptr q in r3 reused: p=q; p+=37 and r=q; r+=36	Sets bytes at +37/+36 of 0x02005130
+0x0800edb0	TestStore_0800EDB0	BLOCKED	46	26	main	agbcc booleanizes (a<<24)==0 to negs/orrs/lsrs; ROM is branchy	Tried if/else, braces, ternary, goto, temp u32, old_agbcc. 26 diffs.
+0x0804bde0	ListWalk_0804BDE0	BLOCKED	46	30	main	ROM uses tst (not ands) and orrs r1,r0 (not r0,r1)	Tried temp u8, (u32) cast. 30 diffs.
+0x0800e400	GuardedListInit_0800E400	MATCHED	50	0	main	u8 z=0 temp reused for strh and call arg	Flag-guarded list init; template for family
+0x0800e650	GuardedListInit_0800E650	MATCHED	50	0	main	same template, IsZero_02005160_080103cc	Same as 0800e400
+0x0800e690	GuardedListInit_0800E690	MATCHED	50	0	main	same template, IsZero_02005160_080104f4	Same as 0800e400
+0x0800e7c8	GuardedListInit_0800E7C8	MATCHED	50	0	main	same template, IsZero_02005160_08010124	Same as 0800e400
+0x0800e808	GuardedListInit_0800E808	MATCHED	50	0	main	same template, IsZero_02005160_08010248	Same as 0800e400
+0x0800e848	GuardedListInit_0800E848	MATCHED	50	0	main	same template, IsZero_02005160_080102f4	Same as 0800e400
+0x0800e888	GuardedListInit_0800E888	MATCHED	50	0	main	same template, IsZero_02005160_080102f4	Same as 0800e400
+0x0800e8c8	GuardedListInit_0800E8C8	MATCHED	54	0	main	template + u8 *q=(u8*)p; q+=10; FlagByte_CopyOrNeg1(q)	Variant with pointer arg to checker
+0x0800e90c	GuardedListInit_0800E90C	MATCHED	56	0	main	template + q+=43; Test_08010454(*q)	Variant with byte arg to checker
+0x0800e950	GuardedListInit_0800E950	MATCHED	56	0	main	template + q+=43; FlagBitClear_10498(*q)	Variant with byte arg to checker

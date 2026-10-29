@@ -1,0 +1,48 @@
+# MMBCC func_list v2.1 addendum (coordinator, 2026-10-20)
+# bl-targeted function starts missed by v2 (v2 harvested bl targets
+# only from descent-reached code; this pass harvests region-wide).
+# All validated with gen_func_list_v2.validate_target. Tier B.
+# format: <offset> B <mode> <symbol> # v2.1: <n> bl callers, byteclass=<cls>
+003090 B T sub_08003090 # v2.1: 1 bl callers, byteclass=unknown
+0030BC B T sub_080030BC # v2.1: 1 bl callers, byteclass=unknown
+004158 B T sub_08004158 # v2.1: 1 bl callers, byteclass=unknown
+004164 B T sub_08004164 # v2.1: 1 bl callers, byteclass=unknown
+004E0C B T sub_08004E0C # v2.1: 41 bl callers, byteclass=unknown
+0082CC B T sub_080082CC # v2.1: 2 bl callers, byteclass=unknown
+00D104 B T sub_0800D104 # v2.1: 1 bl callers, byteclass=unknown
+00EA08 B T sub_0800EA08 # v2.1: 1 bl callers, byteclass=unknown
+00EAB4 B T sub_0800EAB4 # v2.1: 4 bl callers, byteclass=unknown
+00EDE4 B T sub_0800EDE4 # v2.1: 2 bl callers, byteclass=unknown
+00EDF0 B T sub_0800EDF0 # v2.1: 2 bl callers, byteclass=unknown
+00EDFC B T sub_0800EDFC # v2.1: 3 bl callers, byteclass=unknown
+00EE14 B T sub_0800EE14 # v2.1: 3 bl callers, byteclass=unknown
+00EE2C B T sub_0800EE2C # v2.1: 4 bl callers, byteclass=unknown
+00EE38 B T sub_0800EE38 # v2.1: 4 bl callers, byteclass=unknown
+00EE44 B T sub_0800EE44 # v2.1: 8 bl callers, byteclass=unknown
+00EE50 B T sub_0800EE50 # v2.1: 1 bl callers, byteclass=unknown
+01007C B T sub_0801007C # v2.1: 2 bl callers, byteclass=unknown
+011C14 B T sub_08011C14 # v2.1: 1 bl callers, byteclass=unknown
+017488 B T sub_08017488 # v2.1: 1 bl callers, byteclass=unknown
+0174E4 B T sub_080174E4 # v2.1: 2 bl callers, byteclass=unknown
+0174EC B T sub_080174EC # v2.1: 1 bl callers, byteclass=unknown
+0247A8 B T sub_080247A8 # v2.1: 2 bl callers, byteclass=unknown
+027E44 B T sub_08027E44 # v2.1: 1 bl callers, byteclass=unknown
+02D8F4 B T sub_0802D8F4 # v2.1: 2 bl callers, byteclass=unknown
+030B18 B T sub_08030B18 # v2.1: 1 bl callers, byteclass=unknown
+030B1A B T sub_08030B1A # v2.1: 1 bl callers, byteclass=unknown # ALT-ENTRY, not counted: alt-entry of sub_08030B18 (in body)
+03385E B T sub_0803385E # v2.1: 146 bl callers, byteclass=unknown
+03386A B T sub_0803386A # v2.1: 1 bl callers, byteclass=unknown # ALT-ENTRY, not counted: alt-entry of sub_0803385E (in body)
+033874 B T sub_08033874 # v2.1: 2 bl callers, byteclass=unknown # ALT-ENTRY, not counted: alt-entry of sub_0803385E (in body)
+0338D6 B T sub_080338D6 # v2.1: 1 bl callers, byteclass=unknown
+0338F4 B T sub_080338F4 # v2.1: 1 bl callers, byteclass=unknown
+03C20E B T sub_0803C20E # v2.1: 1 bl callers, byteclass=unknown
+03D9EC B T sub_0803D9EC # v2.1: 3 bl callers, byteclass=unknown
+03DA92 B T sub_0803DA92 # v2.1: 2 bl callers, byteclass=unknown
+04151E B T sub_0804151E # v2.1: 1 bl callers, byteclass=code # ALT-ENTRY, not counted: alt-entry inside code (cf. v2 anomaly B_calls_mid_function)
+04427C B T sub_0804427C # v2.1: 1 bl callers, byteclass=unknown
+04B980 B T sub_0804B980 # v2.1: 1 bl callers, byteclass=unknown
+04BE28 B T sub_0804BE28 # v2.1: 1 bl callers, byteclass=unknown # ALT-ENTRY, not counted: alt-entry of sub_0804BE2A (A-tier; prepends 1 insn)
+04BE44 B T sub_0804BE44 # v2.1: 11 bl callers, byteclass=unknown
+04BE46 B T sub_0804BE46 # v2.1: 1 bl callers, byteclass=unknown # ALT-ENTRY, not counted: alt-entry of sub_0804BE44 (in body)
+04C558 B T sub_0804C558 # v2.1: 2 bl callers, byteclass=unknown
+04D130 B T sub_0804D130 # v2.1: 1 bl callers, byteclass=unknown

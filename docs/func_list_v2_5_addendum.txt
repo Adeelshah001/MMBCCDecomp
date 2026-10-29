@@ -1,0 +1,65 @@
+# MMBCC func_list v2.5 addendum (coordinator, 2026-10-20)
+#
+# 52 tier-B entries still novel after the hi-reg MOV decoder fix.
+# The fixed-decoder re-run of gen_func_list_v2.py absorbed 20 of v2.1's 37,
+# 5 of v2.2's 7, and 7 of v2.3's 8 directly into v2 (A+B=1651); the 52 below
+# (17 ex-v2.1 + 2 ex-v2.2 + 1 ex-v2.3 + 32 ex-v2.4) remain outside v2 and are
+# carried here with their original evidence. No overlaps between sources.
+# v2.1's 6 "not counted" alt-entries are NOT carried (unchanged judgment).
+#
+# Format: <offset> B <mode> <symbol> # v2.5 (from vX.Y): <evidence>
+00EAB4 B T sub_0800EAB4 # v2.5 (from v2.1): 4 bl callers, byteclass=unknown
+00EDFC B T sub_0800EDFC # v2.5 (from v2.1): 3 bl callers, byteclass=unknown
+00EE14 B T sub_0800EE14 # v2.5 (from v2.1): 3 bl callers, byteclass=unknown
+00EE2C B T sub_0800EE2C # v2.5 (from v2.1): 4 bl callers, byteclass=unknown
+00EE38 B T sub_0800EE38 # v2.5 (from v2.1): 4 bl callers, byteclass=unknown
+01007C B T sub_0801007C # v2.5 (from v2.1): 2 bl callers, byteclass=unknown
+011C14 B T sub_08011C14 # v2.5 (from v2.1): 1 bl callers, byteclass=unknown
+027E44 B T sub_08027E44 # v2.5 (from v2.1): 1 bl callers, byteclass=unknown
+030B18 B T sub_08030B18 # v2.5 (from v2.1): 1 bl callers, byteclass=unknown
+03385E B T sub_0803385E # v2.5 (from v2.1): 146 bl callers, byteclass=unknown
+0338D6 B T sub_080338D6 # v2.5 (from v2.1): 1 bl callers, byteclass=unknown
+0338F4 B T sub_080338F4 # v2.5 (from v2.1): 1 bl callers, byteclass=unknown
+03D9EC B T sub_0803D9EC # v2.5 (from v2.1): 3 bl callers, byteclass=unknown
+04427C B T sub_0804427C # v2.5 (from v2.1): 1 bl callers, byteclass=unknown
+04B980 B T sub_0804B980 # v2.5 (from v2.1): 1 bl callers, byteclass=unknown
+04BE44 B T sub_0804BE44 # v2.5 (from v2.1): 11 bl callers, byteclass=unknown
+04C558 B T sub_0804C558 # v2.5 (from v2.1): 2 bl callers, byteclass=unknown
+04DE70 B T sub_08004DE70 # v2.5 (from v2.2): 3 genuine callers, 32B body, no prologue — probable alternate entry; was D contains_v1_04DEDE
+04DEE8 B T sub_08004DEE8 # v2.5 (from v2.2): 6 genuine callers, 12B body, no prologue — probable alternate entry; was D contains_v1_04DF9E
+04DDA0 B T sub_0804DDA0 # v2.5 (from v2.3): 13 BL callers, validates cleanly, owned by nothing, byteclass unknown — missed entry point; was D contains_v1_04DE64
+02BCE2 B T sub_0802BCE2 # v2.5 (from v2.4): 3 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0; was D contains_v1_02BD66
+02BCF8 B T sub_0802BCF8 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0,sub_0802FBA4,sub_0802FC70; was D contains_v1_02BD14
+02BD14 B T sub_0802BD14 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0,sub_0802FBA4,sub_0802FC70; was D contains_v1_02BD66
+02BD66 B T sub_0802BD66 # v2.5 (from v2.4): 31 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802FC70; was D contains_v1_02BDEE
+02BD72 B T sub_0802BD72 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0,sub_0802FC70; was D contains_v1_02BDEE
+02BDEE B T sub_0802BDEE # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; was D contains_v1_02C71E
+02BDF6 B T sub_0802BDF6 # v2.5 (from v2.4): 15 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0,sub_0802FBA4,sub_0802FCFC; was D contains_v1_02BEA2
+02BEA2 B T sub_0802BEA2 # v2.5 (from v2.4): 3 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802FCFC; was D contains_v1_02C71E
+02C010 B T sub_0802C010 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0; was D contains_v1_02C6E6
+02C068 B T sub_0802C068 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0,sub_0802FC28; was D contains_v1_02C71E
+02C196 B T sub_0802C196 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0,sub_0802D5A8; was D contains_v1_02C71E
+02C23C B T sub_0802C23C # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; was D contains_v1_02C6E6
+02C2CE B T sub_0802C2CE # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; was D contains_v1_02C71E
+02C344 B T sub_0802C344 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; was D contains_v1_02C71E
+02C3C0 B T sub_0802C3C0 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0,sub_0802FC28,sub_0803FACC; was D contains_v1_02C71E
+02C4C0 B T sub_0802C4C0 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0,sub_0802FC28,sub_0803FACC; was D contains_v1_02C71E
+02C5C0 B T sub_0802C5C0 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0; was D contains_v1_02C71E
+02C5F6 B T sub_0802C5F6 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; was D contains_v1_02C6E6
+02C618 B T sub_0802C618 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0; was D contains_v1_02C71E
+02C64A B T sub_0802C64A # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0; was D contains_v1_02C71E
+02C686 B T sub_0802C686 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0; was D contains_v1_02C71E
+02C6B8 B T sub_0802C6B8 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0; was D contains_v1_02C6E6
+02C6E6 B T sub_0802C6E6 # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; was D contains_v1_02C71E
+02C6EC B T sub_0802C6EC # v2.5 (from v2.4): 1 genuine BL callers (visited-boundary verified), validate_target T; calls known sub_0802D7A0; was D contains_v1_02C71E
+02C71E B T sub_0802C71E # v2.5 (from v2.4): 26 genuine BL callers (visited-boundary verified), validate_target T; was D contains_v1_02C7A4
+033962 B T sub_08033962 # v2.5 (from v2.4): 1 genuine caller (030B0C), calls known sub_0804AD00, tail-branches to known sub_08033AB2; was D contains_v1_033AB2
+000A18 B T sub_08000A18 # v2.5 (from v2.4): pointer-table discovery: 2-byte bx-lr stub; 12 table-runs
+0044F4 B T sub_080044F4 # v2.5 (from v2.4): pointer-table discovery: bx-lr-terminated body; 29 table-runs
+011E98 B T sub_08011E98 # v2.5 (from v2.4): pointer-table discovery: 12-byte bx-lr function; 2 table-runs
+017084 B T sub_08017084 # v2.5 (from v2.4): pointer-table discovery: 12-byte bx-lr function (idem 11E98/20F58); 19 table-runs
+020F58 B T sub_08020F58 # v2.5 (from v2.4): pointer-table discovery: 12-byte bx-lr function (idem 11E98/17084); 8 table-runs
+04C4FC B T sub_0804C4FC # v2.5 (from v2.4): pointer-table discovery: push{r4,r5} prologue, coherent body; 2 table-runs
+#
+# Verified totals after v2.5: A=51, B=1652 (1600 v2 + 52 v2.5),
+# D=45. Working function count: 1703.

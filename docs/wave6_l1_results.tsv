@@ -1,0 +1,12 @@
+name	address	size	status	compiler	notes/diffs
+Task_38AD4	0x08038AD4	316	MATCHED	old_agbcc	Bit-ladder + Text_SelectBlobIdx + EWRAM 0x02004CE0 setup; 0 diffs over 316 B (306 code + 2 pad + 8 pool); bl patched in harness (linker veneer artifact), coordinator to verify bl in full build
+sub_0803AAA8	0x0803AAA8	412	BLOCKED	n/a	Complex bit-ladder variant; 6-case dispatch; case_80 has ldrsb + multi-pool logic (~100 B); not attempted (time)
+sub_08002300	0x08002300	330	BLOCKED	n/a	Decompression dispatcher; 3 loops + single-call tail; BLOCKED on whole-function regalloc (dst r6 vs r7, rem r7 vs r6, cnt path-sensitive r2); 202 diffs best attempt
+sub_08001F1C	0x08001F1C	340	BLOCKED	n/a	SRAM write state machine; not attempted (time); structural decode in notes
+sub_08002070	0x08002070	340	BLOCKED	n/a	SRAM read state machine; 208 diffs best attempt (switch structure diverges in case bodies); complex retry/checksum logic
+sub_0803643C	0x0803643C	438	BLOCKED	n/a	3-arg function with hi-reg allocation (r8/r9/sl/ip); calls unmatched helpers; batch-F class
+sub_08036A14	0x08036A14	402	BLOCKED	n/a	EntryMgr task dispatcher (6-case switch on p[5]); calls 8+ unmatched sub_0800xxxx/sub_0803xxxx helpers (xref DB incomplete); batch-F class
+sub_08036DAC	0x08036DAC	386	BLOCKED	n/a	EntryMgr task dispatcher (12-case switch on p[5]); calls unmatched helpers incl. 0x080400A8, 0x0804DEE8; batch-F class
+sub_08039058	0x08039058	370	BLOCKED	n/a	EntryMgr task dispatcher (5-case switch); calls unmatched helpers incl. 0x0803A6BC, 0x0803AAA8 (which is itself unmatched); batch-F class
+sub_080493EC	0x080493EC	364	BLOCKED	n/a	EntryMgr task dispatcher (5-case switch); calls unmatched helpers incl. 0x08049560, 0x0804A3FC/0x0804A40C; batch-F class
+sub_0803EEA8	0x0803EEA8	1428	BLOCKED	n/a	Large task mode dispatcher (6-case switch); calls 15+ unmatched helpers; batch-F class; structure documented in notes

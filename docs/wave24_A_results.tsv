@@ -1,0 +1,5 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08006AD8	TilemapRectFill_6AD8	BLOCKED	768	723	main agbcc -O2	Pinned COPY registers (w12b): ctx_c->r6, b_c->r9, d_c->r8, pa->sl; explicit pa=a cached copy	V8 hits exact 768B size; prologue has ctx/b/d/pa correct but c/e take r5/r7 instead of spilling to [sp,#4]/[sp,#8]; frame #44 vs ROM #40. Selective-spill wall persists.
+0x08007134	RectFill_7134	BLOCKED	480	426	main agbcc -O2	Pinned COPY registers: ctx_c->r5, b_c->r9, r8v->r8	V4: 500B vs 480B; c->r6/e->r7 vs ROM c->r7/e->spill (swapped); loop body incomplete in v4. Simpler prologue than 6AD8 but same selective-spill wall.
+0x080065BC	FillRect_65BC	BLOCKED	416	-1	n/a	n/a	Not attempted in depth (time-boxed on 6AD8/7134). Prologue decoded: 7 params (ctx,b,c,d,e,f,g); ctx->r9, d->sl, e->r7+spill, f->r6, g->r5+spill; b,c spill. Near-identical structure to 0x08006374.
+0x08006374	FillRect_6374	BLOCKED	420	-1	n/a	n/a	Not attempted in depth (time-boxed). Prologue decoded: 8 params; ctx->r9, (stack u8)->r6->sl; b,c,d,f,g spill. Calls 0x080065BC 2x per w23b (unverified here).

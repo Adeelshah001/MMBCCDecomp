@@ -1,0 +1,18 @@
+name	address	wave	status	notes
+ObjInit_207EC	0x080207ec	5	MATCHED	126B code + 2 pad + 4 pool = 132B total, 0 diffs. old_agbcc. Double-OR via t=2;t|=s[10];s[10]=t|1. int mask=-13. Register-var + opaque asm for r1 copy in idx clamp (signed ble).
+ObjInit_22EBC	0x08022ebc	5	MATCHED	126B code + 2 pad + 12 pool = 140B total, 0 diffs. old_agbcc. Table-driven ChipSlot_Setup arg. idx from EWRAM table. mask in r1 reused for s[0x45] and s[0x41].
+ObjInit_1D3C0	0x0801d3c0	5	BLOCKED	Scheduler reorders str before strb in else branch (s[10]|=1 + *(s+0x6c)=0). Memory barrier fixes if-branch but else-branch still merges ORs. 81 diffs remain.
+ObjInit_205B8	0x080205b8	5	BLOCKED	Register allocator puts double-OR constant 1 in r5 (push {r4,r5,lr}) vs ROM r1 (push {r4,lr}). Persists across agbcc/old_agbcc/no-interwork. 108 diffs.
+sub_08001f1c	0x08001f1c	5	BLOCKED	Not attempted (334B, complex switch). Save-driver related (calls 0x0804dc94).
+sub_08002070	0x08002070	5	BLOCKED	Not attempted (340B, complex switch). Save-driver related (calls 0x0804db5c).
+sub_08002300	0x08002300	5	BLOCKED	Not attempted (330B, 2-arg, muls). Save-driver related.
+sub_08002a1c	0x08002a1c	5	BLOCKED	Not attempted (210B, uses r8/r9 high regs).
+sub_08003fc8	0x08003fc8	5	BLOCKED	Not attempted (160B, 4-arg, calls SetU32_4).
+sub_080046b0	0x080046b0	5	BLOCKED	Not attempted (238B, uses r8/r9 high regs).
+ObjInit_1B47C	0x0801b47c	5	BLOCKED	Not attempted (146B, uses Vec2_AddMirrored, r6 for s). Complex table lookups.
+ObjInit_20B60	0x08020b60	5	BLOCKED	Not attempted (158B). Likely similar to 0x080205b8 (r5 quirk expected).
+ObjInit_211EC	0x080211ec	5	BLOCKED	Not attempted (146B). Likely similar ObjInit variant.
+ObjInit_21594	0x08021594	5	BLOCKED	Not attempted (132B). Likely similar ObjInit variant.
+ObjInit_2184C	0x0802184c	5	BLOCKED	Not attempted (144B). Likely similar ObjInit variant.
+ObjInit_2298C	0x0802298c	5	BLOCKED	Not attempted (220B, push {r4,r5,lr}). Larger ObjInit variant.
+sub_080263a4	0x080263a4	5	BLOCKED	Not attempted (138B, calls 0x08026710).

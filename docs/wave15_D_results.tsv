@@ -1,0 +1,13 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08000DC0	Task_ActivateSlot	MATCHED	68	0	main	split-shift t=(t<<1)+t; t<<=3 + t1(pin r1)/t split + if-scope fix	68/68 B; callee ContextSwitch (0x08000300, ASM); task-slot init at 0x030023C8+cnt*24
+0x08024818	TblStride_24818	MATCHED	48	0	main	pin q->r3 forces 216 const to r2 + pin k->r4; size 46->48 (42 code+2 pad+4 pool)	48/48 B; callee GetStride4Byte20 (0x080258C0, MATCHED); TSV size was wrong
+0x08011170	Tbl_ClearEntries	MATCHED	68	0	main	explicit widened u16 incr via u32 t=(u32)i<<16; t+=(0x80<<9); i=(u16)(t>>16)	68/68 B; callees GetRomTableEntry_082240B8/TableByte_16FAC/TblFindClear_02C74 (all MATCHED)
+0x0800B448	F_0800B448	BLOCKED	36	-	main	(new) empty-asm barrier "+r"(t) defeats pool fold + forces shift-split	Barrier gives lsls#24@def, ldr-between, adds#36, pool=0x02004E40 exact; allocator swaps t/bb r0<->r3 (+1 insn). Park.
+0x08024878	F_08024878	BLOCKED	46	4	-	dead-param-extends = second-vintage, park per wave14_C idiom 5	Confirmed: adds r2,r1,#0; lsls/lsrs r2 on dead 2nd param. Not retried.
+0x080260D4	F_080260D4	BLOCKED	56	4	-	loop-top s16 extend hoist resists (LICM)	Tried pin r4, init-at-decl, explicit s16 copy, asm extend, int/s16 split counters. Wave14_C best (4 diffs) stands.
+0x08040364	TblCall_08040364	BLOCKED	56	8	-	indexed ldrsb r4,[r1,r4] resists	Variable index gives ldrsb r0,[r1,r0]; pin+asm gives ldrsb r4,[r1,r4] but surrounding alloc wrong. Park.
+0x080437D4	TblCall_080437D4	BLOCKED	56	8	-	twin of 08040364	Not attempted separately; same blocker.
+0x08006124	F_08006124	BLOCKED	64	12	-	6-arg wrapper: dead pool load (0x0200483C) + stack codegen	Likely compiler version difference. Park.
+0x08006578	F_08006578	BLOCKED	64	12	-	twin of 08006124	Not attempted separately.
+0x08043630	F_08043630	BLOCKED	62	2	main	near-miss: barrier defeats pool fold, u32 temp avoids extend	Best v7: only movs r0,#0/strb r0 vs ROM movs r3,#0/strb r3 (2-byte allocator diff). Park.
+0x080052DC	F_080052DC	BLOCKED	68	24	-	6-pool fold; barrier forces r8 (120B)	Pool-fold needs barrier but barrier breaks allocation. Park.

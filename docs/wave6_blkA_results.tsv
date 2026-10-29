@@ -1,0 +1,16 @@
+addr	name	status	compiler	diffs	notes_file	formulation
+0x08017D50	sub_08017D50	UNBLOCKED	old_agbcc	0	match_notes_wave6_blkA.md	/tmp/wave6_blkA/ObjInit_17D50_08017D50_MATCHED.c
+0x08003154	sub_08003154	UNBLOCKED	agbcc	0	match_notes_wave6_blkA.md	/tmp/wave6_blkA/StructInit_03154_08003154_MATCHED.c
+0x0800322C	sub_0800322C	UNBLOCKED	agbcc	0	match_notes_wave6_blkA.md	/tmp/wave6_blkA/StructInit_0322C_0800322C_MATCHED.c
+0x08003298	sub_08003298	UNBLOCKED	agbcc	0	match_notes_wave6_blkA.md	/tmp/wave6_blkA/StructInit_03298_08003298_MATCHED.c
+0x080031B8	sub_080031B8	BLOCKED	agbcc	2	match_notes_wave6_blkA.md	/tmp/wave6_blkA/StructInit_031B8_080031B8_BLOCKED_2B.c
+0x08021E64	sub_08021E64	BLOCKED	old_agbcc	2	match_notes_wave6_blkA.md	/tmp/wave6_blkA/ObjInit_21E64_08021E64_BLOCKED_2B.c
+0x0800288C	sub_0800288C	BLOCKED	agbcc	15	match_notes_wave6_blkA.md	-
+0x0802D7A0	Obj_AddEntry	BLOCKED	-	-	match_notes_wave6_blkA.md	-
+0x08017F8C	ObjInit_TypeA	BLOCKED	-	-	match_notes_wave6_blkA.md	-
+0x0801DCC0	ObjInit_TypeB	BLOCKED	-	-	match_notes_wave6_blkA.md	-
+0x0801D3C0	ObjInit_1D3C0	BLOCKED	-	-	match_notes_wave6_blkA.md	-
+0x080205B8	ObjInit_205B8	BLOCKED	-	-	match_notes_wave6_blkA.md	-
+0x080129F8	sub_080129F8	BLOCKED	-	-	match_notes_wave6_blkA.md	-
+0x08025958	sub_08025958	BLOCKED	-	-	match_notes_wave6_blkA.md	-
+0x080281F0	sub_080281F0	BLOCKED	-	-	match_notes_wave6_blkA.md	-

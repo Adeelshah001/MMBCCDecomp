@@ -1,0 +1,51 @@
+name	address	size	status	compiler	notes
+Rank_FromValue	0x08047538	154	MATCHED	old_agbcc	0 diffs over 154 bytes; s8 switch (cases 0,5,10,15,20,25 -> 0..5); 2-byte align pad in isolated build only
+FilterCopy	0x08025578	122	MATCHED	main	0 diffs over 122 bytes; u8 filter-copy with fwd/bwd modes; pool 0x082297E8; 2-byte align pad in isolated build only
+Script_StepState	0x0803F480	964	BLOCKED	—	Systematic register allocation divergence: ROM keeps index sum in r1 (`adds r1,r0,r2`) and loads 0x464C fresh into r6; both compilers put sum in r0 and fold 0x464C via `subs r1,#0x54`. Tried main/old_agbcc, -O1/-Os, explicit parens, k-local, pinned r1 (breaks param alloc). Best C: /tmp/wave7_e/f480_best.c
+sub_080039A4	0x080039A4	456	NOT_ATTEMPTED	—	Complex fixed-point arithmetic with table lookups; time
+sub_08003CB8	0x08003CB8	452	NOT_ATTEMPTED	—	Same family as 0x080039A4; time
+sub_080349F8	0x080349F8	338	NOT_ATTEMPTED	—	Time
+sub_08003724	0x08003724	330	NOT_ATTEMPTED	—	Time
+sub_080086AC	0x080086AC	306	NOT_ATTEMPTED	—	Time
+sub_08003608	0x08003608	280	NOT_ATTEMPTED	—	Time
+sub_08000F28	0x08000F28	266	NOT_ATTEMPTED	—	HW init function (straight-line); time
+sub_08008510	0x08008510	254	NOT_ATTEMPTED	—	Time
+sub_08003408	0x08003408	252	NOT_ATTEMPTED	—	Same family as 0x080039A4; time
+sub_08003508	0x08003508	252	NOT_ATTEMPTED	—	Same family as 0x080039A4; time
+sub_0800561C	0x0800561C	228	NOT_ATTEMPTED	—	Time
+sub_080015B4	0x080015B4	226	NOT_ATTEMPTED	—	Time
+sub_080042B8	0x080042B8	222	NOT_ATTEMPTED	—	Time
+sub_0800D480	0x0800D480	218	NOT_ATTEMPTED	—	Time
+sub_0800DF8C	0x0800DF8C	218	NOT_ATTEMPTED	—	Time
+sub_08003330	0x08003330	214	NOT_ATTEMPTED	—	Time
+sub_08001400	0x08001400	206	NOT_ATTEMPTED	—	Time
+sub_0804DDA0	0x0804DDA0	196	NOT_ATTEMPTED	—	Signed division routine; time
+sub_08001CA8	0x08001CA8	190	NOT_ATTEMPTED	—	Time
+sub_0803FBCC	0x0803FBCC	188	NOT_ATTEMPTED	—	Time
+sub_0804DEE8	0x0804DEE8	182	NOT_ATTEMPTED	—	Unsigned division routine; time
+sub_0804CFD4	0x0804CFD4	180	NOT_ATTEMPTED	—	Time
+sub_080007D0	0x080007D0	178	NOT_ATTEMPTED	—	Time
+sub_08000A1C	0x08000A1C	178	NOT_ATTEMPTED	—	Time
+sub_0800B818	0x0800B818	178	NOT_ATTEMPTED	—	Time
+sub_08006014	0x08006014	176	NOT_ATTEMPTED	—	Time
+sub_0803FE44	0x0803FE44	174	NOT_ATTEMPTED	—	Range classifier; time
+sub_0800D04C	0x0800D04C	172	NOT_ATTEMPTED	—	Time
+sub_0804BCDC	0x0804BCDC	168	NOT_ATTEMPTED	—	ARM code (not Thumb); time
+sub_080024BC	0x080024BC	166	NOT_ATTEMPTED	—	Time
+sub_08027D9C	0x08027D9C	166	NOT_ATTEMPTED	—	Time
+sub_0800B520	0x0800B520	162	NOT_ATTEMPTED	—	Time
+sub_0804D088	0x0804D088	160	NOT_ATTEMPTED	—	Time
+sub_0800C600	0x0800C600	154	NOT_ATTEMPTED	—	Time
+sub_080014F8	0x080014F8	152	NOT_ATTEMPTED	—	HW init; time
+sub_0800B0A4	0x0800B0A4	152	NOT_ATTEMPTED	—	Time
+sub_0800C6B0	0x0800C6B0	152	NOT_ATTEMPTED	—	Time
+sub_08028154	0x08028154	152	NOT_ATTEMPTED	—	Time
+sub_0800DEF8	0x0800DEF8	146	NOT_ATTEMPTED	—	Time
+sub_08034D18	0x08034D18	142	NOT_ATTEMPTED	—	Time
+sub_0800CA10	0x0800CA10	136	NOT_ATTEMPTED	—	Time
+sub_08004078	0x08004078	134	NOT_ATTEMPTED	—	Time
+sub_08034B4C	0x08034B4C	134	NOT_ATTEMPTED	—	Time
+sub_0803F998	0x0803F998	128	NOT_ATTEMPTED	—	Time
+sub_08028880	0x08028880	126	NOT_ATTEMPTED	—	Struct init with bit tests; register allocation (p in r3 vs r4); time
+sub_0800C50C	0x0800C50C	122	NOT_ATTEMPTED	—	Palette blend; close but allocation differs; time
+sub_080107CC	0x080107CC	120	NOT_ATTEMPTED	—	Complex bit magic; time

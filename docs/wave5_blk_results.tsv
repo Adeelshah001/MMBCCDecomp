@@ -1,0 +1,22 @@
+addr	name	status	diffs	compiler	notes
+0x08000978	HBlank_VCountUpdate	UNBLOCKED	0	old_agbcc	Split-adds idiom for XOR (p=base; p+=0x167) + inline asm for AND/OR dest-r0. 0 diffs (bl harness quirk excluded).
+0x08000C68	StridedCopy	UNBLOCKED	0	agbcc	Register pinning (d=r4,dst=r3,sstep=r5) + load-order matching + inline asm earlyclobber for lsls r0,r5,#24 scratch.
+0x080366A8	Task_366A8	UNBLOCKED	0	agbcc	s32 v=(s8)func() forces lsls+asrs; condition is if(!v) not if(v) (notes had it inverted).
+0x0800DD08	Vec2_CopyMirrored	BLOCKED	2	agbcc	Register pinning (d=r4) + inline asm for movs/ldrb order. Remaining: pop {r2}/bx r2 vs pop {r1}/bx r1 (compiler heuristic).
+0x0804DC00	Sram_VerifyCompare	BLOCKED	22	agbcc	Basic-block ordering (beq-continue vs bne-mismatch) not flippable. No-interwork does NOT help (not a pop{pc} case).
+0x0802D7A0	Obj_AddEntry	BLOCKED	n/a	agbcc	Mask idiom works in isolation: int mask=-3 + inline asm "and %0,%1" prevents 8-bit narrowing, CSE-keeps mask. Needs full 10-param function integration.
+0x08017F8C	ObjInit_TypeA	BLOCKED	n/a	agbcc	Multiple blockers: -13 mask (int mask=-13 idiom works), idx-calc movs-before-ldrb scheduling, dual-pool layout. Not attempted in full.
+0x0801DCC0	ObjInit_TypeB	BLOCKED	n/a	agbcc	Double-OR solved by wave4_h idiom (v=2;v|=s[0xA];v|=1). Mask+OR ordering works. Needs full function integration.
+0x080004FC	MainLoop	BLOCKED	n/a	agbcc	LICM hoisting (base+0x2202 vs base+0x2000) not reproducible. 30 variants exhausted. No new angle found.
+0x0804CDE8	Text_OpenDialogue	BLOCKED	n/a	agbcc	Control-flow/pool divergence after matching prologue. No new angle tried.
+0x0800D9FC	ChipSlot_Tick	BLOCKED	n/a	agbcc	Hardest: (u8) truncation range-analyzed away. Not attempted (try last per task).
+0x0803D9EC	Frag_0803D9EC	INTERIOR	n/a	n/a	Mid-function fragment (bl+shared-epilogue b). Treat as part of host body per wave4_j idiom. Not a function.
+0x0804C558	Frag_0804C558	BLOCKED	n/a	agbcc	Result in r3 not r0. Wave4_j tried old_agbcc + volatile, no new angle. Stays blocked.
+0x0803C20E	sub_0803C20E	INTERIOR	n/a	n/a	Mid-function fragment (shared epilogue). Treat as part of host body. Not a function.
+0x08047CC0	sub_08047CC0	BLOCKED	n/a	agbcc	movs r3,#0 scheduling. No new angle tried.
+0x0804C4FC	sub_0804C4FC	BLOCKED	n/a	agbcc	lr-push quirk (push {r4,r5} not producible). Wave4_j exhausted. Stays blocked.
+0x080006DC	Memset16	BLOCKED	n/a	agbcc	Prologue live-range split (lsrs r1; adds r7,r1). No new angle tried.
+0x08035F50	Task_35F50	BLOCKED	n/a	agbcc	Big switch, 159 bytes differ. Duplicated epilogue. No new angle tried.
+0x08036BA8	Task_36BA8	BLOCKED	n/a	agbcc	Prologue regalloc (p=r4,mode=r5,g=r6). Pinning needs full body. Not completed.
+0x08036CA8	Task_36CA8	BLOCKED	n/a	agbcc	Twin of 36BA8. Not attempted.
+0x08037440	Task_37440	BLOCKED	n/a	agbcc	Prologue scheduling (v in r0, w in r2). Inline-asm OR idiom identified but needs full body.

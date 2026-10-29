@@ -1,0 +1,39 @@
+0x0800a6bc	Ewram4830_StateReset_0800A6BC	MATCHED	152	0	old_agbcc	pinned-sh-r1+honest-s8+asm-barrier-base	EWRAM 0x02004830 state reset; 0-diff verified
+0x0800e748	ChipState_Tick_0800E748	MATCHED	128	0	main	switch+asm-ternary+volatile-reload+S2-base	chip-init state machine; 0-diff verified
+0x0800e224	ChipList_Setup_0800E224	MATCHED	168	0	main	movs-first-orr+zero-reuse	chip list setup; 0-diff verified
+0x0800e2cc	ChipState_Tick3_0800E2CC	BLOCKED	212	?	main	prologue-register-allocation	3-case state machine; prologue r7=0 init not reproduced; rest structurally close
+0x08020b60	ChipSlot_Init_08020B60	BLOCKED	158	?	main	r5-CSE-for-constant-1	chip slot init; compiler keeps 1 in r5 across calls, ROM uses temps; prologue push differs
+0x08021f3c	ChipSlot_Init2_08021F3C	BLOCKED	160	?	main	r5-register-allocation	chip slot init variant; same r5 issue as 08020b60; ChipSlot_IncUse(p,p[17])
+0x0801e174	EvtProc_0801E174	BLOCKED	148	?	main	register-allocation-v-in-r1-vs-r0
+event table dispatch (p[16]*12 into 0x020051c8); v==0/v==1/v==2/default; compiler puts v in r1, ROM in r0
+0x080176ac	sub_080176AC	BLOCKED	462	?	main	large-not-attempted	462B, 14 calls; triaged as complex, not attempted in wave
+0x08025ec8	sub_08025EC8	BLOCKED	472	?	main	large-not-attempted	472B, 1 calls; triaged as complex, not attempted in wave
+0x08009c7c	sub_08009C7C	BLOCKED	606	?	main	large-not-attempted	606B, 10 calls; triaged as complex, not attempted in wave
+0x080099fc	sub_080099FC	BLOCKED	636	?	main	large-not-attempted	636B, 10 calls; triaged as complex, not attempted in wave
+0x080471d8	sub_080471D8	BLOCKED	810	?	main	large-not-attempted	810B, 8 calls; triaged as complex, not attempted in wave
+0x08008bc8	sub_08008BC8	BLOCKED	1234	?	main	large-not-attempted	1234B, 7 calls; triaged as complex, not attempted in wave
+0x0801f254	sub_0801F254	BLOCKED	154	?	main	chip-slot-family-r5	p[10]=(p[10]|2)&0xFE; same r5 register-allocation blocker as 08020b60
+0x08003fc8	sub_08003FC8	BLOCKED	160	?	main	complex-registers	push {r4-r6,sl,r9,r8}; high-register usage, not attempted
+0x0801bf10	sub_0801BF10	BLOCKED	164	?	main	stack-frame-5-calls	sub sp,#4 frame with 5 callees; not attempted
+0x0801fcd0	sub_0801FCD0	BLOCKED	166	?	main	complex-registers	push {r4,r5,r6,lr}; not attempted
+0x080482d8	sub_080482D8	BLOCKED	168	?	main	not-attempted	168B, 3 calls; not attempted in wave (time)
+0x08042c04	sub_08042C04	BLOCKED	172	?	main	not-attempted	172B, 8 calls; not attempted in wave (time)
+0x0804b514	sub_0804B514	BLOCKED	182	?	main	not-attempted	182B, 3 calls; not attempted in wave (time)
+0x0801c56c	sub_0801C56C	BLOCKED	186	?	main	not-attempted	186B, 3 calls; not attempted in wave (time)
+0x0802d6e0	sub_0802D6E0	BLOCKED	192	?	main	not-attempted	192B, 2 calls; not attempted in wave (time)
+0x0801b0dc	sub_0801B0DC	BLOCKED	208	?	main	not-attempted	208B, 7 calls; not attempted in wave (time)
+0x0801c030	sub_0801C030	BLOCKED	214	?	main	not-attempted	214B, 4 calls; not attempted in wave (time)
+0x0802298c	sub_0802298C	BLOCKED	220	?	main	not-attempted	220B, 2 calls; not attempted in wave (time)
+0x0801e77c	sub_0801E77C	BLOCKED	254	?	main	not-attempted	254B, 6 calls; not attempted in wave (time)
+0x0801c428	sub_0801C428	BLOCKED	278	?	main	not-attempted	278B, 5 calls; not attempted in wave (time)
+0x08049560	sub_08049560	BLOCKED	278	?	main	not-attempted	278B, 13 calls; not attempted in wave (time)
+0x0800ac8c	sub_0800AC8C	BLOCKED	294	?	main	not-attempted	294B, 3 calls; not attempted in wave (time)
+0x080203e0	sub_080203E0	BLOCKED	306	?	main	large-not-attempted	306B, 1 calls; triaged as complex, not attempted in wave
+0x08001f1c	sub_08001F1C	BLOCKED	334	?	main	large-not-attempted	334B, 2 calls; triaged as complex, not attempted in wave
+0x08002070	sub_08002070	BLOCKED	340	?	main	large-not-attempted	340B, 2 calls; triaged as complex, not attempted in wave
+0x0804d8a8	sub_0804D8A8	BLOCKED	344	?	main	large-not-attempted	344B, 1 calls; triaged as complex, not attempted in wave
+0x08027400	sub_08027400	BLOCKED	358	?	main	large-not-attempted	358B, 14 calls; triaged as complex, not attempted in wave
+0x0803aaa8	sub_0803AAA8	BLOCKED	412	?	main	large-not-attempted	412B, 6 calls; triaged as complex, not attempted in wave
+0x0804b124	sub_0804B124	BLOCKED	492	?	main	large-not-attempted	492B, 8 calls; triaged as complex, not attempted in wave
+0x0801e208	sub_0801E208	BLOCKED	706	?	main	large-not-attempted	706B, 5 calls; triaged as complex, not attempted in wave
+0x0800f4f8	sub_0800F4F8	BLOCKED	1188	?	main	large-not-attempted	1188B, 6 calls; triaged as complex, not attempted in wave

@@ -1,0 +1,18 @@
+name	address	size	status	compiler	notes
+GetByte1_26554	0x08026554	32	MATCHED	old_agbcc	u8 (void *ctx, s16 idx); 28-byte table entries at *(ctx+4); returns entry[1], 0 if idx>127 or entry[25]==0. Priority pick for Task_3AFFC path (called from sub_080241F8 case 2).
+GetByte0_265B0	0x080265B0	32	MATCHED	old_agbcc	u8 (void *ctx, s16 idx); twin of 26554; returns entry[0], 49 if invalid. Called from sub_08024384 case 2.
+GetPtr14_265D0	0x080265D0	34	MATCHED	old_agbcc	u8 *(void *ctx, s16 idx); returns &entry[14], NULL if idx>127 or entry[25]==0.
+Poke_4AC88	0x0804AC88	36	MATCHED	old_agbcc	void (u8 a); byte pokes at pool 0x0200BD20: p[127]=0, p[126]=0, p[160]++, p[161]=a.
+Memset_11C14	0x08011C14	60	MATCHED	old_agbcc	void (void); two memset loops via pp base 0x02005260: 16B at pp[1], 8B at pp[2].
+Decode_23B88	0x08023B88	60	MATCHED	old_agbcc	void (u16 *str); 24-element decoder: if (u16)(v-1)<=9 decrement, else if (u16)(v-94)<=26 subtract 84. CSE beats temp idiom.
+Init_1E74	0x08001E74	70	MATCHED	old_agbcc	int (u8 a, u32 b, u32 c); guarded init at 0x02002F80; -1 if a>1/*p!=0/c>0x2010. Pool-load hoisting idiom (block-scoped p).
+sub_08026574	0x08026574	60	BLOCKED	—	u8 (void*, s16 idx, u8 sel); 52/60 match. Prologue zero-extend order: ROM extends idx then sel; builds produce sel-first or interleaved. ~10 variants tried (barriers, -O1, -fno-schedule-insns).
+sub_08047510	0x08047510	40	BLOCKED	—	Pool-forcing works via .set idiom; remaining: regalloc (s in r1 vs r0 in ldrsb→lsls→adds→pool-add→strh).
+sub_08010498	0x08010498	52	BLOCKED	—	39/52 match; remaining: `& -2` allocates r3 vs ROM r0 (movs r0,#2; negs r0; ands r0,r1).
+sub_0804A884	0x0804A884	40	BLOCKED	—	4-word copy; remaining: ldmia/stmia reg choice (ROM r2,r3,r4 vs builds r4,r5,r6).
+sub_0804D634	0x0804D634	40	BLOCKED	—	Remaining: r4 allocation for a[28] ldrh (vs r0).
+sub_08023D34	0x08023D34	52	BLOCKED	—	46/52 match; remaining: 6-byte prologue scheduler interleaving (lsl r1 / add r4,r0,#0 / lsr r1 order).
+sub_0804DA34	0x0804DA34	72	BLOCKED	—	u32-from-4-bytes builder; s param in r1 (not r0); v in r4 (not r3). Regalloc stubborn across variants.
+sub_080047EC	0x080047EC	80	BLOCKED	—	Indexed struct-array writer at 0x02003250; base/idx reg swap + store-offset folding differences.
+sub_08002E80	0x08002E80	84	BLOCKED	—	DISPCNT setup + 3-u32 copy to 0x04000040; volatile stack temp needs repeated `mov rX, sp` (builds use once).
+sub_08005FC0	0x08005FC0	78	BLOCKED	—	Struct init + 12-iter loop; negs idiom works but regalloc differs (r0/r1/r2 vs r1/r2/r3).

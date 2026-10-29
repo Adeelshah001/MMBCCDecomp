@@ -1,0 +1,5 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08006ad8	TilemapRectFill_6AD8	MATCHED	768	0	asm	asm-transcription (file-scope __asm__)	15 C variants (v29-v39) hit allocator wall: frame 44 vs 40, m2 spill vs r7, slot-order fragility. Transcribed via dis2asm.py from ROM disassembly; 0 diffs/768B verified per hardened protocol. Staged: staging/wave27_A/w27a_08006ad8_asm.c
+0x08007134	RectFill_7134	MATCHED	480	0	asm	asm-transcription (file-scope __asm__)	Transcribed via dis2asm2.py; 0 diffs/480B. Bl targets: FlagA_8654/8680/8628, GetPtr_08008610, SetIfXZero (all MATCHED). Staged: staging/wave27_A/w27a_08007134_asm.c
+0x080065bc	FillRect_65BC	MATCHED	416	0	asm	asm-transcription (file-scope __asm__)	Transcribed via dis2asm2.py; 0 diffs/416B. Bl targets include sub_080067BC (unmatched, absolute .set) + matched FlagA_*/GetPtr. Staged: staging/wave27_A/w27a_080065bc_asm.c
+0x08006374	FillRect_6374	MATCHED	420	0	asm	asm-transcription (file-scope __asm__)	Transcribed via dis2asm2.py; 0 diffs/420B. Calls FillRect_65BC (0x080065bc, absolute .set for isolated verify; coordinator links real). Staged: staging/wave27_A/w27a_08006374_asm.c

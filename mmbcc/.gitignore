@@ -1,0 +1,7 @@
+# Build artifacts — never commit. The baserom is verified by SHA-1 only
+# and must never enter the repo.
+build/
+*.elf
+*.gba
+rom.sha1
+baserom.gba

@@ -1,0 +1,33 @@
+name	address	wave	status	source	notes
+List_UnlinkPushHead	0x080044F4	4	MATCHED	mmbcc/src/wave4_j.c	old_agbcc; 36 B; unlink+push-head; 29 table refs
+Obj_SetFromTableA	0x08011E98	4	MATCHED	mmbcc/src/wave4_j.c	old_agbcc; 24 B; table 0x08223CC0; 2 table refs
+Obj_SetFromTableB	0x08017084	4	MATCHED	mmbcc/src/wave4_j.c	old_agbcc; 24 B; table 0x082243D8; 19 table refs
+Obj_SetFromTableC	0x08020F58	4	MATCHED	mmbcc/src/wave4_j.c	old_agbcc; 24 B; table 0x08226EF0; 8 table refs
+Wrap_0804DF9E	0x0804DF9E	4	MATCHED	mmbcc/src/wave4_j_noiw.c	no-interwork TU; 8 B code; strip trailing nop like GetIndexedU8
+sub_0802BCE2	0x0802BCE2	4	INTERIOR	-	host sub_080298FC (0x080298FC-0x0802C7B2); intra-function long-branch target; 3 BL callers all intra-function
+sub_0802BCF8	0x0802BCF8	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802BD14	0x0802BD14	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802BD66	0x0802BD66	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 31 BL callers intra-function
+sub_0802BD72	0x0802BD72	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802BDEE	0x0802BDEE	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802BDF6	0x0802BDF6	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 15 BL callers intra-function
+sub_0802BEA2	0x0802BEA2	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 3 BL callers intra-function
+sub_0802C010	0x0802C010	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C068	0x0802C068	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C196	0x0802C196	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C23C	0x0802C23C	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C2CE	0x0802C2CE	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C344	0x0802C344	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C3C0	0x0802C3C0	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C4C0	0x0802C4C0	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C5C0	0x0802C5C0	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C5F6	0x0802C5F6	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C618	0x0802C618	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C64A	0x0802C64A	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C686	0x0802C686	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C6B8	0x0802C6B8	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C6E6	0x0802C6E6	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function (0x0802BE9E)
+sub_0802C6EC	0x0802C6EC	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 1 BL caller intra-function
+sub_0802C71E	0x0802C71E	4	INTERIOR	-	host sub_080298FC; intra-function long-branch target; 26 BL callers intra-function
+sub_08033962	0x08033962	4	INTERIOR	-	host sub_08030AD4 (0x08030AD4-0x08033AC2); intra-function long-branch target; 1 BL caller (0x08030B0C) intra-function
+sub_0804C4FC	0x0804C4FC	4	BLOCKED	-	lr-push quirk: compilers push lr when r4/r5 used; ROM has push {r4,r5}/bx lr; 2 table refs

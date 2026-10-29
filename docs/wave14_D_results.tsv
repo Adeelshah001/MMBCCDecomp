@@ -1,0 +1,13 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08005338	TblMapFF_05338	MATCHED	104	0	old_agbcc	pinned offset-temp + pinned sum-temp + pinned OR-result	Landed in src/wave14_D_old.c; verified in built ROM
+0x08023D34	Checksum_23D34	MATCHED	52	0	old_agbcc	pinned r0 scratch + empty-then-else bne + in-place trunc asm	Landed in src/wave14_D_old.c; verified in built ROM
+0x08026574	TblGetU8_26574	MATCHED	60	0	old_agbcc	pinned idx-copy + u32 sel + in-place trunc asm	Landed in src/wave14_D_old.c; verified in built ROM
+0x08010498	FlagBitClear_10498	MATCHED	52	0	old_agbcc	pinned-r0 temp for & -2	Landed in src/wave14_D_old.c; verified in built ROM
+0x0802FC4C	F_2FC4C	MATCHED	36	0	old_agbcc	late empty-asm barrier + pinned-r0 sum	Landed in src/wave14_D_old.c; verified in built ROM; true extent 36B incl pool
+0x08047510	sub_08047510	MATCHED	40	0	old_agbcc	pinned regs + memory-clobber reload + operand swap	Landed in src/wave14_D_old.c; verified in built ROM
+0x0804D634	sub_0804D634	MATCHED	40	0	old_agbcc	full pinning + u32 param asm trunc	Landed in src/wave14_D_old.c; verified in built ROM
+0x0804DA34	BuildU32_4DA34	MATCHED	72	0	old_agbcc	uninitialized pinned r4 + tied-asm masks	Landed in src/wave14_D_old.c; verified in built ROM
+0x0804A884	Copy4Words_4A884	MATCHED	40	0	old_agbcc	explicit asm ldmia/stmia	Landed in src/wave14_D_old.c; verified in built ROM
+0x08002E80	sub_08002E80	BLOCKED	84	4	old_agbcc	—	Scheduling: pp pool-load vs mov sp order; 4-byte diff
+0x08005FC0	sub_08005FC0	BLOCKED	78	32	old_agbcc	—	Loop allocation resists; pinned z ignored (r6 vs r5)
+0x080047EC	sub_080047EC	BLOCKED	80	43	old_agbcc	—	Store address computation allocation

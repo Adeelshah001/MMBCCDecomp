@@ -1,0 +1,35 @@
+name	address	size	status	compiler	notes
+Ent_TblInit_08021000	0x08021000	50	MATCHED	old_agbcc	0 diffs code+pools; t1=s[9] entry->+4 to s+20, s+12=1, tbl2[s[16]](s), Dispatch_08226F2C_10(s)
+ObjInit_0801AE00	0x0801ae00	98	MATCHED	old_agbcc	0 diffs code+pools; Setup(s,0x22B,0), IncUse(s,0), idx=tblbyte&3 clamp, s[0x45]=(s[0x45]&-13)|(idx<<2), s[0x22]=13, 0x600/8 pairs, Text_SelectBlobIdx(0x96)
+ObjInit_0801DAD4	0x0801dad4	98	MATCHED	old_agbcc	0 diffs code+pools; *(s+108)=0, t=2|t|=s[10]|1 double-OR, Setup(s,0x1400,0), IncUse(s,0), idx clamp, s[0x45]=(s[0x45]&-13)|(idx<<2) in-place, s[0x22]=s[18]
+FlagToggle_080481FC	0x080481fc	98	BLOCKED	old_agbcc	3-byte diff: pool reg r0 vs r2 (ldr r0 vs ldr r2 @0x19, adds r1,r4,r0 vs r1,r4,r2 @0x1a); ands r1,r0 vs ands r0,r1 @0x52. XOR block matched via inline asm (ldrb r3/eor r0,r3). Near-miss.
+ObjInit_08017E6C	0x08017e6c	98	MATCHED	old_agbcc	0 diffs code+pools; Setup(s,0x20C,1), IncUse(s,1), idx clamp (sh-var form), p-=0x23 reuse, scoped u32 zero for r1
+ObjInit_0801DB9C	0x0801db9c	96	MATCHED	old_agbcc	0 diffs code+pools; 0x1dad4 variant: IncUse(s,10), Setup(s,0x501,0), s[0x22]=0 via q+z with inline-asm movs (breaks zero CSE)
+ObjInit_0801BC04	0x0801bc04	96	MATCHED	old_agbcc	0 diffs code+pools; Setup(s,0x224,0), IncUse(s,0), idx clamp, s[0x45] mask, s[0x22]=13, Vec2_AddMirrored(s,-15360,0), Text_SelectBlobIdx(0x9F)
+ObjInit_0801ACF4	0x0801acf4	94	MATCHED	old_agbcc	0 diffs code+pools; Setup(s,0x226,0), IncUse(s,0), idx clamp, p-=0x23, scoped zero, *(s+88)=0x700, *(s+96)=-8, *(s+92/100)=0
+Copy3_08011CD4	0x08011cd4	94	MATCHED	old_agbcc	0 diffs in 94B extent; u16 a, 3 outputs; TableU32_0820B6A4(a); copies up to 3 nonzero u32s via s16 i loop; +94 0000 is inter-fn gap
+HwSetup_0804CCB8	0x0804ccb8	94	MATCHED	old_agbcc	0 diffs code+pools; double-indirect via 0x03007FF0, early-return, 2x REG bit-test/set, 2x strh 0x400, CpuSet(zero,p+0x350,0x05000318)
+TextShape_0804C58C	0x0804c58c	92	BLOCKED	old_agbcc	57-byte diff; complex regalloc (ROM uses ip/r12 for s, r4-r7 for t2/v1/i/sh). Natural C gives r7/r3/r5. Needs register-pressure engineering.
+ObjInit_0801AFE4	0x0801afe4	92	MATCHED	old_agbcc	0 diffs code+pools; Setup(s,0x242,0), IncUse(s,2), idx clamp, p-=0x23, scoped zero, *(s+88/96)=0, *(s+92)=0x200, *(s+100)=80
+Ent_TblInit_080217E0	0x080217e0	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; tbl2=0x08227018, Dispatch_0822701C_10
+Ent_TblInit_08022920	0x08022920	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x0822715C Dispatch_08227168_10
+Ent_TblInit_0801D36C	0x0801d36c	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x082243D8 t2=0x08226A04 Dispatch_08226A24_10
+Ent_TblInit_08021DF8	0x08021df8	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x08227088 Dispatch_0822709C_10
+Ent_TblInit_0802054C	0x0802054c	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x082243D8 t2=0x08226EC8 Dispatch_08226EDC_10
+Ent_TblInit_08023034	0x08023034	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x082271BC Dispatch_082271C8_10
+Ent_TblInit_08021528	0x08021528	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x08226FE4 Dispatch_08226FEC_10
+Ent_TblInit_0801F1E8	0x0801f1e8	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x082243D8 t2=0x08226DC0 Dispatch_08226DD8_10
+Ent_TblInit_08022644	0x08022644	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x08227138 Dispatch_08227140_10
+Ent_TblInit_080236F0	0x080236f0	50	MATCHED	old_agbcc	0 diffs code+pools; same shape as 0x08021000; t1=0x08226EF0 t2=0x082271F0 Dispatch_082271F4_10
+ObjInit_0801B6C4	0x0801b6c4	88	MATCHED	old_agbcc	0 diffs code+pools; Setup(s,0x25B,0), IncUse(s,0), idx clamp, p-=0x23, scoped zero, *(s+88/96/92)=0, *(s+100)=80
+ObjInit_0801AEF4	0x0801aef4	86	MATCHED	old_agbcc	0 diffs code+pools; Setup(s,0x22D,0), IncUse(s,0), idx clamp, p-=0x23, scoped zero, *(s+88/96/92/100)=0
+ObjInit_0801B81C	0x0801b81c	86	MATCHED	old_agbcc	0 diffs code+pools; Setup(s,0x313,0), IncUse(s,0), idx clamp, p-=0x23, scoped zero, *(s+88/96/92/100)=0
+ObjInit_08016DAC	0x08016dac	78	MATCHED	old_agbcc	0 diffs code+pools; tbl[0x08223CF0][s[13]](s) dispatch, idx clamp, s[0x45] mask, s[0x22]=16
+LoopSet_0804C8A4	0x0804c8a4	72	BLOCKED	old_agbcc	51-byte diff; bit-test regalloc: ROM adds r0,r7,#0; ands r0,r1 (mask->r0), mine adds r0,r1,#0; ands r0,r7 (v->r0). Loop structure matches.
+Get_0802503C	0x0802503c	18	MATCHED	old_agbcc	0 diffs code+pools; return Sub80_Field22(gEwram_02007090+24)
+Copy_08007BEC	0x08007bec	20	MATCHED	old_agbcc	0 diffs code+pools; Memcpy16(src, gEwram_03002420+((u16)n<<5), 32)
+Lists_0800E204	0x0800e204	22	MATCHED	old_agbcc	0 diffs code+pools; ListIterate_D568(*(u8**)0x02005270); ListIterate_D568(*(u8**)0x020053C0)
+Wrap_08002904	0x08002904	24	MATCHED	old_agbcc	0 diffs; Copy8_28D0(s, a, b+0x10)
+Sram_08001E30	0x08001e30	66	BLOCKED	old_agbcc	37-byte diff; regalloc: ROM a in r6 + base 0xE0000000 in r5 (kept across calls), mine a in r5 + base recomputed. Logic matches.
+Dispatch_0803B998	0x0803b998	64	BLOCKED	-	bl target 0x0803C20E is INTERIOR (not a matched function); complex r8/r9 + jump-table switch, needs RE
+Tick_08028244	0x08028244	62	MATCHED	old_agbcc	0 diffs code+pools; s[1] 0/1 state machine, s[6]++ tick, call InitRec8_267B4(0x020070F0,9) if s[6]>180 or flag; struct-offset defeats pool folding

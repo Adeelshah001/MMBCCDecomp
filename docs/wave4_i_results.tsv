@@ -1,0 +1,65 @@
+name	address	wave	status	source	notes
+Dispatch_0816E2C0_2	0x08001D98	4	MATCHED	src/wave4_i_old.c	32 B; old_agbcc; tbl[((u8*)0x02002F80)[2]]((u8*)0x02002F80); two pools + 0000 pad
+SelBlob_Ret	0x0800303C	4	MATCHED	src/wave4_i.c	28 B (26+2pad); main agbcc; Text_SelectBlob(v); return (s16)v; static 0000 pad
+Dispatch_0816E304	0x0800330C	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; tbl[((s[0x18]<<1)|s[0x19])&3](s,b) via _call_via_r2
+CpuFastSet_Vram	0x080045F8	4	MATCHED	src/wave4_i_old.c	44 B; old_agbcc; CpuFastSet(0x0805633C,0x06007000+((*(u16*)0x020031E4&0xC)<<12),0x200)
+Dispatch_081705A4_0	0x08004BC0	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; s8; r=tbl[s[0]](s); s[4]=(u8)r; return (s8)s[4]
+Dispatch_08173064_1	0x0800AC70	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; tbl[s[1]](s); return 5
+Dispatch_081734F4_0	0x0800CD38	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; s[8]=(u8)tbl[s[0]](s)
+CallEwSet8_72	0x0800EE8C	4	MATCHED	src/wave4_i.c	12 B (10+2pad); main agbcc; EwSet8_72(); static 0000 pad
+Dispatch_08223D08_10	0x080120F0	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08223E94_10	0x08015A48	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226A24_10	0x0801D3A8	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226DD8_10	0x0801F224	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226EDC_10	0x08020588	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226F2C_10	0x0802103C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08226FEC_10	0x08021564	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_0822701C_10	0x0802181C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_0822709C_10	0x08021E34	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08227140_10	0x08022680	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_08227168_10	0x0802295C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_082271C8_10	0x08023070	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Dispatch_StkTbl	0x08023278	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; struct-copy 3-word tbl to stack; tbl[s[0xD]](s)
+Dispatch_082271F4_10	0x0802372C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[0x10]](s)
+Wrap_GetRomTableU16	0x08024634	4	MATCHED	src/wave4_i.c	20 B (18+2pad); main agbcc; return GetRomTableU16(idx); static 0000 pad
+Wrap_TblGet11	0x0802465C	4	MATCHED	src/wave4_i.c	20 B (18+2pad); main agbcc; return TblGet11(idx); static 0000 pad
+GetEnt_U16_14	0x08024F08	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; b=*(0x02007090+0x14); return GetU16_Off14(b+b[0x1B0]*144)
+GetEnt_U16_10	0x08024F48	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; b=*(0x02007090+0x14); return GetU16_10(b+b[0x1B0]*144)
+GetEnt_U8_24	0x08024FF4	4	MATCHED	src/wave4_i.c	24 B; main agbcc; return GetField24_U8(base+0x18)
+GetEnt_U8_19	0x0802500C	4	MATCHED	src/wave4_i.c	24 B; main agbcc; return GetU8_19(base+0x18)
+GetEnt_U16_22	0x08025024	4	MATCHED	src/wave4_i.c	24 B; main agbcc; return GetField22_U16(base+0x18)
+GetEnt_IdxByte1	0x080251B8	4	MATCHED	src/wave4_i_old.c	32 B (30+2pad); old_agbcc; return GetByte1_25A08(s+s[0x1B0]*144); static 0000 pad
+AddTbl_S14	0x0802588C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; return GetRomTableU16(s[1])+*(u16*)(s+14); call-first operand order
+AddTbl_S14_Idx	0x080258A4	4	MATCHED	src/wave4_i_old.c	28 B (26+2pad); old_agbcc; return GetRomTableU16(idx)+*(u16*)(s+14); static 0000 pad
+SetSlot_IfLE29	0x08025934	4	MATCHED	src/wave4_i.c	36 B; main agbcc; if(a>29) return 1; SetU8_0_FF1(s+(a*4+0x14),b)
+Sub80_Field22	0x080265F8	4	MATCHED	src/wave4_i.c	20 B; main agbcc; return 0x80-GetField22_U16(s); no u16 local
+Dispatch_0822DC84_1	0x08027718	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+EntMgr_Reinit1	0x08027730	4	MATCHED	src/wave4_i.c	24 B; main agbcc; u8 zero idiom; s[1]=1,s[3]=0,s[2]=0; Teardown; Setup
+EntMgr_Reinit2	0x08027748	4	MATCHED	src/wave4_i.c	28 B; main agbcc; u8 zero idiom; Teardown; s[1]=2,s[3]=0,s[2]=0; Setup
+EntMgr_ClearBit3	0x08027CFC	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; int mask=-7; p[3]&=mask; Teardown
+Dispatch_0822EA6C_4	0x080350B4	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+EntMgr_Reinit45	0x0803510C	4	MATCHED	src/wave4_i.c	28 B; main agbcc; u8 zero idiom; Teardown; s[4]=2,s[5]=0; Setup; ret 0
+Dispatch_0822EB58_1	0x08035DF4	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+EntMgr_Reinit12	0x08035E40	4	MATCHED	src/wave4_i.c	28 B; main agbcc; u8 zero idiom; Teardown; s[1]=2,s[3]=0,s[2]=0; Setup
+Set469F_Dispatch0	0x080365F8	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; s[0x469F]=0; tbl[s[1]](s)
+Set469F_Dispatch1	0x0803661C	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; s[0x469F]=1; tbl[s[1]](s)
+Set469F_Dispatch2	0x08036640	4	MATCHED	src/wave4_i_old.c	36 B; old_agbcc; s[0x469F]=2; tbl[s[1]](s)
+Dispatch_08230D94_1	0x08037958	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+Dispatch_08231098_1	0x08038E70	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+Dispatch_08232330_1	0x0803AE2C	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[1]](s)
+sub_0803C20E	0x0803C20E	4	BLOCKED	n/a	18 B; mid-function fragment (shared epilogue), not a function entry; see match_notes_wave4_i.md
+Dispatch4_R3	0x080400D0	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; return (u8)_call_via_r3(s,b,c,tbl[s[4]])
+Dispatch_08232D2C_4	0x08042AC8	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+Dispatch_08232E48_4	0x08045EA0	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+Dispatch_08233A44_2	0x080468EC	4	MATCHED	src/wave4_i_old.c	24 B; old_agbcc; tbl[s[2]](s)
+CopyHdr_Dispatch	0x08047600	4	MATCHED	src/wave4_i_old.c	40 B; old_agbcc; s8; *(u16*)s=*(u16*)(p+4); tbl[p[0]](p), p=0x0200B7A8
+Dispatch_08233C54_4	0x08047CA4	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+sub_08047CC0	0x08047CC0	4	BLOCKED	n/a	32 B; movs r3,#0 scheduling not reproducible; see match_notes_wave4_i.md
+Dispatch_08234314_2	0x08048260	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[2]](s)
+EntMgr_Reinit23	0x080482BC	4	MATCHED	src/wave4_i.c	28 B; main agbcc; u8 zero idiom; Teardown; s[2]=2,s[3]=0; Setup; ret 0
+Dispatch_08234B74_4	0x080499EC	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; u8 return; tbl[s[4]](s)
+Dispatch_08234D4C_0	0x0804AF90	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; s8 return; tbl[s[0]](s)
+Dispatch_08234D60_0	0x0804B334	4	MATCHED	src/wave4_i_old.c	28 B; old_agbcc; s8 return; tbl[s[0]](s)
+CallVia_Mem1	0x0804CA1C	4	MATCHED	src/wave4_i.c	20 B; main agbcc; (*(u32*)0x0200CE0C)(s) via _call_via_r1
+Dispatch_PostInc	0x0804DA00	4	MATCHED	src/wave4_i.c	32 B; main agbcc; tbl[*b->ptr++](a,b) via _call_via_r2
+CallVia_Mem2	0x0804DA20	4	MATCHED	src/wave4_i.c	20 B; main agbcc; (*(u32*)0x0200CD80)(a,b) via _call_via_r2

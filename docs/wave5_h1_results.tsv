@@ -1,0 +1,31 @@
+addr	name	bytes	status	compiler	notes
+0x08001db8	-	112	NOT_ATTEMPTED	-	save-path addr-compute; time
+0x08001e30	-	66	NOT_ATTEMPTED	-	save-path; time
+0x0800288c	-	64	BLOCKED	-	regalloc: s/a copy order, v reload; see notes
+0x08003154	-	92	BLOCKED	-	fresh negation vs subs/adds; see notes
+0x080031b8	-	106	BLOCKED	-	same family blocker as 0x08003154
+0x0800322c	-	100	BLOCKED	-	same family blocker as 0x08003154
+0x08003298	-	106	BLOCKED	-	same family blocker as 0x08003154
+0x08009380	TableDispatch_9380	76	MATCHED	old_agbcc	tbl hoisted to r5; dual u16/s16 loop vars
+0x0800bb78	TableCall_BB78	52	MATCHED	agbcc	indirect via 0x081731a0/0x0817313c; v=-1 guard
+0x0800d568	ListIterate_D568	46	MATCHED	agbcc	InitLinkedNode + linked-list fn-pointer iteration
+0x08011cd4	-	94	NOT_ATTEMPTED	-	table-copy with u16/s16 loop; time
+0x080129f8	-	62	BLOCKED	-	else-branch regalloc (r3/r4 vs r0/r1); see notes
+0x08016dac	-	78	NOT_ATTEMPTED	-	time
+0x08017d50	-	100	BLOCKED	-	ands dest reg (r1 vs r0) in idx calc; see notes
+0x08017e6c	-	98	NOT_ATTEMPTED	-	ObjInit family; time
+0x080186f4	-	112	NOT_ATTEMPTED	-	ObjInit family; time
+0x08019090	-	102	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801abe4	-	104	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801acf4	-	94	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801ae00	-	98	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801aef4	-	86	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801afe4	-	92	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801b3ac	-	118	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801b6c4	-	88	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801b81c	-	86	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801bc04	-	96	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801d658	-	104	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801dad4	-	98	NOT_ATTEMPTED	-	ObjInit family; time
+0x0801db9c	-	96	NOT_ATTEMPTED	-	ObjInit family; time
+0x08020d54	-	114	NOT_ATTEMPTED	-	ObjInit family; time

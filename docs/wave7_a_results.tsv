@@ -1,0 +1,2 @@
+name	address	size	status	compiler	notes
+Task_3AFFC	0x0803AFFC	926	BLOCKED	old_agbcc	BLOCKED: tail-crossjump unproducible. Best attempt (t3affc_v2.c) 661/864 diffs, 62 bytes short. Prologue/dispatch/JT byte-exact. Mode bodies structurally correct but GCC merges if-checks across 16 cases and over-merges ldrb/adds into shared tail. See docs/match_notes_wave7_a.md for full analysis and angles tried.

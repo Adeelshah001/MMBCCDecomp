@@ -1,0 +1,17 @@
+name	address	wave	status	notes
+Task_360C4	0x080360c4	5	MATCHED	200B, 0 diffs, main agbcc. Switch on p[3] (5 cases): case0 polls sub_0800B148; case1 nested (u8) checks with sub_0800B2D8/sub_0800B320; case2 falls through to case3; case4 sets p[0x4699]=0,p[4]=0,p[3]=1 on (u8)sub_0800B2F0. Returns 0. C: /tmp/wave5_g2/t360c4.c
+Task_40798	0x08040798	5	MATCHED	156B, 0 diffs, main agbcc. 7x sub_08006A54(Gfx_BlitRequest) calls: (ptr[i], 0x2f, 1/3/5/7/9/11/13, 8, 0). Pointers from ROM table 0x082325E4..0x0823261C. C: /tmp/wave5_g2/t40798b.c
+Task_45200	0x08045200	5	MATCHED	156B, 0 diffs, main agbcc. 7x sub_08006A54 calls: (ptr[i], 1, 1/3/5/7/9/11/13, 8, 0). Pointers from 0x08232C04..0x08232C3C. C: /tmp/wave5_g2/t45200.c
+Task_4529C	0x0804529c	5	MATCHED	156B, 0 diffs, main agbcc. 7x sub_08006A54 calls: (ptr[i], 0x2f, 1/3/5/7/9/11/13, 8, 0). Pointers from 0x08232C04..0x08232C3C. C: /tmp/wave5_g2/t4529c.c
+Task_351D8	0x080351d8	5	BLOCKED	314B. Tail-merging divergence: ROM case2 has inline (u8) check (lsls/cmp/beq) then jumps to shared increment; case1/case3 share the check. Both agbcc/old_agbcc merge case2's check into shared. 146 diffs. Best C: /tmp/wave5_g2/t351d8c.c
+Task_37600	0x08037600	5	BLOCKED	248B. Register allocation: ROM base(0x02002F50) in r1, value in r4; both compilers put base in r4/r0, value in r1/r3. Branchless (b&0x40)?0x40:0 via negs/asrs/ands reproduced, but alloc blocks. Best C: /tmp/wave5_g2/t37600f.c
+Task_374B8	0x080374b8	5	BLOCKED	194B. Register allocation: ROM p in r4; compiler puts p in r5. Uses r8 for 0x0822EF0C pointer (reproduced). 112 diffs (old_agbcc). Best C: /tmp/wave5_g2/t374b8.c
+Task_49A08	0x08049a08	5	BLOCKED	148B. Register allocation: ROM p in r3; compiler puts p in r2. Bit-counting loop with p[0x46B8+idx] stores. 122 diffs. Best C: /tmp/wave5_g2/t49a08.c
+Task_4C8EC	0x0804c8ec	5	BLOCKED	200B. Complex script-init: HW regs, magic check, table init, save call. Structural differences, 223 diffs. Best C: /tmp/wave5_g2/t4c8ec.c
+Task_36A14	0x08036a14	5	NOT_ATTEMPTED	402B. Switch on p[5], 6 cases. Time.
+Task_36DAC	0x08036dac	5	NOT_ATTEMPTED	386B. Time.
+Task_38AD4	0x08038ad4	5	NOT_ATTEMPTED	306B. Same family as blocked 0x08037600 (r1/r3/r4 variant). Time.
+Task_39058	0x08039058	5	NOT_ATTEMPTED	370B. Time.
+Task_3AAA8	0x0803aaa8	5	NOT_ATTEMPTED	412B. Time.
+Task_3AC4C	0x0803ac4c	5	NOT_ATTEMPTED	238B. Time.
+Task_493EC	0x080493ec	5	NOT_ATTEMPTED	364B. Time.

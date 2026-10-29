@@ -1,0 +1,3 @@
+name	address	size	status	compiler	notes
+ObjInit_TypeC	0x08021594	148	MATCHED	old_agbcc	0 diffs code+pools; r0-pinned clamp, int mask=-13 var, nested-block four, extern gEwram_02003670[0x11AE], asm movs-zero anti-CSE
+ObjInit_2184C	0x0802184c	164	MATCHED	old_agbcc	0 diffs; barrier-forced tbl loads, r2-pinned z, off-before-tbl+=2, s16 tbl 0x08227036

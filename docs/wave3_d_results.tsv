@@ -1,0 +1,16 @@
+name	address	wave	status	source	notes
+NullCallback	0x08005208	3	MATCHED	src/wave3_d.c	2 B code (bx lr); main agbcc; empty no-op callback stub; 1 bl caller (sub_080050F0@0x08005126); LANDING: strip 2 B gas nop pad — ROM has next function immediately at 0x0800520A
+GetU16_10	0x080257F8	3	MATCHED	src/wave3_d.c	4 B code; main agbcc; return *(u16*)(s+0x10); 5 bl callers (0x08024F5E/0x08025B20/0x08025C00/0x08025C3A/0x08025DFA)
+GetU32_38	0x08023E30	3	MATCHED	src/wave3_d.c	4 B code; main agbcc; return *(u32*)(s+0x38); 2 bl callers (0x0802445A/0x08024FA2)
+GetU8_19	0x08026550	3	MATCHED	src/wave3_d.c	4 B code; main agbcc; return s[0x19]; 1 bl caller (0x08025012)
+EwramGet_02005238	0x08011BC8	3	MATCHED	src/wave3_d.c	12 B section (6 code + 00 00 gap + pool 0x02005230); main agbcc; return *(u32*)(0x02005230+8); local base var keeps the two ldr split (folding +8 into pool does NOT match); 6 bl callers in sub_0803A434
+EwramSet_020070F7	0x08026DB0	3	MATCHED	src/wave3_d.c	12 B section (6 code + 00 00 gap + pool 0x020070F0); main agbcc; *(u8*)(0x020070F0+7) = v; 1 bl caller (0x08022CC8)
+IncU8_12	0x08017458	3	MATCHED	src/wave3_d.c	8 B code; main agbcc; s[0x12]++; 12 bl callers; same struct family as wave3_c IncU8_11/GetS16_78_3 (0x0801745x/0x080174Ex accessors)
+GetS16_7C	0x080174E4	3	MATCHED	src/wave3_d.c	8 B code; main agbcc; return ((s16*)(s+0x78))[2] — adds r0,#0x78 / movs r1,#4 / ldrsh [r0,r1]; writing (s+0x7C) directly folds to adds #0x7C and does NOT match; 2 bl callers (0x08017778/0x080177B8)
+EwramSet2_02005138	0x0800EA08	3	MATCHED	src/wave3_d.c	12 B section (8 code + pool 0x02005130); main agbcc; *(u8*)0x02005138=a; *(u8*)0x02005139=b; 1 bl caller (0x08028A8C)
+DivZeroStub	0x0804DE64	3	BLOCKED	src/wave3_d.c (not staged)	push{lr}; bl sub_0804DD9C; movs r0,#0; pop{pc} — calls empty stub, returns 0; div-by-zero exit of the libgcc-style division routine at 0x0804DDA0 (beq here on divisor==0); both agbcc and old_agbcc emit pop{r1}/bx r1 under -mthumb-interwork; pop{pc} only without it — region is hand-written asm (cf. `mov pc,lr` stub at 0x0804DD9C); see match_notes_wave3_d.md
+OrU8_1F	0x0800B6E8	3	MATCHED	src/wave3_d.c	12 B section (10 code + 0000 pad via sPad idiom); main agbcc; s[0x1F] |= 4; needs `u8 v = 4;` first so constant lands in r1; 1 bl caller (0x0800B6CC)
+SetU32_200	0x08004158	3	MATCHED	src/wave3_d.c	12 B section (10 code + 0000 pad via sPad idiom); main agbcc; *(u32*)(s+0x200) = v (0x200 = movs r2,#0x80 / lsls r2,#2); 1 bl caller (0x080054B2)
+Script_NextOp	0x0804BE44	3	MATCHED	src/wave3_d.c	12 B section (10 code + 0000), ASM-STAGED not C-compiled; script-interpreter opcode fetch: r2=[r1+0x40]; [r1+0x40]=r2+1; r3=*r2; b 0x0804BE2A (ROM-pointer validator); agbcc has no TCO so C `return callee(...)` emits push{lr}/bl — noreturn+inline-asm `b` probe reproduces the 10 code bytes exactly but gcc appends a 2 B safety bx lr; 0 bl callers (reached via bx ip dispatch)
+TableU32_0820B6A4	0x08011CC4	3	MATCHED	src/wave3_d.c	16 B section (12 code + pool 0x0820B6A4); main agbcc; return table[(u16)idx], u32 table in ROM; 2 bl callers (0x0801192A/0x08011CE2)
+EwramInit_02005260	0x08011C04	3	MATCHED	src/wave3_d.c	16 B section (12 code + pool 0x02005260); main agbcc; p[0]=p[1]=v; p[2]=v+0x10 at EWRAM 0x02005260; 1 bl caller (0x08026868)

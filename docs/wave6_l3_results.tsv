@@ -1,0 +1,17 @@
+name	address	size	status	compiler	notes
+ObjInit_186F4	0x080186F4	132	MATCHED	old_agbcc	ObjInit family template (opaque copy + mask block); pool-forced 0x1401
+ObjInit_1B3AC	0x0801B3AC	124	MATCHED	old_agbcc	ObjInit family; branch layout: bne to out-of-line true branch + b over inline pool
+ObjInit_22320	0x08022320	128	MATCHED	old_agbcc	ObjInit family; pool-forced 0x3B16; avoid u16 zero-ext (u32 local for callee)
+ObjInit_20D54	0x08020D54	128	MATCHED	old_agbcc	ObjInit family; block zero-CSE into r5 via movs asm
+ObjInit_223E4	0x080223E4	120	MATCHED	old_agbcc	ObjInit family template
+ObjInit_22E14	0x08022E14	116	MATCHED	old_agbcc	ObjInit family template
+ObjInit_1ABE4	0x0801ABE4	116	MATCHED	old_agbcc	ObjInit family template
+ObjInit_1D658	0x0801D658	116	MATCHED	old_agbcc	ObjInit family template
+ObjInit_1D828	0x0801D828	116	MATCHED	old_agbcc	ObjInit family; pinned sh to r1 (register __asm__) for tail-call allocation
+ObjInit_1F930	0x0801F930	116	MATCHED	old_agbcc	ObjInit family template
+ObjInit_19090	0x08019090	124	MATCHED	old_agbcc	ObjInit family template
+Sram_VerifySlot	0x08001DB8	112	MATCHED	old_agbcc	SRAM slot verify w/ retry (3x2); key idiom: volatile asm adds/subs (GAS needs add/sub w/o 's') to defeat LICM+CSE; p computed after FIRST check only (nested if, not && chain)
+Gfx_Blit3	0x08042EC0	110	MATCHED	old_agbcc	3x Gfx_BlitRequest via double-deref tables; local u32 decl for callee avoids u16 zext; tB as local assigned pre-call for ldr-before-ldrb order; ldrsb [r5,r1] reg-offset form from s8 base[idx]
+Mem1_AllocInit	0x0804CD70	106	MATCHED	old_agbcc	Allocator init; magic 0x68736D53 (not 0x08046D53); p as u32* (counter, not ptr); 0x80000000 via movs 0x80+lsls 24; do-while with if-guard for zero-fill
+Task_3AF98	0x0803AF98	100	MATCHED	old_agbcc	If/elif/else on s[0x469C]; duplicate pool entries (use separate externs); interleaved pool layout from old_agbcc; pinned r1/r0 for offset/addr; z=0 idiom for else block
+Mem1_TaskChain	0x0804B980	106	BLOCKED	n/a	Early bx lr before frame, hi-reg save block, bl to hardcoded 2-byte bx-r3 stub at 0x0804BDA2, tail bx r3 to IWRAM 0x03000001. Natural C gives simple push{lr} frame; cannot reproduce without heavy asm. Save for targeted RE.

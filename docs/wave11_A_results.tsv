@@ -1,0 +1,26 @@
+name	address	size	status	compiler	notes
+F_20230	0x08020230	28	MATCHED	old_agbcc	q[5]/q[6]=x by *(a+0x23)&15; explicit 00 00 pad idiom
+F_24744	0x08024744	28	MATCHED	old_agbcc	t=x-50; (u8)t>6?-1:t; barrier-before-copy idiom; explicit pad
+F_3FE00	0x0803fe00	28	MATCHED	old_agbcc	switch defeats <C→<=C-1 folding; x in {0x60,0xD3,0xD4}→1
+F_4C53C	0x0804c53c	28	MATCHED	old_agbcc	sig (u8 dummy,u8 *p); p[22]=p[26]=0; p[0]|=(p[24]==0?12:3); explicit pad; 2nd-param-in-r1 idiom
+F_EE50	0x0800ee50	32	MATCHED	old_agbcc	P[0x44]=(P[0x44]==1)?0:1; tied-opaque pool 0x02005160
+F_D104	0x0800d104	40	MATCHED	old_agbcc	*(u16*)P&=m1&m2; p[9]&=-3; (u32)-3 emits movs;negs naturally; pools 0x020031e0/0xedff/0xdbff
+F_3F440	0x0803f440	32	MATCHED	old_agbcc	byte-swap t[i]↔t[j], t=base+0x45C4; tied-opaque pool
+F_3F460	0x0803f460	32	MATCHED	old_agbcc	byte-swap t[i]↔t[j], t=base+0x464C; tied-opaque pool
+F_3FD9C	0x0803fd9c	32	MATCHED	old_agbcc	x==0x222||x==0x3000→1; tied-opaque pool
+F_4C610	0x0804c610	32	MATCHED	old_agbcc	if *(u32*)(p+52)==0x68736d53: set u16s at +38/+36/+40=0x100; pin v to free r1 idiom
+F_11054	0x08011054	28	MATCHED	old_agbcc	if g[4]==1{q[0]=g[12];return 1;}return 0; mid-function pool 0x020051b0
+F_173FC	0x080173fc	32	MATCHED	old_agbcc	split offset var gives adds r0,r0,r1 (not r1,r0); two-step offset+base idiom
+F_21C0C	0x08021c0c	32	MATCHED	old_agbcc	u32 param + explicit asm lsl/lsr for deferred-extend pattern (lsls@entry, lsrs#19@end)
+F_25308	0x08025308	28	MATCHED	old_agbcc	s16 do-while zero loop; i<=0xF8
+F_1D68	0x08001d68	32	MATCHED	old_agbcc	struct zero via u16/u32 stores; explicit 00 00 pad
+F_4BDC0	0x0804bdc0	32	MATCHED	old_agbcc	linked-list unlink; pin p to r0 prevents copy idiom
+F_EF8	0x08000ef8	36	MATCHED	old_agbcc	dual-array zero loop; explicit pad
+F_23B64	0x08023b64	36	MATCHED	old_agbcc	u16 array transform; inverted if gives bhi; q[i]=t+1 avoids r4 spill; explicit pad
+F_23D10	0x08023d10	36	MATCHED	old_agbcc	checksum: sum+=q[i] for i<=13; return -sum; explicit pad
+F_25490	0x08025490	36	MATCHED	old_agbcc	byte swap base[a]↔base[b]; block-scoped b2 forces r0 reload; explicit pad
+F_4ACDC	0x0804acdc	36	MATCHED	old_agbcc	base+0x7f/0x7e=0; base+0xa0++; base+0xa1=x; u32 param avoids extend; pool 0x0200bd20
+F_36318	0x08036318	32	MATCHED	old_agbcc	if x>6 return 0; *(base+2)|=(1<<x); return 1; pool 0x0200bce8
+F_3FA48	0x0803fa48	36	MATCHED	old_agbcc	if x<pool→0; elif x<=pool+1→1; elif x==0x13a0→1; signed pool (blt not bcc); pool 0x3a1
+F_2FC4C	0x0802fc4c	34	BLOCKED	old_agbcc	3-byte regalloc diff: final RMW uses r0/r2 not r3/r0 (ldrh r3,[r1,#10]; adds r0,r3,r2)
+F_25230	0x08025230	60	BLOCKED	old_agbcc	Complex nested loop structure not matching; needs control-flow analysis

@@ -1,0 +1,25 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08016efc	ObjInit_08016EFC	MATCHED	120	0	old_agbcc	natural-ldrsh+split-pool-load	6-param object init; s16 table lookup via ldrsh; calls IncU8_12, sub_080174CC (.set), SetBytes_08011F68
+0x080224e4	BlendCopy_080224E4	BLOCKED	206	~40	main	register-rotation-wall	15-bit color blender; identical twin of 0x08021b3c; loop body 95% matched but srcA/srcB/mask allocation stuck at (r9,r8,ip) vs ROM (r8,ip,r9)
+0x08010e00	NodeAlloc_08010E00	BLOCKED	122	~100	old_agbcc	param-allocation-wall	bitflag-gated node allocator; b-extension forced via empty asm; a→r0 vs ROM a→r6 unresolved
+0x0800d1e0	NodeInitSwitch_0800D1E0	MATCHED	152	0	old_agbcc	opaque-barrier-negs+base++	4-param switch state machine; calls NodeInit_0802260C, Byte12_Gt1, BitCtl_520C
+0x0800909c	TblFill_0800909C	BLOCKED	164	143	main	-	nested table fill; 6 params; complex nested loops; not close
+0x0801d598	StateTick_0801D598	BLOCKED	192	185	main/old	-	state machine tick; ldrsh tables; too many live vars for clean allocation
+0x0800571c	SysInit_0800571C	BLOCKED	224	-	main	-	large EWRAM init; 8 pools; pool placement diverges
+0x080291ec	TblBuild_080291EC	BLOCKED	196	-	main	-	dual-loop table builder with Scramble_400A8; ldrsh
+0x08021b3c	BlendCopy_08021B3C	BLOCKED	206	~40	main	register-rotation-wall	identical twin of 0x080224e4 (only bl encoding differs); same wall
+0x08002a1c	-	BLOCKED	210	-	-	-	not attempted: complex ldrsb loop with CpuSet
+0x080046b0	-	BLOCKED	238	-	-	-	not attempted
+0x0803ac4c	-	BLOCKED	238	-	-	-	not attempted
+0x080096bc	-	BLOCKED	260	-	-	-	not attempted
+0x08006fe8	-	BLOCKED	264	-	-	-	not attempted
+0x08024a30	-	BLOCKED	268	-	-	-	not attempted
+0x08034f2c	-	BLOCKED	390	-	-	-	not attempted
+0x08007840	-	BLOCKED	408	-	-	-	not attempted
+0x080176ac	-	BLOCKED	462	-	-	-	not attempted
+0x08025ec8	-	BLOCKED	472	-	-	-	not attempted
+0x08009c7c	-	BLOCKED	606	-	-	-	not attempted
+0x080099fc	-	BLOCKED	636	-	-	-	not attempted
+0x080471d8	-	BLOCKED	810	-	-	-	not attempted
+0x08008bc8	-	BLOCKED	1234	-	-	-	not attempted
+0x08046df8	-	BLOCKED	836	-	-	-	not attempted; callee 0x08006a54=Gfx_BlitRequest MATCHED (no rect-fill block)

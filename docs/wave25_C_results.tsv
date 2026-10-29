@@ -1,0 +1,7 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x0803f844	ShiftPairCfg_3F844	MATCHED	220	0	old_agbcc	sibling-shape transfer; pin+asm movs; barrier vs pool fold; negs for -2	C template for family; half1 (108/12/43/0x40/idx1) + half2 (108/64/95/0x80/idx2); q2 in r4
+0x08046810	ShiftPairCfg_46810	MATCHED	220	0	old_agbcc	sibling-shape transfer; c128 hoist to r4 via pin+asm	half1 (152/12/43/0x40/idx1) + half2 (152/128/159/0x80/idx2); q2 in r5; 128 kept in r4 for orrs
+0x08045914	ShiftPairCfg_45914	MATCHED	228	0	old_agbcc	sibling-shape transfer; asm movs/lsl for 292; c128 hoist	half1 (292/12/43/0x40/idx1) + half2 (292/128/159/0x80/idx2); q2 in r5; EWRAM 0x02004DB0/0x02004DE4
+0x0804a1f0	ShiftPairCfg_4A1F0	MATCHED	220	0	old_agbcc	sibling-shape transfer (direct copy of 3F844)	half1 (108/12/43/0x40/idx1) + half2 (108/64/95/0x80/idx2); q2 in r4; identical shape to 3F844
+0x0803ad48	ShiftPairCfg_3AD48	MATCHED	228	0	old_agbcc	sibling-shape transfer; pool 0xFFFC via u32; negs(31) mask	half1 (136/0xFFFC/negs31/0x40/idx1) + half2 (136/64/95/0x80/idx2); q2 in r4
+0x08041890	ShiftPairCfg_41890	MATCHED	228	0	old_agbcc+sed	sibling-shape transfer; sed: pop{r0}->pop{r1}, bx r0->bx r1	half1 (292/12/43/0x40/idx1) + half2 (292/128/159/0x80/idx2); q2 in r5; epilogue uses r1 (unique); patch in w25c_08041890_patch.sh

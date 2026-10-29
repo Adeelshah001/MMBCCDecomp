@@ -1,0 +1,5 @@
+addr	name	status	diffs	compiler	notes
+0x0803affc	Task_3AFFC	BLOCKED	n/a	old_agbcc	Prologue/dispatch/JT byte-exact; mode bodies mostly correct; BLOCKED on shared strb tail crossjumping (compiler merges goto blocks). See t_3affc_status.md.
+0x0800dd08	Vec2_CopyMirrored	BLOCKED	2	agbcc/old_agbcc	PERMANENTLY BLOCKED: pop {r2}/bx r2 vs pop {r1}/bx r1 is a compiler-heuristic anomaly (479 vs 1 in ROM). No flag/code variation changes it. See vec2_vintage_conclusion.md.
+0x080230a0	sub_080230A0	UNBLOCKED	0	old_agbcc	Inline-asm `add %0,%1,#0` forces the redundant `adds r0,r1,#0`; register pinning for double-OR; s32 for signed ble; hoisted lsls. Formulation: sub_080230A0_080230A0_MATCHED.c
+0x08037440	Task_37440	UNBLOCKED	0	old_agbcc	Block-scope r1 pinning for g[0x14]|=1; goto-beq for branch structure; volatile barrier for table load order; inline-asm for p[5]++ store; u8 z declared after q for movs ordering. Formulation: Task_37440_08037440_MATCHED.c

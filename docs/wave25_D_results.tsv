@@ -1,0 +1,7 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08045838	FlagPairDispatch_08045838	MATCHED	220	0	old_agbcc	switch-dispatch; inline-asm ldrsb; reg pins (pp->r5,q->r4,t->r1,x->r4); cross-jump shared store; byte-swapped pools caught (0x46B1/0x02004D7C)
+0x0803643c	WalkBits_0803643C	BLOCKED	444	60	main/old	Register allocation divergence; 3 hoisted 0x10000 consts need .s sed; pools verified (3x 0x0200BCE8, 2x 0x0822EED8)
+0x080460c0	F_080460C0	BLOCKED	186	174	main	Complex 7-call dispatch; register allocation (r5/r7 swap); pools 0xA946/0x2308502E/0x2308342E
+0x08016e84	F_08016E84	BLOCKED	114	49	old	Inline-asm ldrsh works but reg allocation (r0/r2/r3 temps); u16->int param trick needed
+0x08046df8	-	BLOCKED	832	-	-	Not attempted: 832B too large for bulk timebox
+0x08016efc	-	BLOCKED	116	-	-	Not attempted: sibling of 0x08016e84, similar complexity

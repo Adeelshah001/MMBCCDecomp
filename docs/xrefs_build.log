@@ -1,0 +1,28 @@
+discovery: 1636 insns, 185 pools, 46 bl-targets, 1 bx-targets, 3 anomalies
+tier-A starts: 51
+tier-A functions: 51, orphans: 0
+possible tail-called (b-only) functions merged: 0
+v1 entries (deduped): 1611
+after v1 reconcile: A=50 B=1516 D=45
+final: A=51 B=1600 D=45 (A+B=1651)
+byteclass: code=62.0% pool=5.4% data=0.1% unknown=32.6%
+pool/code byte conflicts: 24
+v1->v2 transitions:
+  A -> A: 49
+  A -> B: 648
+  A -> D: 29
+  B -> A: 1
+  B -> B: 387
+  B -> D: 4
+  C -> B: 481
+  C -> D: 12
+descent-only A (not in v1): 1
+anomalies (141):
+  B_target_demoted: 122
+  B_target_failed: 10
+  B_calls_mid_function: 6
+  bx_indirect: 3
+starts: 1703 (A=51 B=1652)
+owner agreement vs v2 map (built with buggy hi-reg mov decoder): 96422/96583 insns match; mismatches expected at mov-pc/mov-r7 sites
+xrefs.tsv: 15945 rows; unresolved: 160; pools: 4461
+dataptrs: 3285 code-pointer words in ROM

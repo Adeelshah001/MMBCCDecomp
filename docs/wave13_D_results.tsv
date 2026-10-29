@@ -1,0 +1,5 @@
+address	name	status	bytes	compiler	notes
+0x08046ca0	ChipSlot_InitEntry	MATCHED	92	old_agbcc	Struct+array init: p[4]=p[5]=0, p[2]=p[3]=(b?25:20), p[8]=b, *(u16*)(p+6)=0x800A, q[0..a]=0, q[0]=0x8000; for(i=0;i<a+1;i++) old_agbcc entry-check lowering
+0x08002d20	DispCntRestore_Dma3	MATCHED	100	old_agbcc	DISPCNT save/mask/merge/restore via volatile u16 stack var; EWRAM 0x020031E0 non-volatile (CSE); DMA3 SAD=0x020031E4/DAD=0x04000008/CNT=0x8400000E + dummy read; true size 100 (pools excluded from func_stats)
+0x08002678	PalDmaInit_02678	MATCHED	108	old_agbcc	Palette DMA init: stack-marker DMA3 to 0x03002420 then to 0x05000000; q[0x400..0x402]=32 via inline asm (adds r0,r2,r3 order); *(u16*)(q+0x404)=0, *(u16*)(q+0x406)=0x400; true size 108
+0x080048b4	DrawText_048B4	MATCHED	84	old_agbcc	String-to-tilemap: dst=**(u16**)0x02003250 + (x+y*32); per-char tile = (c>0x9F?0x2E0:0x3A0)+c; b1/b2 via inline asm temp+copy; explicit .byte 0,0 pad

@@ -1,0 +1,15 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x080224e4	BlendCopy_080224E4	BLOCKED	206	104	main	Single mask->r9 pin solves high-reg rotation	High-reg rotation (srcA->r9/srcB->r8/mask->ip vs ROM r8/ip/r9) SOLVED by pinning ONLY mask to r9; remaining wall is systematic low-reg allocator difference (r3<->r4 swap in loop body, temp reg choices, c0 finalize lsrs placement, prologue adds dest r1 vs r0). Tried: v6-v15, old_agbcc, -O1/-Os, clobber-reservation, av pin. Best: v11.
+0x08021b3c	BlendCopy_08021B3C	BLOCKED	206	104	main	Same as twin	Identical to 0x080224e4 except bl target encoding; same wall applies. Not separately attempted.
+0x0801c030	ChipState_0801C030	BLOCKED	214	60	main	Pin sp->r5 gives correct prologue	Prologue (push/adds/ldrb/branch tree) matches ROM. Wall: case 1 ldrsh needs r6=0 index (my z goes to r4); s[19] reuse in r4 works but ldrsh pattern wrong. Tried v1-v8, pins, old_agbcc. Best: v4 (60 diffs).
+0x0801b0dc	ChipSetup_0801B0DC	BLOCKED	208	16	old_agbcc	old_agbcc fixes tail allocation	Switch cases 0-2 match ROM. Wall: tail (16 diffs) - clamp needs movs r1,#3 before ldrb + adds r0,r1,#0 copy; t<<2 needs single lsls not shift pair; p69 in r2 vs r3. Best: v3 with old_agbcc (16 diffs, 220B vs 208B).
+0x08002d6e0	sub_08002D6E0	NOT_ATTEMPTED	192	-	-	-	Triaged: jump-table switch (5 cases) with complex state-machine bodies; time constraints.
+0x0802375c	sub_0802375C	NOT_ATTEMPTED	198	-	-	-	Triaged: sibling of 0x0801f254 family with known v/c allocation wall (w26c); time constraints.
+0x08002a1c	sub_08002A1C	NOT_ATTEMPTED	210	-	-	-	Triaged: contains ldrsb (needs inline asm per w25d); complex pointer math; time constraints.
+0x0802298c	sub_0802298C	NOT_ATTEMPTED	220	-	-	-	Triaged: sibling of 0x0801f254 family with known v/c allocation wall (w26c); time constraints.
+0x080046b0	sub_080046B0	NOT_ATTEMPTED	238	-	-	-	Triaged: complex gfx setup with CpuFastSet calls, high-reg pressure; time constraints.
+0x0803ac4c	sub_08003AC4C	NOT_ATTEMPTED	238	-	-	-	Triaged: multiple branches with Text_SelectBlobIdx; time constraints.
+0x0801e77c	sub_0801E77C	NOT_ATTEMPTED	254	-	-	-	Triaged: switch on p[14] (4 cases) with stack args; time constraints.
+0x080096bc	sub_080096BC	NOT_ATTEMPTED	260	-	-	-	Triaged: tile-copy loop with Memcpy16, 5 params; time constraints.
+0x08006fe8	sub_08006FE8	NOT_ATTEMPTED	264	-	-	-	Triaged: 6 params, GetPtr family, high regs; time constraints.
+0x08024a30	sub_08024A30	NOT_ATTEMPTED	268	-	-	-	Triaged: 11 callees, very complex; time constraints.

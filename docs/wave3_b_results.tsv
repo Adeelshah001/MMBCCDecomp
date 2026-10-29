@@ -1,0 +1,16 @@
+name	address	wave	status	source	notes
+TailCallR3	0x0804C278	3	MATCHED	wave3_b.c	2 B code; naked+asm (agbcc lowers indirect C calls via _call_via_r3); tail-call trampoline via r3; TENTATIVE name
+SetU8_Off1	0x080256DC	3	MATCHED	wave3_b.c	4 B; agbcc; p[1]=v byte setter; TENTATIVE name
+ArmTrampoline	0x0804B970	3	MATCHED	wave3_b.c	4 B code; naked+asm; Thumb->ARM trampoline (adr r2; bx r2) to ARM code at 0x0804B974; TENTATIVE name
+GetU16_Off14	0x080257B8	3	MATCHED	wave3_b.c	4 B; agbcc; *(u16*)(p+14) getter; TENTATIVE name
+EwGet16_18	0x08024760	3	MATCHED	wave3_b.c	6 B code (+pool); agbcc; returns ew02007090.f18 (u16); 14 bl callers in 0x08042xxx-0x08045xxx; TENTATIVE name
+EwSet16_14	0x0800EDF0	3	MATCHED	wave3_b.c	6 B code (+pool); agbcc; ew02005130.f14 = v; struct view needed (else folds to [r1,#0]); TENTATIVE name
+EwSet16_16	0x0800EE2C	3	MATCHED	wave3_b.c	6 B code (+pool); agbcc; ew02005130.f16 = v; TENTATIVE name
+ListPushFront	0x08004170	3	MATCHED	wave3_b.c	8 B; agbcc; singly-linked list push-front (node->next=*head; *head=node); callers sub_080093D0/ sub_08009490/ sub_0800954C; TENTATIVE name
+EwSet8_68	0x0800EE44	3	MATCHED	wave3_b.c	8 B code (+pool); agbcc; ew02005160.f68 = v; TENTATIVE name
+TickWrapper	0x08011F7C	3	MATCHED	wave3_b.c	8 B; agbcc; push{lr}; bl ChipSlot_Tick (0x0800D9FC, BLOCKED wave2); pop{r0}; bx r0; TENTATIVE name
+SetHalf8000	0x080082CC	3	MATCHED	wave3_b.c	10 B; naked+asm; *p = 0x8000 with original compiler's redundant r2->r1 copy (not reproducible in C); callers pass only r0; TENTATIVE name
+EwSet8_72	0x08010364	3	MATCHED	wave3_b.c	10 B code (+pool); agbcc; ew02005160.f72 = 1; called once from sub_0800EE8C; TENTATIVE name
+EwSet16_128	0x0804A3FC	3	MATCHED	wave3_b.c	10 B code (+pool); agbcc; ew0200BD20.f128 = 0; TENTATIVE name
+TblGet11	0x08026710	3	MATCHED	wave3_b.c	12 B code (+pool); agbcc; rom0822740C[(u8)a].f11 (16-byte entries); 6 bl callers; TENTATIVE name
+EwSet8Ret1_20	0x08010DDC	3	MATCHED	wave3_b.c	12 B code (+pool); agbcc; ew020051B0.f20 = (u8)v; return 1; (u8)(v|1)&1 forces redundant truncation; sibling reader at 0x08010DEC returns (f20==0); TENTATIVE name

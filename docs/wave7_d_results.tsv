@@ -1,0 +1,8 @@
+name	address	size	status	compiler	notes
+sub_080031B8	0x080031b8	116	MATCHED	main	Struct-init family; r8 for a2; mov r1,r8 via pinned asm; k3f in r3; 0 diffs
+sub_0800322C	0x0800322c	108	MATCHED	main	Struct-init variant; true size 100B code+8B pool; z in r3; k3f in r0; 0 diffs
+ObjInit_TypeA	0x08017f8c	216	MATCHED	old_agbcc	Dual-branch (s[0x10]==2); idx-calc duplicated; split pools; 0 diffs
+ObjInit_TypeB	0x0801dcc0	136	MATCHED	old_agbcc	Double-OR (2|t|1); mask pinned r0 for s[0x41]; 0 diffs
+Obj_AddEntry	0x0802d7a0	340	BLOCKED	main	10-param; prologue a6->sl vs ROM a7->sl; mask narrowing; 260 diffs best
+ObjInit_1D3C0	0x0801d3c0	164	BLOCKED	old_agbcc	If/else on s[0x11]; v11 reg; mask blocks; scheduler; 137 diffs best
+ObjInit_205B8	0x080205b8	168	MATCHED	old_agbcc	Double-OR const pinned r1; mask sh in r0/m in r1; pad u16; 0 diffs

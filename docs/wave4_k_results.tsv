@@ -1,0 +1,13 @@
+name	address	wave	status	source	notes
+Task_35E0C	0x08035e0c	4	MATCHED	mmbcc/src/wave4_k.c	52 bytes, main agbcc; task init: p[1]=2, zero p[2..4]/p[0x4699]/p[0x46B7]; sub_0804A2DC(6); Teardown/Setup
+Task_35EB0	0x08035eb0	4	MATCHED	mmbcc/src/wave4_k.c	92 bytes, OLD_AGBCC; switch p[2]: case0 sub_08004E24(0), p[2]++; case1 Teardown, if sub_08004E0C(3): p[1]=4,p[3]=0,p[2]=0, *(u16*)0x020031E0 &= 0xEDFF &= 0xDBFF; Setup in case1
+Task_35F0C	0x08035f0c	4	MATCHED	mmbcc/src/wave4_k.c	66 bytes (68 built, +2 pad stripped), main agbcc; if p[0x46B7]==8: sub_0804A328, sub_080267B4, p[0x4698]=0; else p[1]=1; Teardown/Setup
+Task_35F50	0x08035f50	4	BLOCKED	-	352 bytes; big switch on p[3] with 4 cases + default; case0 table-index idiom + fallthrough to case1; case2 flag logic on *(u16*)0x02002F50, Text_SelectBlobIdx, *(u32*)(p+0x18/0x1C) bit ops; duplicated sub_080361E8 epilogue not reproduced (159+ byte diff)
+Task_360B0	0x080360b0	4	MATCHED	mmbcc/src/wave4_k.c	18 bytes (20 built, +2 pad stripped), main agbcc; return (u8)sub_080400D0(p,0,0)
+Task_36664	0x08036664	4	MATCHED	mmbcc/src/wave4_k.c	68 bytes exact, main agbcc; task init with *(u32*)(p+0x4698)=0, *(u32*)(p+0x469C)=0; literal-0 trick forces pool loads; sub_0804A2DC(7); Teardown/Setup
+Task_366A8	0x080366a8	4	BLOCKED	-	64 bytes; s8 v=(s8)sub_08004E0C(0); if(v){p[1]=2;p[2]=v;p[3]=v;}; 3-byte diff: ref has asrs r1,r0,#24 (sign-extend) + cmp r1/bne, both compilers emit lsrs (zero-extend) + cmp r0/beq; sign unobservable, compiler optimizes it away
+Task_36724	0x08036724	4	MATCHED	mmbcc/src/wave4_k.c	92 bytes, OLD_AGBCC; twin of Task_35EB0; u8 z declared at if-body top with z=0 placed mid-ands-block gets movs scheduling right
+Task_36780	0x08036780	4	MATCHED	mmbcc/src/wave4_k.c	96 bytes exact, main agbcc; sub_080267B4, sub_0804A328; if/else chain on p[0x469F] (not switch) for linear cmp/bne; p[0x4698]=1/2/3; Teardown/Setup
+Task_36BA8	0x08036ba8	4	BLOCKED	-	256 bytes; Teardown; gEwram_02004E40[0x14]|=1; switch p[5]: case0 ROM fn-table dispatch via 0x082300D4/0x0822FF4C; case1 sub_0800B308 poll, g[8] check, sub_08040060, Text_SelectBlobIdx(0x78); prologue register allocation (p=r4,mode=r5,g=r6) not reproduced (188 byte diff)
+Task_36CA8	0x08036ca8	4	BLOCKED	-	260 bytes; near-twin of Task_36BA8; table 0x0822FF58, *(u16*)(gRom_0822FE60+2+idx*6), p[0x4699]=6; same prologue allocation issue; not attempted in detail
+Task_37440	0x08037440	4	BLOCKED	-	120 bytes; Teardown; g[0x14]|=1; switch p[5]: case0 sub_0800B368 dispatch via 0x082300E0; case1 sub_0800B308, p[0x4699]=mode; prologue ldr r1/movs r0/ldrb r2 scheduling not reproduced (61 byte diff)

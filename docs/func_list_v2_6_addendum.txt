@@ -1,0 +1,31 @@
+# MMBCC func_list v2.6 addendum (Wave 4 batch J interior-label resolutions, 2026-10-20)
+#
+# 27 DEMOTIONS (not functions — interior long-branch targets of larger bodies).
+# Count: 1703 -> 1676.
+#
+# A. 25 thunk-span entries (docs/func_list_v2_4_addendum.txt, 0x0802BCE2-0x0802C71E):
+#    coordinator-verified: every BL caller in the full-ROM xrefs scan is
+#    intra-function (all within 0x080298FC-0x0802C7B2); recursive descent
+#    from all 25 reaches only the single epilogue `bx r1 @ 0x0802C7B2`,
+#    so no target can return — the BLs are LONG BRANCHES (target >2 KB,
+#    out of Thumb `b` range), not calls. Host: sub_080298FC
+#    (0x080298FC-0x0802C7B2, battle-scene switch dispatcher). The v2.4
+#    promotion ("each 1-31 genuine BL callers") was wrong: the callers are
+#    genuine BLs but intra-function long branches, not cross-function calls.
+#    Evidence: docs/match_notes_wave4_j.md; coordinator re-verified
+#    caller locations and the 0x0802C7B2 = 0847 (bx r1) terminator.
+#    Demoted: 02BCE2 02BCF8 02BD14 02BD66 02BD72 02BDEE 02BDF6 02BEA2
+#             02C010 02C068 02C196 02C23C 02C2CE 02C344 02C3C0 02C4C0
+#             02C5C0 02C5F6 02C618 02C64A 02C686 02C6B8 02C6E6 02C6EC 02C71E
+#
+# B. 0x08033962 (v2.4 pointer-table discovery): sole BL caller 0x08030B0C
+#    is intra-function; bcond self-references only. Host: sub_08030AD4
+#    (0x08030AD4-0x08033AC2). Demoted.
+#
+# C. sub_08033AB2 (v1:A): 2 BL callers, both from sub_08030AD4
+#    (intra-function, shared-epilogue entry). Host: sub_08030AD4.
+#    Demoted.
+#
+# Lesson for future sweeps: validate BL-target function starts by
+# reachable terminators (can the target return?), not by opcode alone.
+# Intra-function `bl`-as-long-branch is now a known idiom in this ROM.

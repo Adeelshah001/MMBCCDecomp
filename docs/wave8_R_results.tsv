@@ -1,0 +1,14 @@
+name	address	size	status	compiler	notes
+Init_080021C4	0x080021C4	56	MATCHED	main	clears 2 EWRAM u32, stack-marker/IO-block init, returns 0x85006000
+Clr8_08004B94	0x08004B94	44	MATCHED	main	whole-loop inline asm, pinned regs, shift-add-shift u16 counter
+FlagSet_08026F98	0x08026F98	52	MATCHED	old_agbcc	144<<5 mask unfolded, (x|-x)>>31 branchless, barrier keeps base+0x11AC unfolded
+SubClamp_0802C7B4	0x0802C7B4	40	MATCHED	old_agbcc	signed saturating subtract, clamp at 0, u8 borrow; explicit 00 00 pad
+Clr36_080475D4	0x080475D4	44	MATCHED	main	sibling of Clr8: 36-byte clear, strh zero to [4]
+Test_08010454	0x08010454	36	MATCHED	old_agbcc	if x==1 p+=20; (p[16]&2)==0 if/return form (ternary goes branchless)
+Fill_0802520C	0x0802520C	36	MATCHED	old_agbcc	struct init + 0xFF fill loop reusing param regs
+Append_0802526C	0x0802526C	36	MATCHED	old_agbcc	buffer append with bounds check
+Set_08004E24	0x08004E24	32	MATCHED	old_agbcc	p[0]=(x<<7)|64; v=2/if(x==0)v=1 movs-first form
+Cmp_08004E0C	0x08004E0C	24	MATCHED	old_agbcc	p[1]==x if/else form; pointer+index keeps 0x02004F80 pool unfolded
+Clr_0800B4C8	0x0800B4C8	28	MATCHED	main	p[19]&=-m9/-m17 via negated vars; p[8]=0xFF
+Clr_08010478	0x08010478	32	MATCHED	old_agbcc	if x==1 p+=20; p[16]&=-m2; return 1
+Zero_0801052C	0x0801052C	32	MATCHED	old_agbcc	zero p[28]/p[60] (via p+=32) if nonzero

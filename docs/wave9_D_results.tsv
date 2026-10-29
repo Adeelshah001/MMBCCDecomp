@@ -1,0 +1,10 @@
+ShiftPair_Copy_800C	0x0800800c	36	MATCHED	src/wave9_d_old.c	W9-D MATCHED (36B, old_agbcc): copies two s16 (<<8) to word slots, table lookup byte to [0x1A]. Idiom: a+=(u32)romSym yields adds r1,r1,r2.
+Ewram5160_Init_10508	0x08010508	36	MATCHED	src/wave9_d_old.c	W9-D MATCHED (36B, old_agbcc): struct init at EWRAM 0x02005160. Uses gEwram5160 from wave3_e.o.
+CheckPair_258D8	0x080258d8	32	MATCHED	src/wave9_d_old.c	W9-D MATCHED (32B, old_agbcc): checks two bytes at [p+idx*4+20], returns 0/1/2.
+StoreIdx2_25638	0x08025638	28	MATCHED	src/wave9_d_old.c	W9-D MATCHED (28B, old_agbcc): stores byte at [p+idx+2]. Idiom: pin q to r0.
+Ewram4E40_Init_0B4E4	0x0800b4e4	60	MATCHED	src/wave9_d_old.c	W9-D MATCHED (60B, old_agbcc): writes 0x8000 to 3 slots at EWRAM 0x02004E40+136+i*36. Idiom: inline asm for adds order.
+Buf_RemoveAt_25290	0x08025290	64	MATCHED	src/wave9_d_old.c	W9-D MATCHED (64B, old_agbcc): removes byte at idx from (buf,count) list. Idiom: reload count 3x.
+Check_2D440	0x0802d440	32	MATCHED	src/wave9_d_old.c	W9-D MATCHED (32B, old_agbcc): returns 6 if (a!=2 && b==c && b!=0).
+CtrTick5_400A8	0x080400a8	40	BLOCKED	(staging)	BLOCKED: allocation divergence (ldr r3 vs ldrh r1). Tried old/main, pins, -O1/-Os.
+FlagBit_Set_11D68	0x08011d68	72	BLOCKED	(staging)	BLOCKED: scheduler order (v-mask before s) and lsr fold.
+Get_25654	0x08025654	40	BLOCKED	(staging)	BLOCKED: scheduler interleaves pp init with i mask; volatile asm order issues.

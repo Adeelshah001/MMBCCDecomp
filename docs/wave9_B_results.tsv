@@ -1,0 +1,2 @@
+name	address	size	status	compiler	notes
+Script_StepState	0x0803F480	964	MATCHED	old_agbcc	Full 964B/22-case switch matched 0 diffs. Key: u32 s pinned r2; volatile-sum + b2 split (0x4600+0x4C) for prologue; pa/pb/k recompute per case & epilogue; t-then-flag for r0 boolean; 22 separate cases (not paired) to defeat cross-case merging. Staging: staging/wave9_B/vv_v26.c. Landed: mmbcc/src/wave9_b_old.c.

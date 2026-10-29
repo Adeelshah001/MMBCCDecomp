@@ -1,0 +1,2 @@
+name	address	size	status	compiler	notes
+Task_367E0	0x080367e0	564	MATCHED	old_agbcc	0 diffs over 564 B (full extent incl. pools). 9-mode task dispatcher. Formulation: /tmp/wave7_b/Task_367E0_080367e0_MATCHED.c. Section .text.w7b_080367e0. Matched callees: EntryMgr_Teardown, EntryMgr_Setup, Task_37598, Text_SelectBlobIdx. Unmatched via .set: sub_08004E44/08004DFC/0800BEE0/08005A9C/080374B8/0800800C/0800B148/0800B2D8/08037600/0800B308/0800B368.

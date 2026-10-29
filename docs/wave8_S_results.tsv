@@ -1,0 +1,79 @@
+name	address	size	status	compiler	notes
+sub_08000EF8	0x08000ef8	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08001D68	0x08001d68	30	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+TblValidate_300C	0x0800300c	48	MATCHED	old_agbcc	shift-split (x<<16)>>13 trick
+sub_0800800C	0x0800800c	30	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+FlagA_8628	0x08008628	48	MATCHED	old_agbcc	goto + asm barrier for sign-extend
+FlagA_8654	0x08008654	48	MATCHED	old_agbcc	goto + asm barrier
+FlagA_8680	0x08008680	48	MATCHED	old_agbcc	goto + asm barrier
+TblInit_960C	0x0800960c	52	MATCHED	old_agbcc	dual s16/u16 counter, pinned regs, explicit shifts
+sub_0800B308	0x0800b308	24	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0800C248	0x0800c248	28	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+FillPairs_C92C	0x0800c92c	56	MATCHED	old_agbcc	do-while s16 dance, 8-byte pool
+sub_0800D104	0x0800d104	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0800EE50	0x0800ee50	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08010508	0x08010508	30	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08011054	0x08011054	28	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08011DB0	0x08011db0	28	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08011DD0	0x08011dd0	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08016FAC	0x08016fac	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_080173FC	0x080173fc	28	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08020230	0x08020230	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08021C0C	0x08021c0c	28	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_080225B4	0x080225b4	42	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08023B64	0x08023b64	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08023CE4	0x08023ce4	44	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08023D10	0x08023d10	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+TblGet_f00	0x08024554	32	MATCHED	old_agbcc	table accessor, pinned r1
+TblGet_f04	0x08024570	32	MATCHED	old_agbcc	table accessor
+TblGet_f02	0x0802458c	32	MATCHED	old_agbcc	table accessor
+TblGet_f0A	0x080245c4	32	MATCHED	old_agbcc	table accessor
+TblGet_f08	0x080245e0	32	MATCHED	old_agbcc	table accessor
+TblGet_f0C	0x080245fc	32	MATCHED	old_agbcc	table accessor
+TblGet_f0D	0x08024618	32	MATCHED	old_agbcc	table accessor
+TblGet_f0E	0x08024670	32	MATCHED	old_agbcc	table accessor
+TblGet_f0F	0x0802468c	32	MATCHED	old_agbcc	table accessor
+TblGetW_BB8C	0x080246a8	32	MATCHED	old_agbcc	table accessor
+TblGetW_BF74	0x080246c4	32	MATCHED	old_agbcc	table accessor
+TblGetW_C35C	0x080246e0	32	MATCHED	old_agbcc	table accessor
+sub_08024744	0x08024744	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+EwGet8_A8	0x080247a8	32	MATCHED	old_agbcc	table accessor
+sub_0802518C	0x0802518c	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08025308	0x08025308	28	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08025490	0x08025490	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08025638	0x08025638	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08025654	0x08025654	40	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_080258D8	0x080258d8	32	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+Cmp8_2637C	0x0802637c	32	MATCHED	old_agbcc	4x ldrh compare
+sub_08026554	0x08026554	32	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_080265B0	0x080265b0	32	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_080265D0	0x080265d0	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08026720	0x08026720	32	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08026D94	0x08026d94	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0802D440	0x0802d440	32	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0802D460	0x0802d460	40	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0802FBF0	0x0802fbf0	46	BLOCKED		compiler CSE: 0x18B emitted as 0x18A+1 (adds), not pool ldr
+sub_0802FC4C	0x0802fc4c	30	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08036318	0x08036318	32	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0803F440	0x0803f440	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0803F460	0x0803f460	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+CheckId_FA1C	0x0803fa1c	44	MATCHED	old_agbcc	goto-beq, (130<<5)/(157<<5), signed bgt via int tmp
+sub_0803FA48	0x0803fa48	32	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0803FB9C	0x0803fb9c	44	BLOCKED		mid-function pool 0x2201 in dead code; GCC deletes .word in unreachable code
+sub_0803FC8C	0x0803fc8c	46	BLOCKED		mid-function pool 0x1021 in dead code + outside pools
+sub_0803FD9C	0x0803fd9c	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0803FE00	0x0803fe00	28	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_080400A8	0x080400a8	30	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_08047510	0x08047510	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+EwCopy_4A3C4	0x0804a3c4	44	MATCHED	old_agbcc	goto->pool->cold-block, static const u16 pad
+sub_0804A884	0x0804a884	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0804AC88	0x0804ac88	30	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0804ACDC	0x0804acdc	30	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+CtrTick_4AD4C	0x0804ad4c	44	MATCHED	old_agbcc	goto->pool->cold-block
+sub_0804BDC0	0x0804bdc0	32	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0804C2CC	0x0804c2cc	48	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0804C53C	0x0804c53c	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0804C610	0x0804c610	26	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0804CD34	0x0804cd34	46	BLOCKED		r4 pin needs opaque asm (works); qb+=12 folds to strh offset; dead ldrb
+sub_0804D634	0x0804d634	34	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session
+sub_0804D7A0	0x0804d7a0	30	BLOCKED		not attempted: toolchain (arm-none-eabi-as) lost mid-session

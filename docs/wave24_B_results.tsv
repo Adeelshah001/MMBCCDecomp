@@ -1,0 +1,33 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x080097cc	Load4Tiles	MATCHED	148	0	main+sed	extern-array idiom; sed ldrh temps	Copies 4x32B ROM->VRAM(0x06010000); tables 0x081720b4/0x081720cc via extern; Memcpy16
+0x08026184	InitBufs_26184	MATCHED	132	0	main+sed	volatile reloads; explicit u16 inc; sed 0x8000	Fill_0802520C x2 + Append loop 1..127; field stores
+0x080263a4	Validate_263A4	BLOCKED	138	50	old	branch layout mismatch	Validation fn; TblGet11; loop i=1..9; p4 best has addr-reg r1 vs r0 + branch layout diffs
+0x080460c0	F_080460C0	PENDING	200	-	-	-	Not attempted; 9 callees incl Gfx_BlitRequest, TblGet_f00/f04/f08
+0x080224e4	F_080224E4	PENDING	206	-	-	-	Not attempted; Memcpy16 caller; complex branchy with muls; sibling of 0x08021b3c
+0x0803f844	F_0803F844	PENDING	220	-	-	-	Not attempted; ShiftPair_Copy_800C; 3-way switch on byte value
+0x08046810	F_08046810	PENDING	220	-	-	-	Not attempted; ShiftPair_Copy_800C wrapper family
+0x08045914	F_08045914	PENDING	228	-	-	-	Not attempted; ShiftPair_Copy_800C wrapper family
+0x080065bc	SKIP	416	-	-	-	Worker A rect-fill family; skipped per task
+0x08007728	F_08007728	MATCHED	84	0	main	extern-array idiom	EWRAM 0x02004830+620..622 byte checks/sets; NodeInit_08022FB0
+0x080103e0	F_080103E0	BLOCKED	114	22	main+sed	pool block layout; ands fixed via sed	NewNode_080236B0/Clr_08010478; p4+sed best; pool emitted mid-function in ROM
+0x08016e84	F_08016E84	PENDING	120	-	-	-	Not attempted; high regs (r8/r9/sl); 5 args; SetBytes/IncU8/SetField120
+0x08016efc	F_08016EFC	PENDING	120	-	-	-	Not attempted; high regs; SetBytes/IncU8/SetXY
+0x08010e00	F_08010E00	PENDING	122	-	-	-	Not attempted; high regs (r8/r9); 5 args; NewNode_0801DFC4
+0x0800d1e0	F_0800D1E0	PENDING	148	-	-	-	Not attempted; BitCtl/NodeInit/Byte12_Gt1
+0x0800909c	F_0800909C	PENDING	164	-	-	-	Not attempted; high regs; 6 args; GetPtr/FlagA_8654
+0x0801d598	F_0801D598	PENDING	192	-	-	-	Not attempted; ChipSlot_IncUse, Byte12_Gt1
+0x0800571c	F_0800571C	PENDING	224	-	-	-	Not attempted; ObjSlotInit/TblInit/SetByte620
+0x080291ec	F_080291EC	PENDING	196	-	-	-	Not attempted; Scramble_400A8
+0x08021b3c	F_08021B3C	PENDING	206	-	-	-	Not attempted; Memcpy16; sibling of 0x080224e4 (complex branchy)
+0x08002a1c	F_08002A1C	PENDING	224	-	-	-	Not attempted; CpuSet; high regs (r8/r9); complex
+0x0804a1f0	F_0804A1F0	PENDING	220	-	-	-	Not attempted; ShiftPair_Copy_800C wrapper family
+0x0803ad48	F_0803AD48	PENDING	228	-	-	-	Not attempted; ShiftPair_Copy_800C wrapper family
+0x08041890	F_08041890	PENDING	228	-	-	-	Not attempted; ShiftPair_Copy_800C wrapper family; wave22 misdecode fixed
+0x080046b0	F_080046B0	PENDING	244	-	-	-	Not attempted; CpuFastSet
+0x0803ac4c	F_0803AC4C	PENDING	252	-	-	-	Not attempted; Text_SelectBlobIdx
+0x080096bc	F_080096BC	PENDING	272	-	-	-	Not attempted; Memcpy16 caller
+0x08006fe8	F_08006FE8	PENDING	264	-	-	-	Not attempted; GetPtr/FlagA x3/SetIfXZero
+0x08024a30	F_08024A30	PENDING	268	-	-	-	Not attempted; 7 callees
+0x08034f2c	F_08034F2C	PENDING	390	-	-	-	Not attempted; TblGet_f00
+0x08007840	F_08007840	PENDING	428	-	-	-	Not attempted; GetPtr/FlagA x4/SetIfXZero
+0x080176ac	F_080176AC	PENDING	462	-	-	-	Not attempted; 9 callees; largest

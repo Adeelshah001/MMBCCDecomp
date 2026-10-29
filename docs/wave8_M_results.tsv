@@ -1,0 +1,69 @@
+name	address	size	status	compiler	notes
+Ewram_BumpAlloc	0x0800069c	64	MATCHED	old_agbcc	EWRAM bump allocator @0x02000ED0; pool 0x02000ED0/0x00002002; old_agbcc scheduler wins
+EntList_Add1	0x08002568	92	MATCHED	main	EWRAM list append @0x02002FB0, flag|1; base pinned r5, -4 via opaque asm, add-order asm, if-else for pool placement
+EntList_Add2	0x080025c4	92	MATCHED	main	Twin of Add1 with flag|2
+ChipSlot_StateUpdate	0x08004258	94	BLOCKED	old_agbcc	Near-match: r5 reload OK with old_agbcc but tail-merging commons p[7] strbs (ROM has separate strb per branch); strb r1 vs r0 in c==2; blt vs bge
+TblHash_Combine	0x08001754	72	BLOCKED	main	Table-hash combiner; pool 0x0816e240 at +72; shift-mask sequences and table lookup order differ; tried main/old
+FillPairs_0C5B8	0x0800c5b8	50	BLOCKED	main	Shift-add-shift loop idiom needs asm; register allocation (p1->r4 vs r1, v2->r1 vs r4) won't match; twin at 0x0800cbf0 identical
+FillPairs_0CBF0	0x0800cbf0	50	BLOCKED	main	Identical twin of 0x0800c5b8
+Lookup_02D574	0x0802d574	50	BLOCKED	main	Branch-chain lookup; register allocation r1/r2 swapped vs ROM; pins cause frame; tried main/old
+sub_080017A0	0x080017a0	96	BLOCKED	-	Not attempted; 96B, 2 pool loads, 1 branches
+sub_0804DFA8	0x0804dfa8	94	BLOCKED	-	Not attempted; 94B, 0 pool loads, 3 branches
+sub_0800C784	0x0800c784	92	BLOCKED	-	Not attempted; 92B, 2 pool loads, 2 branches
+sub_08023DD8	0x08023dd8	88	BLOCKED	-	Not attempted; 88B, 0 pool loads, 2 branches
+sub_08046CA0	0x08046ca0	88	BLOCKED	-	Not attempted; 88B, 1 pool loads, 3 branches
+sub_0800D420	0x0800d420	86	BLOCKED	-	Not attempted; 86B, 6 pool loads, 1 branches
+sub_0802567C	0x0802567c	86	BLOCKED	-	Not attempted; 86B, 0 pool loads, 2 branches
+sub_0800520C	0x0800520c	84	BLOCKED	-	Not attempted; 84B, 6 pool loads, 1 branches
+sub_08010AD8	0x08010ad8	84	BLOCKED	-	Not attempted; 84B, 1 pool loads, 2 branches
+sub_080029B0	0x080029b0	82	BLOCKED	-	Not attempted; 82B, 0 pool loads, 0 branches
+sub_080048B4	0x080048b4	82	BLOCKED	-	Not attempted; 82B, 1 pool loads, 2 branches
+sub_0804E008	0x0804e008	82	BLOCKED	-	Not attempted; 82B, 0 pool loads, 2 branches
+sub_08004398	0x08004398	80	BLOCKED	-	Not attempted; 80B, 1 pool loads, 0 branches
+sub_08005338	0x08005338	80	BLOCKED	-	Not attempted; 80B, 6 pool loads, 4 branches
+sub_08002678	0x08002678	78	BLOCKED	-	Not attempted; 78B, 7 pool loads, 0 branches
+sub_08002960	0x08002960	78	BLOCKED	-	Not attempted; 78B, 0 pool loads, 0 branches
+sub_08005FC0	0x08005fc0	78	BLOCKED	-	Not attempted; 78B, 1 pool loads, 0 branches
+sub_0800CC24	0x0800cc24	78	BLOCKED	-	Not attempted; 78B, 8 pool loads, 0 branches
+sub_08027D4C	0x08027d4c	78	BLOCKED	-	Not attempted; 78B, 1 pool loads, 3 branches
+sub_08002D20	0x08002d20	76	BLOCKED	-	Not attempted; 76B, 6 pool loads, 0 branches
+sub_0800483C	0x0800483c	76	BLOCKED	-	Not attempted; 76B, 1 pool loads, 0 branches
+sub_080244B0	0x080244b0	76	BLOCKED	-	Not attempted; 76B, 3 pool loads, 2 branches
+sub_0800410C	0x0800410c	74	BLOCKED	-	Not attempted; 74B, 0 pool loads, 0 branches
+sub_0804D130	0x0804d130	74	BLOCKED	-	Not attempted; 74B, 4 pool loads, 3 branches
+sub_08002E80	0x08002e80	72	BLOCKED	-	Not attempted; 72B, 3 pool loads, 0 branches
+sub_0803FACC	0x0803facc	72	BLOCKED	-	Not attempted; 72B, 4 pool loads, 5 branches
+sub_08047C4C	0x08047c4c	72	BLOCKED	-	Not attempted; 72B, 4 pool loads, 0 branches
+sub_08001E74	0x08001e74	70	BLOCKED	-	Not attempted; 70B, 2 pool loads, 1 branches
+sub_080047EC	0x080047ec	70	BLOCKED	-	Not attempted; 70B, 2 pool loads, 0 branches
+sub_0802FBA4	0x0802fba4	70	BLOCKED	-	Not attempted; 70B, 1 pool loads, 1 branches
+sub_0800291C	0x0800291c	68	BLOCKED	-	Not attempted; 68B, 0 pool loads, 0 branches
+sub_080045AC	0x080045ac	68	BLOCKED	-	Not attempted; 68B, 2 pool loads, 1 branches
+sub_0800C3A0	0x0800c3a0	68	BLOCKED	-	Not attempted; 68B, 0 pool loads, 0 branches
+sub_08011D68	0x08011d68	66	BLOCKED	-	Not attempted; 66B, 1 pool loads, 1 branches
+sub_080255F4	0x080255f4	66	BLOCKED	-	Not attempted; 66B, 0 pool loads, 0 branches
+sub_0804BFD4	0x0804bfd4	66	BLOCKED	-	Not attempted; 66B, 5 pool loads, 0 branches
+sub_08002620	0x08002620	64	BLOCKED	-	Not attempted; 64B, 2 pool loads, 0 branches
+sub_0800C4B4	0x0800c4b4	64	BLOCKED	-	Not attempted; 64B, 4 pool loads, 1 branches
+sub_08025290	0x08025290	62	BLOCKED	-	Not attempted; 62B, 0 pool loads, 0 branches
+sub_080499AC	0x080499ac	62	BLOCKED	-	Not attempted; 62B, 1 pool loads, 3 branches
+sub_08023B88	0x08023b88	60	BLOCKED	-	Not attempted; 60B, 0 pool loads, 0 branches
+sub_08025230	0x08025230	60	BLOCKED	-	Not attempted; 60B, 0 pool loads, 2 branches
+sub_08026574	0x08026574	60	BLOCKED	-	Not attempted; 60B, 0 pool loads, 1 branches
+sub_08004208	0x08004208	58	BLOCKED	-	Not attempted; 58B, 0 pool loads, 0 branches
+sub_0800A094	0x0800a094	58	BLOCKED	-	Not attempted; 58B, 1 pool loads, 0 branches
+sub_0803FDBC	0x0803fdbc	58	BLOCKED	-	Not attempted; 58B, 3 pool loads, 5 branches
+sub_08002C74	0x08002c74	56	BLOCKED	-	Not attempted; 56B, 1 pool loads, 3 branches
+sub_0804A450	0x0804a450	56	BLOCKED	-	Not attempted; 56B, 3 pool loads, 3 branches
+T	0x08011c14	56	BLOCKED	-	Not attempted; 56B, 1 pool loads, 0 branches
+sub_0800B4E4	0x0800b4e4	54	BLOCKED	-	Not attempted; 54B, 1 pool loads, 0 branches
+sub_08049934	0x08049934	54	BLOCKED	-	Not attempted; 54B, 1 pool loads, 3 branches
+sub_0804DA34	0x0804da34	54	BLOCKED	-	Not attempted; 54B, 4 pool loads, 0 branches
+sub_08004484	0x08004484	52	BLOCKED	-	Not attempted; 52B, 1 pool loads, 1 branches
+sub_080044BC	0x080044bc	52	BLOCKED	-	Not attempted; 52B, 1 pool loads, 1 branches
+sub_0800CD00	0x0800cd00	52	BLOCKED	-	Not attempted; 52B, 4 pool loads, 1 branches
+sub_08010498	0x08010498	52	BLOCKED	-	Not attempted; 52B, 1 pool loads, 3 branches
+sub_08011D34	0x08011d34	52	BLOCKED	-	Not attempted; 52B, 1 pool loads, 1 branches
+sub_08023D34	0x08023d34	52	BLOCKED	-	Not attempted; 52B, 0 pool loads, 1 branches
+sub_0803FD68	0x0803fd68	52	BLOCKED	-	Not attempted; 52B, 1 pool loads, 4 branches
+sub_0802D8F4	0x0802d8f4	50	BLOCKED	-	Not attempted; 50B, 1 pool loads, 1 branches

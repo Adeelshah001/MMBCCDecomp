@@ -1,0 +1,37 @@
+# MMBCC func_list v2.2 addendum (coordinator audit, 2026-10-20)
+#
+# 7 wrongful D-demotions promoted to tier B.
+#
+# Root cause (traced exemplar: sub_08004F80): fwd_check's `overlaps_pool`
+# rule misfires when a function's OWN inline literal pools are already in
+# `all_pools` (registered via another decode path). The function below is
+# real — push prologue, coherent body, 70 genuine BL callers in classified
+# bodies — but was demoted because linear decode reached its own pool word
+# 004FD4. Same misfire class for 004E60/004FEC/00B520 (`overlaps_pool`);
+# 02142C (`bx_pool_not_code`: bx target was a misclassified pool word);
+# 04DE70/04DEE8 (`contains_v1_*`: over-strict containment vs neighbours
+# 04DEDE/04DF9E — probable alternate entries, flagged for Phase 2).
+#
+# Evidence per entry: genuine BL callers inside owner-classified bodies
+# (verified via dec_thumb at instruction boundaries), prologue, body shape.
+# Format: <offset> B <mode> <symbol> # v2.2: <evidence>
+004E60 B T sub_08004E60 # v2.2: 2 genuine callers (004E44, 004E50), push {r4-r7} prologue, 118B body; was D overlaps_pool
+004F80 B T sub_08004F80 # v2.2: 70 genuine callers in classified bodies (99 total), push {r4,r5} prologue, 46B body; was D overlaps_pool (own pool 004FD4)
+004FEC B T sub_08004FEC # v2.2: push {r4,r5} + 5 BLs to v2 A/B callees (00CD00, 00A0D4, 005800, 00B910, 00D480), 62B body; was D overlaps_pool
+00B520 B T sub_0800B520 # v2.2: 3 genuine callers, push {r4-r7} prologue, 162B body; was D overlaps_pool
+02142C B T sub_0802142C # v2.2: 1 genuine caller, push prologue, 50B body; was D bx_pool_not_code
+04DE70 B T sub_08004DE70 # v2.2: 3 genuine callers, 32B body, no prologue — probable alternate entry; was D contains_v1_04DEDE
+04DEE8 B T sub_08004DEE8 # v2.2: 6 genuine callers, 12B body, no prologue — probable alternate entry; was D contains_v1_04DF9E
+#
+# Explicitly NOT promoted (rejected):
+# - 04DDA0: 13 callers but none genuine-in-body; alternate entry into A-tier
+#   sub_0804DD9C region; already D in v2 (contains_v1_04DE64). Phase 2 call.
+# - 02BCxx-02C7xx cluster (~25 candidates): real thunk code (idiom
+#   381c49465246089b x100 over 029AC4-02C70C) but callers all in unclassified
+#   regions; needs Phase 2 unknown-region sweep for exact delimitation.
+#   NOT counted here — honest undercount region, see method doc.
+# - 5 novel targets failing validate_target (incl. 02F5AC): caller patterns
+#   are data false-positives.
+#
+# Verified totals after v2.2: A=51, B=1598 (1554 v2 + 37 v2.1 + 7 v2.2),
+# D=64 (71 - 7). Working function count: 1649.

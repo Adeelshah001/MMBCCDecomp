@@ -1,0 +1,2 @@
+name	address	size	status	compiler	notes
+Task_3AFFC	0x0803affc	928	BLOCKED	old_agbcc	W11-C: best 363 diffs (was 661 W7, 590 W10), exact size 928/928. Modes 0-9 at 91% (26/292B diffs). Blocked on: (1) mode 2/4 ldr interleaving (lsls;ldr;lsrs vs lsls;lsrs;ldr, 8B); (2) TailC sharing via goto disrupts modes 10-15 layout; (3) register allocation (r1 vs r2 for g8). See docs/match_notes_wave11_C.md

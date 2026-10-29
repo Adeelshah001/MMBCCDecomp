@@ -1,0 +1,90 @@
+# MMBCCDecomp — ROM layout for the linker script (DOCUMENTATION)
+
+**This file documents the ROM layout; it is NOT a linker script.**
+The build uses `mmbcc/ldscript.ld` (Phase-0 version: rom_header.o, then
+crt0.o, then `*(.text)` catch-all). This document records the layout the
+real, byte-identical `ldscript.ld` must reproduce, so future workers can
+slot objects into the right positions without re-deriving the map.
+
+Source of truth for regions: `docs/memmap.md` ← `ANALYSIS.md`.
+File offset = ROM address − `0x08000000`.
+
+---
+
+## Region table (ROM order)
+
+| # | File offset | VMA (ROM) | Size | Contents | Linker section | Object that will supply it |
+|---|---|---|---|---|---|---|
+| 1 | `0x000000` | `0x08000000` | 0xC0 (192) | Cartridge header (logo, `BATTLECHIPGP`, `A89E`, maker `08`, fixed `0x96`, checksum byte @`0xBD` = `0x7B` quirk) | `.text` (first) | `build/rom_header.o` — first in link order, `ENTRY(Start)`-adjacent |
+| 2 | `0x0000C0` | `0x080000C0` | 0x280 (640) | crt0 boot chain: `Init` @C0 (ARM), `IntrWait` @FC (ARM), `IrqDispatcher` @1BC (ARM), `ArmTrampoline` @2A4 (ARM), `crt0_thumb_helpers` (Thumb entry) @33C | `.text` | `build/crt0.o` — second in link order (after rom_header.o) |
+| 3 | `0x000340` | `0x08000340` | variable | Game code, Thumb, per-function objects in original link order. Includes: init routines (fn #1 @`0x63C`, fn #2 @`0x7D0`), save API entries @`0xB54`/`0xBAC`/`0xC04`, SRAM addr-compute sites @`0x1DB8`/`0x1E30`/`0x1F1C`/`0x2070`, ARM math routine @`0x4BCDC`, BIOS veneers @`0x4DB24`, save primitives @`0x4DB38–0x4DC94` | `.text` | one object per asm/src file (see below) |
+| 4 | `0x050000` | `0x08050000` | 0x7B0000 | Data zone: tiles, tilemaps (`0x73000–0x7E000` cluster), text bank (`0x165C00–0x16D630`), save-device table (`0x16E148–0x16E230`), audio sequences (`0x3A8DA8–0x3A95B8`), 338 LZ77 blocks, strings (`SRAM_V113` @`0x16E210`, `CAPCOM ALL STAFF` @`0x234F54`) | `.rodata` | future `asm/data/*.s` (`.incbin` slices) and/or `src/data/*.c` tables; per-region objects in ascending offset order |
+| 5 | — | — | — | Padding to 8 MiB + `gbafix` + `tools/finish_rom.py` (0x7B quirk application) | — | Makefile post-link steps, not the linker script |
+
+> The current Phase-0 `ldscript.ld` has `.rodata`/`.data` sections with
+> wildcard placement — fine for a shiftable build, but for byte-identity
+> every data object needs an explicit ascending-offset slot like region 4.
+
+## Ordering constraints (hard requirements for byte-identity)
+
+1. **`rom_header.o` must link at exactly `0x08000000`** (`. = 0x08000000`
+   at the start of `.text`). Its first 0xC0 bytes are the header; the
+   entry branch at offset 0x0 targets `0x080000C0`.
+2. **`crt0.o` immediately after**, so `Init` lands at `0x080000C0`.
+   These two objects are already pinned in `mmbcc/ldscript.ld` and must
+   stay pinned.
+3. **Per-function objects in original link order** (canonical pret
+   practice, cf. ANALYSIS §3.2: "explicit per-object ordering … is what
+   makes the link byte-identical"). Rule: object N's first byte =
+   ROM address of its first function; ascending addresses, no gaps, no
+   overlaps. The crt0 region shows the pattern — `0x33C` Thumb entry
+   sits 0x4 bytes after `0x338`-end-of-ARM; same discipline applies
+   throughout `.text`.
+4. **Inline literal pools travel with their function** — pools live
+   inline in the code region, so each function's asm object must include
+   its pool words at the original offsets (see `mmbcc/asm/crt0.s`:
+   `.word` pool entries annotated with their offsets).
+5. **The 5 BIOS veneers (@`0x0804DB24`) and 6 save primitives
+   (@`0x0804DB38–0x4DC94`) are 4-byte-aligned Thumb code at the tail of
+   `.text`** — they belong in their own object(s) at the pinned offsets
+   (`mmbcc/asm/savedrv.s` is the planned home; see feeds_recomp_notes.md
+   for the symbol table). They must not be reordered relative to the
+   surrounding code.
+6. **The header quirk byte (file `0xBD` = `0x7B`) is applied AFTER
+   `gbafix`** by `tools/finish_rom.py` — the linker script must not try
+   to produce it; gbafix would compute `0x94` and the post-step
+   overwrites it. (Do not "fix" this — it reproduces the factory
+   cartridge.)
+
+## How future asm → src objects slot in
+
+Standard pret flow (ANALYSIS §3.2):
+
+- **asm/ phase:** each function (or function group) disassembles to
+  `mmbcc/asm/<name>.s` and gets an explicit `build/<name>.o` line in
+  `ldscript.ld` at its ROM offset. Build is "shiftable" — layout
+  correct, code not yet matching — verified with `make compare` failing
+  only on unmatched regions.
+- **src/ phase:** when a function's C matches byte-identically, its asm
+  object is replaced by `build/src_<name>.o` at the SAME link position.
+  The Makefile already globs `src/*.s` into `$(OBJS)`; as C sources
+  appear, a `$(BUILD)/%.o: src/%.c` rule plus agbcc flags will be added.
+- **Data phase:** data-zone slices go to `mmbcc/asm/data/*.s` (or
+  generated `.inc` via gbagfx) with explicit ascending-offset link
+  slots in `.rodata`, per region 4.
+- **Symbol naming:** `sub_08XXXXXX` (ROM address, 8 hex digits, lowercase)
+  until a real name is earned. The 16 already-named functions are listed
+  in `docs/feeds_recomp_notes.md` §(a); the sibling save-driver worker's
+  names (when `mmbcc/asm/savedrv.s` lands) take precedence over the
+  `sub_` placeholders used there.
+
+## What is still unknown (ldscript blockers)
+
+- `.data`/`.bss` RAM-side VMA + length (copy loop @`0x080007D0` operands
+  not yet read — see `docs/memmap.md` §(c)). The linker script cannot
+  place `.data`/`.bss` in RAM until these are known; current `.data`
+  section is a placeholder.
+- Exact end of the save-primitive tail (past `0x0804DC94`).
+- Whether any original `.rodata` existed on-ROM vs. inline pools only
+  (affects whether `.rodata` gets its own placement rules or stays a
+  catch-all for the data zone).

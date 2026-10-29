@@ -1,0 +1,30 @@
+addr	name	bytes	status	compiler	notes
+0x08021e64	ObjInit_21E64	100	BLOCKED	old_agbcc	r5 zero-CSE: ROM push {r4,lr} with fresh movs r0,#0; both compilers keep zero in r5 (push {r4,r5,lr}). 55 diffs.
+0x08022320	ObjInit_22320	114	NOT_ATTEMPTED	—	Same family as 0x08021e64 (identical tail); likely same r5 blocker.
+0x080223e4	ObjInit_223E4	106	NOT_ATTEMPTED	—	Same family as 0x08021e64 (identical tail); likely same r5 blocker.
+0x080230a0	ObjInit_230A0	100	BLOCKED	old_agbcc	2-byte diff: ROM has adds r0,r1,#0 before cmp r0,#3 (0x080230dc); 9 C variants tried, none reproduce the redundant move. Best C in /tmp/wave5_h2/best_230a0.c.
+0x08025958	FindZero_25958	58	BLOCKED	agbcc	Loop regalloc: ROM lsls r2,r3,#2 / adds r0,r2,r4 with bne layout; compiler uses r0 and beq. 4 variants tried.
+0x080281f0	Task_281F0	72	BLOCKED	agbcc	Branch regalloc: ROM strb r0,[r4,#6] with reload ldrb r0,[r4,#1]; compiler keeps p[1] in r0/r1 without reload. Goto-beq tried.
+0x08028244	ObjInit_28244	62	NOT_ATTEMPTED	—	—
+0x08035128	Task_35128	72	MATCHED	old_agbcc	Table lookup + sub_0804dcd0 poll; u32 *tbl=gRom first for pool order; old_agbcc for ldrb r2 regalloc.
+0x08035bc8	Task_35BC8	84	MATCHED	agbcc	s8 clamp (v>12 ? v-13) + Text_SelectBlobIdx(0x66) + EWRAM pos writes (v<<4)+0x10, flag*24+0x20.
+0x08035c1c	Task_35C1C	64	MATCHED	agbcc	3x GatedDispatch(base[0x13/0x12/0x11], ...); literal 0 (not u32 z) for r4/r5 allocation.
+0x08035da4	Task_35DA4	80	MATCHED	agbcc	Sibling of 0x08035bc8 (v>3 ? v-4; (v<<4)+0xf8).
+0x08035e5c	Task_35E5C	80	BLOCKED	agbcc	Complex s8-indexed table + nested if/else with r1=0; 60 diffs, control flow not reproduced.
+0x080366e8	Task_366E8	68	MATCHED	old_agbcc	s8 table + poll; u32 z=0 inside if for movs r1,#0 before movs r0,#3.
+0x08037598	Task_37598	48	MATCHED	agbcc	GatedDispatch + Gfx_BlitRequest wrappers.
+0x08037a30	Task_37A30	76	MATCHED	old_agbcc	(u8)poll switch via goto-beq; p[3] before p[2]; 2B pad.
+0x08037ad8	Task_37AD8	116	MATCHED	agbcc	Mode dispatcher (v==4/9/8) + Teardown/Setup; tail-merged stores.
+0x08038f3c	Task_38F3C	76	MATCHED	old_agbcc	Sibling of 0x08037a30 (p[2] before p[3]).
+0x08038fe4	Task_38FE4	116	MATCHED	agbcc	Sibling of 0x08037ad8 (v==7/0xb/0xc).
+0x0803af98	ObjInit_3AF98	100	NOT_ATTEMPTED	—	—
+0x08042ec0	Task_42EC0	110	NOT_ATTEMPTED	—	—
+0x08045ebc	Task_45EBC	64	MATCHED	agbcc	Simple init + Teardown/Setup; return 0.
+0x080481fc	Task_481FC	98	NOT_ATTEMPTED	—	—
+0x0804827c	Task_4827C	64	MATCHED	agbcc	Init with u32 off=0x46a8; p[off-2]=0 via subs.
+0x080496a8	SramInit_496A8	64	MATCHED	agbcc	SRAM reads via 0x0804db24/0x0804db28; u32 z=0 first for movs r4,#0 order.
+0x0804b980	Task_4B980	106	NOT_ATTEMPTED	—	—
+0x0804c288	Text_4C288	62	BLOCKED	agbcc	Linked-list walk with bx r3 thunk call; 61 diffs.
+0x0804c58c	Text_4C58C	92	NOT_ATTEMPTED	—	—
+0x0804cc64	Text_4CC64	76	BLOCKED	agbcc	Magic-guarded init with loops; 78 diffs.
+0x0804ccb8	Text_4CCB8	94	NOT_ATTEMPTED	—	—

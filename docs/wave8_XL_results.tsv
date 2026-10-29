@@ -1,0 +1,33 @@
+name	address	size	status	compiler	notes
+Audio_MixFragment	0x0804bcdc	168	MATCHED	naked+asm	ARM sound-driver mixer fragment; entered via ARM beq from 0x0804bbb8; ble exits to 0x0804bc74; ends add r0,pc,#1; bx r0 back to Thumb
+LoadHalfTables	0x0800b520	162	BLOCKED	old_agbcc -O2	Best 164B, first 99B identical. Divergences: (1) pool->r3+mov ip vs pool->r4 (p must be in ip w/ r3 copy for [r3,#19] byte access; pinning p to ip breaks ldrb addressing); (2) ROM hoists r6=i*12, r5=&ap[i], r4=p+100 separately in outer loop; mine fuses. Tried: args[3] vs &a, v-hoist vs memory-clobber reload, for vs goto outer, expr reorderings, q=p+100 local (top/inner), -O1/-Os. Closest: goto-outer + mem-clobber + (p+100+j*2+i*12).
+HwInit2	0x080007d0	178	BLOCKED	old_agbcc -O2	Best 220B, first 99B identical (prologue: pinned r4=0x080001bc, r3=src, r2=dst, scoped dma). Blockers: (1) two dead ldrb (ldrb r0,[r2] before strb r3; ldrb r2,[r0] before strb r1) - dummy expr stmts optimized away, volatile loads reproduce them but cause 46B bloat; (2) 42B unexplained bloat likely from pinned-reg constraints. Tried: pinning r4/r3/r2, scoped dma, volatile, hardcoded asm.
+DmaSetupBits	0x08000a1c	178	BLOCKED	old_agbcc -O2	Best 172B. DMA setup with bitfield adjustments. Structure matches but 6B short with scattered diffs. Likely codegen differences in bit-test ordering and spin-wait loop. Tried: temp vars for CSE, scoped dma locals.
+BoundsCheck	0x08006014	176	BLOCKED	main -O2	Best 196B (20B over). Complex bounds validation with s8 arithmetic. Logic structure not matching; needs detailed re-derivation.
+ComputeFields	0x0804cfd4	180	BLOCKED	old_agbcc -O2	Best 180B (exact size) but diffs at byte 100. Two-block struct computation. ROM reloads p[0] twice (no CSE); register allocation (p in r2) not reproduced. Tried: b0 local vs direct p[0].
+sub_08001400	0x08001400	206	BLOCKED	-	Complex multi-stage init (206B): pool stores, byte clears, 2-iter loop, conditional bit sets. High-register pressure. Not attempted; requires detailed re-derivation.
+sub_080015b4	0x080015b4	226	BLOCKED	-	Complex init (226B): halfword shuffling loop with sl/r9/r8/ip allocation, conditional DMA setup. Not attempted.
+sub_08001ca8	0x08001ca8	190	BLOCKED	-	190B function with 7 branches. Not triaged in detail; complex control flow.
+sub_08003330	0x08003330	214	BLOCKED	-	214B complex loop function (0x080033xx region, likely related to 0x080039a4 family). Not attempted.
+sub_08003408	0x08003408	252	BLOCKED	-	252B complex function. Not attempted.
+sub_08003508	0x08003508	252	BLOCKED	-	252B complex function. Not attempted.
+sub_08003608	0x08003608	280	BLOCKED	-	280B complex function. Not attempted.
+sub_08003724	0x08003724	330	BLOCKED	-	330B complex function. Not attempted.
+sub_080039a4	0x080039a4	456	BLOCKED	-	456B fixed-point sprite/OAM transform loop (analyzed in detail): 12-byte record array, per-record math with muls/asrs, write cursor. Extremely intricate scheduler; not attempted beyond analysis.
+sub_08003cb8	0x08003cb8	452	BLOCKED	-	452B complex function. Not attempted.
+sub_080042b8	0x080042b8	222	BLOCKED	-	222B function with 11 branches. Not attempted.
+sub_0800561c	0x0800561c	228	BLOCKED	-	228B switch-like dispatcher (4 branches). Not attempted.
+sub_08008510	0x08008510	254	BLOCKED	-	254B complex function. Not attempted.
+sub_080086ac	0x080086ac	306	BLOCKED	-	306B complex function. Not attempted.
+sub_0800d480	0x0800d480	218	BLOCKED	-	218B complex function. Not attempted.
+sub_0800df8c	0x0800df8c	218	BLOCKED	-	218B complex function. Not attempted.
+sub_080027d9c	0x08027d9c	166	BLOCKED	-	166B complex function. Not attempted.
+sub_080349f8	0x080349f8	338	BLOCKED	-	338B complex function. Not attempted.
+sub_0803fbcc	0x0803fbcc	188	BLOCKED	-	188B complex function. Not attempted.
+sub_0803fe44	0x0803fe44	174	BLOCKED	-	174B complex function. Not attempted.
+sub_0804dda0	0x0804dda0	196	BLOCKED	-	196B binary division routine (sign handling, 0x10000000 scaling, shift loop). Complex bit algorithm; not attempted.
+sub_0804dee8	0x0804dee8	182	BLOCKED	-	182B binary division/modulo routine (early return via mov pc,lr). Complex; not attempted.
+sub_080024bc	0x080024bc	166	BLOCKED	-	166B fixed-point loop with muls/bitmanip (analyzed): struct-based position update with pool 0x040000d4 region. Intricate; not attempted beyond analysis.
+sub_08000f28	0x08000f28	266	BLOCKED	-	266B complex function. Not attempted.
+sub_0800b818	0x0800b818	178	BLOCKED	-	178B function with high-register (ip/sl/r9/r8) allocation, bitfield ops. Not attempted beyond triage.
+sub_0800d04c	0x0800d04c	172	BLOCKED	-	172B switch-like init with nested loops (analyzed in triage). Complex; not attempted.

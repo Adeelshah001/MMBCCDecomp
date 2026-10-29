@@ -1,0 +1,7 @@
+name	address	wave	status	source	notes
+Memcpy16	0x08000758	4	MATCHED	src/wave4_h.c	120B; agbcc; 16-bit memcpy via CpuFastSet/CpuSet; barriers for prologue order; cnt temp for exact `movs r2,#31; ands r2,r4; lsrs r2,r2,#1`
+Copy8_28D0	0x080028D0	4	MATCHED	src/wave4_h.c	46B; agbcc; copy 8B via CpuFastSet if *(u16*)(s+4)!=0 and s[6]==0; dst=0x03002420+(b<<5), src=s+*(u32*)s+(a<<5); b5 hoisted for `lsls #24; lsrs #19`
+Init_216A8	0x080216A8	4	MATCHED	src/wave4_h.c	42B; agbcc; init with ChipSlot_Setup(s, 0x1600, 0); two-step `v=2; v|=s[0xA]; v|=1` for exact orr sequence
+TableLookup_11C80	0x08011C80	4	MATCHED	src/wave4_h.c	44B; agbcc; table lookup 32B entries at 0x0817A9C4; NULL if idx==0 or idx>=GetLimit_11C50() (0x4867)
+Reinit_350D0	0x080350D0	4	MATCHED	src/wave4_h.c	46B; agbcc; zeroes s+0x46A8/0x46AC, sets s[4]=1, then EntryMgr_Teardown/Setup; returns 0
+Memset16	0x080006DC	4	BLOCKED	n/a	124B; agbcc+old_agbcc; 16-bit fill val-first; prologue `lsrs r1; adds r7,r1` (live-range split) not reproducible — compiler emits `lsrs r7` directly; see match_notes_wave4_h.md

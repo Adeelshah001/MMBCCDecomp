@@ -1,0 +1,5 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08004998	HexFormat_08004998	MATCHED	108	0	main	r7-pin + clobber-reservation + pinned-COPY chain + loop-reorder fixup	Catch-22 broken: c7 pin forces c->r7 while r7-denial steers pool->r1. True extent 108 (not 102).
+0x080259a4	Tbl_SwapAndUpdate_080259A4	BLOCKED	98	25	main	pinned temps b4->r2, p20->r1	Swap sequence matches. Blocked: r7 not saved in prologue (gcc bug), u8-extract from pinned reg broken, call ordering.
+0x08026740	Task_Clock_08026740	MATCHED	116	0	main	pinned regs + control-flow correction	Branch inversion via if/else swap (w24d). S[18]=0 inside if(S[19]!=99). True extent 116 (not 112).
+0x0800e440	ChipState_F_0800E440	BLOCKED	118	83	main	S pinned to r4	S+37 via adds (not pool). Blocked: ternary uses r1 vs ROM r0; 80+ diffs in body.

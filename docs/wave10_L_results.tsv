@@ -1,0 +1,15 @@
+name	address	size	status	compiler	notes
+S8TableLookup_0C248	0x0800C248	28	MATCHED	old_agbcc	s8 table lookup via gTbl_0817313C; -1 if idx==-1 or idx<=59; goto-style preserves redundant check; (s8) via u8 temp + cast
+PairBonus_2D460	0x0802D460	40	MATCHED	old_agbcc	6 if (y,x) in {(4,4),(3,1),(2,4)}; if/else-if (not ||) avoids r4/copy codegen; compiler jump-threads tails
+Clamp_26720	0x08026720	32	MATCHED	old_agbcc	>84->239, >48->(u8)(v+150), else (u8)(w+200); result-var form fixes branch order; w-copy kept
+EwramLookup_26D94	0x08026D94	26	MATCHED	old_agbcc	EWRAM gEwram020070F0; -1 if [1]==0 else (s8)[2]; early-return form; pool embedded mid-function
+TableByte_16FAC	0x08016FAC	34	MATCHED	old_agbcc	ROM table g_082240b8_L (0x082240B8); 8-byte entries; explicit tbl var fixes ldr/lsrs order; distinct symbol avoids wave7 local conflict
+Rank_49934	0x08049934	54	MATCHED	old_agbcc	EWRAM u16 at +idx*12+50; 254->2,255->3,253->1; goto decision-tree; int v=(u16) for ldrh+bgt; pool-first decl order
+Xor_23CE4	0x08023CE4	44	MATCHED	old_agbcc	XOR-fold 14 bytes; dst[i] ^= src[((i*2)&7)]; do-while i<=13
+sub_0803FACC	0x0803FACC	72	BLOCKED	-	Decision tree (0x1030/0x3030/0x3020/0x4030/0x30-0x36); 3 codegen mismatches: b-copy kept (adds r2,r1), blt #0x30 (not ble #0x2f), literal 0x3020 pool (not subs r0,#16); neither compiler reproduces
+sub_08004398	0x08004398	80	BLOCKED	-	Struct init + fixed-point loop; ROM keeps stride re-extension and 0xFFFF0000 pool load INSIDE loop; old_agbcc hoists both (LICM)
+sub_080244B0	0x080244B0	76	BLOCKED	-	Table lookup with r4 (push/pop) and kept u16 b-copy; compiler eliminates copy and avoids r4
+sub_08011DB0	0x08011DB0	28	BLOCKED	-	EWRAM table; r0/r1 allocation mismatch in comparisons; beq vs bne branch direction
+sub_0804D7A0	0x0804D7A0	30	BLOCKED	-	Flag clear; r1/r2 allocation swap (p in r1 vs r2); compiler insists on r2
+sub_0802518C	0x0802518C	34	BLOCKED	-	Struct copy; r2/r3 allocation swap for offset var; both compilers prefer r2, ROM uses r3
+sub_0802D8F4	0x0802D8F4	50	BLOCKED	-	Table ptr; p in r1 vs r2; 336 materialized as 392-56 vs 168*2; instruction order differs

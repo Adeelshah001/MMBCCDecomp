@@ -1,0 +1,36 @@
+name	address	size	status	compiler	notes
+sub_0804D088	0x0804d088	160	BLOCKED	main	Palette fade/blend. Dead mov ip,r2 forced via volatile asm; literal [0] gives reg-indexed ldrsh; unpinned gives temp-form clamp. BLOCKED on register allocation permutation (r3/r4/r6/r7 vs r2/r3/r1/r6).
+sub_0800C600	0x0800c600	154	BLOCKED		Not attempted in depth.
+sub_080014F8	0x080014f8	152	BLOCKED		Not attempted in depth.
+sub_0800B0A4	0x0800b0a4	152	BLOCKED		Not attempted in depth.
+sub_0800C6B0	0x0800c6b0	152	BLOCKED		Not attempted in depth.
+sub_08028154	0x08028154	152	BLOCKED		Not attempted in depth.
+sub_0800DEF8	0x0800def8	146	BLOCKED		Not attempted in depth.
+sub_08034D18	0x08034d18	142	BLOCKED		Not attempted in depth.
+sub_0800CA10	0x0800ca10	136	BLOCKED		Not attempted in depth.
+sub_08004078	0x08004078	134	BLOCKED		Not attempted in depth.
+sub_08034B4C	0x08034b4c	134	BLOCKED		Not attempted in depth.
+sub_0803F998	0x0803f998	128	BLOCKED		Not attempted in depth.
+sub_08028880	0x08028880	126	BLOCKED		Not attempted in depth.
+sub_0800C50C	0x0800c50c	122	BLOCKED		Not attempted in depth.
+sub_080107CC	0x080107cc	120	BLOCKED		Not attempted in depth.
+sub_08034CA0	0x08034ca0	116	BLOCKED		Not attempted in depth.
+sub_0800244C	0x0800244c	112	BLOCKED		Not attempted in depth.
+sub_0804D6C4	0x0804d6c4	112	BLOCKED		Not attempted in depth.
+sub_0800DD74	0x0800dd74	110	BLOCKED		Not attempted in depth.
+sub_0803F920	0x0803f920	110	BLOCKED		Not attempted in depth.
+T_0804DE70	0x0804de70	110	BLOCKED	nointerwork	Unsigned division. Unusual: push {r4} mid-prologue, beq jumps past function end (0x804dede), mov pc,lr return. Likely misidentified boundary or shared epilogue.
+sub_080030C4	0x080030c4	108	BLOCKED	main	Struct copy with fixed-point. Prologue matches with s pinned to r3. BLOCKED on body allocation (r3 reuse for s[1], (s16)r5+120 computation order).
+sub_0802FCFC	0x0802fcfc	108	BLOCKED		Not attempted in depth.
+sub_0804D180	0x0804d180	104	BLOCKED	main	Byte struct manipulation with (u8) dance (lsls/lsrs). Compiler optimizes to 84-92 bytes vs 104 expected. BLOCKED on preventing optimization / matching branch structure.
+sub_080083F8	0x080083f8	102	BLOCKED		Not attempted in depth.
+sub_08009654	0x08009654	102	BLOCKED		Not attempted in depth.
+sub_08029504	0x08029504	102	BLOCKED		Not attempted in depth.
+sub_080016C0	0x080016c0	100	BLOCKED		Not attempted in depth.
+sub_08002DCC	0x08002dcc	100	BLOCKED		Not attempted in depth.
+sub_08042A64	0x08042a64	100	BLOCKED	main	Bounds check, byte-identical to 0x080459f8. Pools: 0x02007036, 0x0000ac11. BLOCKED on register allocation (b in r4/d in r5/base in r7 vs b in r5/d in r3/base in r6).
+sub_080459F8	0x080459f8	100	BLOCKED	main	Byte-identical to 0x08042A64 (verified via cmp). Same BLOCKED status.
+sub_0804D65C	0x0804d65c	100	BLOCKED		Not attempted in depth.
+sub_0804D738	0x0804d738	100	BLOCKED		Not attempted in depth.
+sub_0800BEE0	0x0800bee0	98	BLOCKED	main	Bitfield manipulation at 0x0200404f. Uses -7/-9 (negs) not ~7/~9. BLOCKED on register allocation (needs r4,r5,r6).
+sub_0800BF6C	0x0800bf6c	98	BLOCKED		Not attempted in depth.

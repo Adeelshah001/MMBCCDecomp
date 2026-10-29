@@ -1,0 +1,15 @@
+addr	name	size	status	notes
+0x0803531c	Task_3531C	788	BLOCKED	Not attempted; prologue r5=p,r7=ret vs compiler r4/r5 default. See wave4_f notes.
+0x080367e0	Task_367E0	564	BLOCKED	389/564 bytes match (69%). Prologue/dispatch/size exact. Remaining: register allocation permutations (r1/r2, r0/r1 swaps) in mode bodies. Formulation in /tmp/wave5_f/t_367e0.c, old_agbcc.
+0x08036f34	Task_36F34	604	BLOCKED	Not attempted; prologue r5=p (non-standard, no ret init). 17-case switch.
+0x0803719c	Task_3719c	664	BLOCKED	Not attempted; prologue r5=p (non-standard). 17-case switch.
+0x08037b4c	Task_37B4C	650	BLOCKED	Not attempted; 7-case switch on p[0].
+0x080385a8	Task_385A8	938	BLOCKED	Not attempted; 11-case switch on p[0].
+0x0803affc	Task_3AFFC	926	BLOCKED	Not attempted; prologue r4=p,r5=ret matches default but 16-case switch, 926B. Candidate for future.
+0x0803b3a0	Task_3B3A0	1266	BLOCKED	Not attempted; largest, 12-case switch.
+0x0803e144	Task_3E144	654	BLOCKED	Not attempted; no switch (if-chain), prologue saves r8.
+0x08047860	Task_47860	990	BLOCKED	Not attempted; 6-case switch, prologue saves r8.
+0x08047ce4	Task_47CE4	922	BLOCKED	Not attempted; 13-case switch.
+0x08048400	Task_48400	596	BLOCKED	Not attempted; prologue r5=p,r6=ret vs compiler default. See wave4_f notes (3 attempts).
+0x08048658	Task_48658	1550	BLOCKED	Not attempted; 56-case switch, largest. Deprioritized per wave4_f.
+0x08049ab0	Task_49AB0	752	BLOCKED	Not attempted; 16-case switch.

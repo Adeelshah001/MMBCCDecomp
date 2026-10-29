@@ -1,0 +1,16 @@
+name	address	wave	status	source	notes
+NoopStub	0x080057FC	3	MATCHED	src/wave3_c.c	2 B code; main agbcc; empty stub (alias sub_080057FC); sole caller EntryMgr_HookA@0x08004F70; coordinator: drop entrymgr.c .set on integrate
+SetU32_4	0x08003130	3	MATCHED	src/wave3_c.c	4 B code; main agbcc; *(u32*)(s+4)=v; 5 bl callers (0x08003154/0x080031B8/0x0800322C/0x08003298/0x08003FC8)
+GetU8_0	0x08025A0C	3	MATCHED	src/wave3_c.c	4 B code; main agbcc; return s[0]; 2 bl callers (sub_08024384 x2)
+GetU8_12	0x08017460	3	MATCHED	src/wave3_c.c	4 B code; main agbcc; return s[0x12]; 1 bl caller (sub_0800E4C0); same struct family as IncU8_11/GetS16_78_3
+ToU8	0x08024724	3	MATCHED	src/wave3_c.c	6 B code; main agbcc; return (u8)v (lsls/lsrs #24); 8 bl callers
+SetU32Pair	0x0802617C	3	MATCHED	src/wave3_c.c	6 B code; main agbcc; p[0]=p[1]=v; 1 bl caller (sub_08023F28)
+G05130_SetU16_12	0x0800EE38	3	MATCHED	src/wave3_c.c	12 B (6 code+2 pad+4 pool); main agbcc; *(u16*)(g_02005130+0x12)=v via ((u16*)p)[9]; 0 bl callers; idiom: base into local first (assembler folds g+const into pool otherwise)
+SetU8_0_FF1	0x080256D4	3	MATCHED	src/wave3_c.c	8 B code; main agbcc; s[0]=v; s[1]=0xFF; 2 bl callers (sub_08025934/sub_08025958)
+GetS16_78_3	0x080174EC	3	MATCHED	src/wave3_c.c	8 B code; main agbcc; s16 *p=(s16*)(s+0x78); return p[3]; 1 bl caller (sub_080176AC); idiom: two-statement base defeats 0x78+6 fold (single-expression ((s16*)(s+0x78))[3] folds to adds #0x7E)
+Wrap_ChipSlotTick	0x08021290	3	MATCHED	src/wave3_c.c	10 B code; main agbcc; forwarder to sub_0800D9FC (wave-2 ChipSlot_Tick candidate, BLOCKED); push{lr}/bl/pop{r0}/bx r0 = plain non-leaf codegen (no sibling-call in agbcc); 0 bl callers
+G0BD10_Zero2	0x0804A2CC	3	MATCHED	src/wave3_c.c	16 B (10 code+2 pad+4 pool); main agbcc; g_0200BD10[0]=g_0200BD10[1]=0; 2 bl callers (sub_08000418/sub_080267F8)
+IncU8_11	0x08017488	3	MATCHED	src/wave3_c.c	10 B code; main agbcc; s[0x11]++; return s[0x11] (explicit reload — not return ++s[0x11]); 1 bl caller (sub_080176AC)
+G05130_GetS8_0A	0x0800EAB4	3	MATCHED	src/wave3_c.c	16 B (10 code+2 pad+4 pool); main agbcc; return (s8)p[0x0A] with p=g_02005130; 0 bl callers
+Text_SelectBlobU16	0x08002FC4	3	MATCHED	src/wave3_c.c	14 B code; main agbcc; Text_SelectBlob(idx) with u16 param (u32-param+(u16)-cast variant byte-identical — ambiguous); 4 bl callers (sub_08027374/sub_08046904/sub_0804A2DC/sub_0804B380); extern-only decl (defined in src/text.c, no .set)
+G0CE08_IndirectCall	0x0804CA08	3	MATCHED	src/wave3_c.c	20 B (14 code+2 pad+4 pool); main agbcc; g_0200CE08(a) via ldr r1,[pc]; ldr r1,[r1]; bl _call_via_r1; 1 bl caller (sub_0804C2FC); function-pointer global at 0x0200CE08

@@ -1,0 +1,7 @@
+addr	sym	status	size_bytes	compiler	evidence
+0x0800b368	sub_0800B368	MATCHED	72	old_agbcc	src/wave10_T_old.c; 0 diffs via mk.sh; byte-identical in full build
+0x0800bee0	sub_0800BEE0	BLOCKED	100	old_agbcc	FULLY RE'd (not matched). Base is 0x02004F40 (W8-L used wrong 0x0200404f). Best 47/100 diffs (v6). See docs/match_notes_wave10_T.md
+0x080241f8	sub_080241F8	BLOCKED	176	old_agbcc	FULLY RE'd (not matched). u8 (u16) switch dispatcher. Best 84/176 diffs. See docs/match_notes_wave10_T.md
+0x08024384	sub_08024384	BLOCKED	174	old_agbcc	FULLY RE'd (not matched). Twin of 241F8. See docs/match_notes_wave10_T.md
+0x0800b148	sub_0800B148	BLOCKED	340	old_agbcc	FULLY RE'd (not matched). Complex bitfield state machine. See docs/match_notes_wave10_T.md
+0x0803affc	Task_3AFFC	BLOCKED	926	old_agbcc	Re-attack attempted with RE'd callee signatures; fundamental cross-case merging blocker persists. See docs/match_notes_wave10_T.md

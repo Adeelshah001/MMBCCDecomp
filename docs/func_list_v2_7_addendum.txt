@@ -1,0 +1,51 @@
+# func_list v2.7 addendum — 2 interior demotions (Wave 5 blocked-revisit)
+
+Date: 2026-10-20. Coordinator-verified. Count: 1676 → **1674**.
+
+Both entries were B-tier "functions" that are actually interior labels
+of larger host bodies. Evidence: disassembly + zero incoming edges in
+xrefs.tsv (fixed-decoder rebuild).
+
+## 03D9EC (was B in v2.5: "3 bl callers")
+
+Disassembly @0x0803D9EC:
+```
+0803d9e8: f7c7 fa96  bl   0x08004F18  (EntryMgr_Teardown)
+0803d9ec: f7c7 fac8  bl   0x08004F80  (EntryMgr_Setup)
+0803d9f0: e04f        b.n  0x0803DA92  (shared epilogue)
+```
+- 0x0803D9EC is reached by FALLTHROUGH from 0x0803D9E8 (after the
+  `bl EntryMgr_Teardown` returns). No prologue.
+- xrefs.tsv: ZERO incoming edges (the v2.5 "3 bl callers" claim does not
+  survive the fixed-decoder xref rebuild).
+- Preceding 0x0803D9E6 is `bne.n 0x0803D9F8` — this is the else-path of a
+  conditional inside one larger function.
+- Classification: INTERIOR label, not a function entry.
+
+## 03C20E (was B in v2.txt: "via-B:sub_0803B998")
+
+Disassembly @0x0803C20E:
+```
+0803c20a: f00e f867  bl   0x0804A2DC
+0803c20e: f7c8 feb7  bl   0x08004F80  (EntryMgr_Setup)
+0803c212: 4640        mov  r0, r8
+0803c214: bc18        pop  {r3, r4}
+...
+0803c21e: 4708        bx   r1
+```
+- 0x0803C20E is reached by FALLTHROUGH from 0x0803C20A (after the
+  `bl 0x0804A2DC` returns). No prologue.
+- xrefs.tsv: ZERO incoming edges (the "via-B:sub_0803B998" attribution
+  was a false positive — 0x0803B998 does not branch here).
+- The `pop`/`bx r1` at 0x0803C214–0x0803C21E is the host's epilogue.
+- Classification: INTERIOR label, not a function entry.
+
+## Count impact
+
+1676 − 2 = **1674** (51 A + 1623 B). Both demoted entries were B-tier.
+D-tier unchanged (45).
+
+Lesson (extends v2.6): a `bl X; b <epilogue>` or `bl X; <epilogue>`
+tail with zero incoming edges and fallthrough entry is an interior
+label, not a function — validate by (1) incoming-edge census in
+xrefs.tsv, (2) fallthrough vs prologue structure.

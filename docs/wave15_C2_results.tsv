@@ -1,0 +1,31 @@
+address	name	status	size_rom	diffs_best	compiler	decisive_idiom	notes
+0x08019b64	ObjInit_08019B64	MATCHED	106	0	old_agbcc	wave5 idx/mask/sh pattern; (0x80<<2) setup; Vec2_AddMirrored tail	ChipSlot_Setup(s,0x200,s[17]); no Text_SelectBlobIdx
+0x0803aed0	sub_0803AED0	UNATTEMPTED	106	-	-	-	-
+0x08011a0c	FlagApply_08011A0C	MATCHED	108	0	old_agbcc	s8 ldrsb flag logic; r1-pinned increment temp; zero-var return	Returns zero-1 via subs
+0x0801a6ac	ObjInit_0801A6AC	MATCHED	110	0	old_agbcc	wave5 pattern; gTbl_082265C0 global .set for r0-first pool load	ChipSlot_Setup(s,594,0); Text_SelectBlobIdx(0xa3) discarded
+0x0804d7c0	MaskWrite23_0804D7C0	MATCHED	110	0	old_agbcc	pinned r6/sl/r8/r9 + asm prologue; r0-pinned am; u32 rb/rv	Pool 0x68736D53 guard; strb [r4,#23]
+0x0804d834	MaskWrite25_0804D834	MATCHED	110	0	old_agbcc	twin of 0804d7c0	strb [r4,#25] instead of #23
+0x0801f9ec	ObjInit_0801F9EC	MATCHED	112	0	old_agbcc	r5/z r0-pinned prologue; global .set for idx pools	Wrapper_D728(s,15639,0); r5[7]=0 tail
+0x08016d2c	sub_08016D2C	BLOCKED	116	26	old_agbcc	-	r2=s allocation not reproduced; tried pinning (broke), reorder (worse)
+0x08018310	ObjInit_08018310	MATCHED	116	0	old_agbcc	wave5 pattern; (0xA0<<3)=0x500; Vec2 pools	ChipSlot_Setup(s,541,s[17]); ChipSlot_IncUse(s,1)
+0x08018e1c	ObjInit_08018E1C	MATCHED	116	0	old_agbcc	twin of 08018310	ChipSlot_Setup(s,553,s[17]); IncUse(s,0); (0x80<<3)=0x400
+0x080200ec	ObjInit_080200EC	MATCHED	120	0	old_agbcc	p2 pinned r2; inlined shift; conditional Wrapper_D728 arg	W_D728(s, s[18]?0x3f18:0x3e18, 0); s[18]=(v<<28)>>28
+0x080181ac	ObjInit_080181AC	MATCHED	126	0	old_agbcc	wave5 pattern; ((u32)s[17]<<25)>>24; (u32)-0x80	ChipSlot_Setup(s,543,((s[17]<<25)>>24))
+0x08025108	sub_08025108	BLOCKED	128	74	old_agbcc	-	loop over-optimized; do-while attempt shorter; complex r7 loop
+0x0800a6bc	sub_0800A6BC	UNATTEMPTED	142	-	-	-	-
+0x0801b47c	sub_0801B47C	UNATTEMPTED	146	-	-	-	-
+0x080211ec	sub_080211EC	UNATTEMPTED	146	-	-	-	-
+0x08011ac8	sub_08011AC8	UNATTEMPTED	154	-	-	-	-
+0x0801f254	sub_0801F254	UNATTEMPTED	154	-	-	-	-
+0x08020b60	sub_08020B60	UNATTEMPTED	158	-	-	-	-
+0x08003fc8	sub_08003FC8	UNATTEMPTED	160	-	-	-	-
+0x0801fcd0	sub_0801FCD0	UNATTEMPTED	166	-	-	-	-
+0x080482d8	sub_080482D8	UNATTEMPTED	168	-	-	-	-
+0x08042c04	sub_08042C04	UNATTEMPTED	172	-	-	-	-
+0x0802d6e0	sub_0802D6E0	UNATTEMPTED	192	-	-	-	-
+0x0801b0dc	sub_0801B0DC	UNATTEMPTED	208	-	-	-	-
+0x0802298c	sub_0802298C	UNATTEMPTED	220	-	-	-	-
+0x0800ac8c	sub_0800AC8C	UNATTEMPTED	294	-	-	-	skipped per budget (294B+)
+0x08001f1c	sub_08001F1C	UNATTEMPTED	334	-	-	-	skipped per budget (294B+)
+0x08002070	sub_08002070	UNATTEMPTED	340	-	-	-	skipped per budget (294B+)
+0x0804d8a8	sub_0804D8A8	UNATTEMPTED	344	-	-	-	skipped per budget (294B+)

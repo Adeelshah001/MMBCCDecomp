@@ -1,0 +1,5 @@
+Scramble_400A8	0x080400a8	40	MATCHED	src/wave9_e_old.c	W9-E MATCHED (40B, old_agbcc): u16 scramble/hash step at EWRAM 0x020070F0+8. Idioms: register pins r2/r1/r3/r0, opaque movs #255, empty barrier defeating shift-combiner.
+Classify_3FD68	0x0803fd68	52	MATCHED	src/wave9_e_old.c	W9-E MATCHED (52B, old_agbcc): classifier with mid-function pool 0x2004. Idioms: goto-chain for duplicate cmp, int sxr copy forcing bgt while >>12 stays lsrs.
+TblGet_25654	0x08025654	40	MATCHED	src/wave9_e_old.c	W9-E MATCHED (40B, old_agbcc): table lookup with bounds (idx<=9: base+2+idx; 10-11: base+12+(idx-10); >11: return 0). Idiom: u8 x=idx kept in r1, p+=x.
+TblSet_11DD0	0x08011dd0	32	MATCHED	src/wave9_e_old.c	W9-E MATCHED (32B, old_agbcc): table set with bounds (1<=x<=7). Idioms: empty barrier preventing pool folding for (hdr+8), u32 xr for cmp.
+Check_B308	0x0800b308	24	MATCHED	src/wave9_e_old.c	W9-E MATCHED (24B, old_agbcc): checks (gEwram_02004E40[4] & 15)==0, returns 1/0. Uses existing gEwram_02004E40 symbol.

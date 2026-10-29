@@ -1,0 +1,48 @@
+# MMBCC func_list v2.3 addendum (coordinator audit, 2026-10-20)
+#
+# 8 more wrongful D-demotions promoted to tier B, from the 1B auditor's
+# full-D-tier walk (all 71 D entries walked with pool-check disabled to
+# test intrinsic validity).
+#
+# 7 uncalled-but-clean functions killed by phantom pools:
+#   The "pools" that demoted them were registered by single `ldr [pc]`
+#   instructions inside OTHER (all uncalled) functions' walks, in a
+#   pathological repeating pattern (`ldr rX,[pc,#imm]; lsls r0,r0,#2` xN);
+#   the pool "words" decode as valid code with non-pool-like values.
+#   Root causes: (1) order-dependent pool poisoning — v1 entries processed
+#   in offset order, early confirmations kill later entries (reverse the
+#   order and verdicts flip); (2) self-pool fallthrough — fwd_check only
+#   consults the global pool set. All 7 walk clean with genuine
+#   `pop {..,rX}; bx rX` returns and healthy bodies (118-494 B).
+#
+# 1 missed entry point:
+#   04DDA0: real code (validates cleanly), 13 BL callers, owned by no
+#   function, byteclass `unknown`. The method doc's "kept merged per the
+#   no-split rule" is NOT reflected in the artifacts (sub_0804DD9C is a
+#   2-byte stub) — it was simply missed, also by the v2.1 re-harvest.
+#
+# Format: <offset> B <mode> <symbol> # v2.3: <evidence>
+014944 B T sub_08014944 # v2.3: 1B audit — clean walk, genuine return, uncalled; was D (phantom pool)
+014B54 B T sub_08014B54 # v2.3: 1B audit — clean walk, genuine return, uncalled; was D (phantom pool)
+014EB8 B T sub_08014EB8 # v2.3: 1B audit — clean walk, genuine return, uncalled; was D (phantom pool)
+015278 B T sub_08015278 # v2.3: 1B audit — clean walk, genuine return, uncalled; was D (phantom pool)
+0420D0 B T sub_080420D0 # v2.3: 1B audit — clean walk, genuine return, uncalled; was D (phantom pool)
+0422F8 B T sub_080422F8 # v2.3: 1B audit — clean walk, genuine return, uncalled; was D (phantom pool)
+015378 B T sub_08015378 # v2.3: 1B audit — clean 260B walk, genuine return; referencing ldr in pathological pattern (uncalled 014FB4); was D literal-pool-word
+04DDA0 B T sub_0804DDA0 # v2.3: 13 BL callers, validates cleanly, owned by nothing, byteclass unknown — missed entry point; was D contains_v1_04DE64
+#
+# Flagged for Phase 2 review (NOT promoted):
+# - 04D088: clean 160B walk, genuine return; demoted on side-path indirect
+#   jump — 1B leans real.
+# - 04B992: coherent, ends `bx r3`->WRAM (genuine indirect tail); target
+#   UNVERIFIABLE — 1B leans real.
+# - 02F5AC: 6 callers but genuine invalid decode at 02F5E4 — UNVERIFIED
+#   (possible misalignment or dead code).
+# - 030B18 (v2.1 addendum): 1B clean-room walker says invalid, generator's
+#   own decoders + validate_target say clean — disputed, keep B for now.
+# - 65 four-byte indirect stubs (`push {r4-r7,lr}; mov pc,rN` variants):
+#   clean walks, zero bl callers; 4 referenced as function pointers from
+#   pools — keep B as "probable", Phase 2 review.
+#
+# Verified totals after v2.3: A=51, B=1606 (1554 v2 + 37 v2.1 + 7 v2.2 + 8 v2.3),
+# D=56 (71 - 15). Working function count: 1657.
