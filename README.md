@@ -2,6 +2,9 @@
 
 ![Logo](docs/logo.jpg)
 
+> [!NOTE]
+> **AI usage disclosure:** This Decompilation project was developed entirely using Muse (Meta).
+
 A work-in-progress matching decompilation of **Mega Man Battle Chip Challenge (USA)** for the Game Boy Advance, in the pret style: C source that compiles with the era-appropriate toolchain to a **byte-identical** ROM.
 
 This repository does **not** contain any game assets or a ROM. An existing copy of the game, legally obtained by you, is required to build.
