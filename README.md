@@ -31,7 +31,7 @@ Per-phase progress:
 - Phase 4 Assets: ░░░░░░░░░░ 0% (text codec still unknown)
 - Phase 5 Byte-identical build: ░░░░░░░░░░ 0% (pending `make compare`)
 
-See [docs/STATUS.md](docs/STATUS.md) for the current status and [PROGRESS.md](PROGRESS.md) for the running log.
+See [docs/STATUS.md](docs/STATUS.md) for the current status and `memory.md` for the verified state snapshot.
 
 ## Dependencies
 
@@ -79,7 +79,6 @@ make compare
 
 - `ANALYSIS.md` — full ROM research and analysis findings (evidence first)
 - `PLAN.md` — multiphase decompilation plan with entry/exit criteria
-- `PROGRESS.md` — running progress log (functions matched / total, blockers)
 - `DECOMP_MEMORY.md` — coordinator handoff: per-wave bests, mechanism closures, and the open ruling questions for the remaining functions
 - `memory.md` — central memory: verified headline state and where to recover it from
 - `mmbcc/` — the pret-style project: `Makefile`, `ldscript.ld`, `src/` (matched C), `asm/` (verified assembly), `tools/` (build scripts)
