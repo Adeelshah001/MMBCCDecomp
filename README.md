@@ -11,23 +11,23 @@ This repository does **not** contain any game assets or a ROM. An existing copy 
 
 ## Progress
 
-**C-matched: 1280 / 1677 functions (76.3%)**
+**C-matched: 1293 / 1677 functions (77.1%)**
 
 ```
-███████████████░░░░░ 76.3% (1280/1677)
+███████████████████████░░░░░░░ 77.1% (1293/1677)
 ```
 
 - 13 additional functions verified as assembly
-- **1293 byte-identical functions total**
-- Current build: 8,388,608 bytes, verified reproducible (SHA-1 `03970057b4a502a5ce77b804d9120bc7db034484` for the in-progress build)
-- Next milestone: 80% (1342/1677)
+- **1306 byte-identical functions total**
+- Current build: 8,388,608 bytes, verified reproducible (SHA-1 `5c17f049ba76a8b457e4a0663a8a2e04b0d04978` for the in-progress build)
+- Next milestone: 80% (1342/1677, 49 short)
 
 Per-phase progress:
 
 - Phase 0 Toolchain: ██████████ 100%
 - Phase 1 Disassembly: ██████████ 100%
 - Phase 2 Boundaries / naming: ██████████ 100%
-- Phase 3 Matching C: ████████░░ 76.3% (1280/1677)
+- Phase 3 Matching C: ████████░░ 77.1% (1293/1677)
 - Phase 4 Assets: ░░░░░░░░░░ 0% (text codec still unknown)
 - Phase 5 Byte-identical build: ░░░░░░░░░░ 0% (pending `make compare`)
 
@@ -80,6 +80,8 @@ make compare
 - `ANALYSIS.md` — full ROM research and analysis findings (evidence first)
 - `PLAN.md` — multiphase decompilation plan with entry/exit criteria
 - `PROGRESS.md` — running progress log (functions matched / total, blockers)
+- `DECOMP_MEMORY.md` — coordinator handoff: per-wave bests, mechanism closures, and the open ruling questions for the remaining functions
+- `memory.md` — central memory: verified headline state and where to recover it from
 - `mmbcc/` — the pret-style project: `Makefile`, `ldscript.ld`, `src/` (matched C), `asm/` (verified assembly), `tools/` (build scripts)
 - `docs/` — research notes, function lists, cross-references, per-wave match notes, `match_status.tsv` (the match registry)
 - `rom.sha1` — SHA-1 of the expected baserom (a hash record only, not the ROM)

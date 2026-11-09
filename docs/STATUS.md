@@ -1,19 +1,19 @@
 # Status
 
-Current state, verified 2026-10-29 from the match registry (`docs/match_status.tsv`):
+Current state, verified 2026-11-08 from the match registry (`docs/match_status.tsv`):
 
-- **C-matched: 1280 / 1677 functions (76.3%)**
+- **C-matched: 1293 / 1677 functions (77.1%)**
 - Assembly-verified: 13 functions
-- **Byte-identical total: 1293 functions**
-- Build: 8,388,608 bytes, reproducible — staging build SHA-1 `03970057b4a502a5ce77b804d9120bc7db034484` (in-progress build, not yet byte-identical to the baserom)
-- Next milestone: 80% (1342/1677, 62 short)
+- **Byte-identical total: 1306 functions**
+- Build: 8,388,608 bytes, reproducible — staging build SHA-1 `5c17f049ba76a8b457e4a0663a8a2e04b0d04978` (in-progress build, not yet byte-identical to the baserom)
+- Next milestone: 80% (1342/1677, 49 short)
 
 ## Phases
 
 - Phase 0 Toolchain: complete (agbcc @da598c1, binutils-arm-none-eabi 2.42)
 - Phase 1 Disassembly: complete
 - Phase 2 Boundaries / naming: complete
-- Phase 3 Matching C: in progress, 76.3%
+- Phase 3 Matching C: in progress, 77.1%
 - Phase 4 Assets: pending — text codec (custom Capcom container) still unknown; audio is a proprietary Capcom driver (stretch goal)
 - Phase 5 Byte-identical build: pending `make compare`
 

@@ -568,7 +568,20 @@ SRCS_C  := src/bios.c src/chipslot.c src/entrymgr.c src/gateddispatch.c \
            src/w83a_08014b54_MATCHED.c \
            src/w83a_0802fda0_MATCHED.c \
            src/w83a_08039cfc_MATCHED.c \
-           src/w84d_0804367c_MATCHED.c
+           src/w84d_0804367c_MATCHED.c \
+           src/w126a_08035630_MATCHED.c \
+           src/w130a_080396b4_MATCHED.c \
+           src/w138a_08013df8_MATCHED.c \
+           src/w138b_08016400_MATCHED.c \
+           src/w138b_08015cf4_MATCHED.c \
+           src/w138d_080160d4_MATCHED.c \
+           src/w139a_080424f4_MATCHED.c \
+           src/w143a_08048f3c_MATCHED.c \
+           src/w149c_08016988_MATCHED.c \
+           src/w194f_08012b80_MATCHED.c \
+           src/w194f_08042f44_MATCHED.c \
+           src/w194f_08037de0_MATCHED.c \
+           src/w194f_080158dc_MATCHED.c
 
 
 # Wave 6 BLK-A: sub_08017D50 needs old_agbcc (ands dest-reg idiom).
@@ -4951,6 +4964,98 @@ $(BUILD)/w83a_08039cfc_MATCHED.o: src/w83a_08039cfc_MATCHED.c
 	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
 
 $(BUILD)/w84d_0804367c_MATCHED.o: src/w84d_0804367c_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+# Wave 126: sub_08035630 needs old_agbcc (coordinator-verified 520/0, pure C, no flags).
+$(BUILD)/w126a_08035630_MATCHED.o: src/w126a_08035630_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+# Wave 130: sub_080396B4 needs old_agbcc (coordinator-verified 580/0, pure C, no flags).
+$(BUILD)/w130a_080396b4_MATCHED.o: src/w130a_080396b4_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+# Wave 138: sub_08013DF8, sub_08016400, sub_08015CF4, sub_080160D4 need old_agbcc (coordinator-verified 0-diff each, pure C, no flags).
+$(BUILD)/w138a_08013df8_MATCHED.o: src/w138a_08013df8_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+$(BUILD)/w138b_08016400_MATCHED.o: src/w138b_08016400_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+$(BUILD)/w138b_08015cf4_MATCHED.o: src/w138b_08015cf4_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+$(BUILD)/w138d_080160d4_MATCHED.o: src/w138d_080160d4_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+# Wave 139: sub_080424F4 needs old_agbcc (coordinator-verified 0-diff, pure C, no flags).
+$(BUILD)/w139a_080424f4_MATCHED.o: src/w139a_080424f4_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+# Wave 143: sub_08048F3C needs old_agbcc (coordinator-verified 0-diff, pure C, no flags).
+$(BUILD)/w143a_08048f3c_MATCHED.o: src/w143a_08048f3c_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+# Wave 149: sub_08016988 needs old_agbcc (coordinator-verified 0-diff, pure C, no flags).
+# Three .set stubs dropped at landing (already .globl-defined elsewhere):
+# Sub_0800D9FC (w51c), Sub_0804A378 (w126a), G_02003670 (w84d).
+$(BUILD)/w149c_08016988_MATCHED.o: src/w149c_08016988_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+# Wave 194: 4 sanctioned-exception landings per the 2026-11-02 user ruling
+# (coordinator-verified 0-diff each, old_agbcc -O2, no .set stub dropped —
+# audit found no stub symbol with a real definition in mmbcc/src/).
+# 12B80 v10 alias (SHA 3453b252); 42F44 v9 pin chain (SHA a30f28cc);
+# 37DE0 P8 sanctioned-ldrsb + pin (SHA 2c9f060d); 158DC bppinr0 pin
+# (SHA 0b80c682, identical at -O2 and -Os; -O2 landed).
+$(BUILD)/w194f_08012b80_MATCHED.o: src/w194f_08012b80_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+$(BUILD)/w194f_08042f44_MATCHED.o: src/w194f_08042f44_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+$(BUILD)/w194f_08037de0_MATCHED.o: src/w194f_08037de0_MATCHED.c
+	@mkdir -p $(BUILD)
+	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
+	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)
+	$(AS) -mthumb $(ASFLAGS) -o $@ $(@:.o=.s)
+
+$(BUILD)/w194f_080158dc_MATCHED.o: src/w194f_080158dc_MATCHED.c
 	@mkdir -p $(BUILD)
 	$(CPP) $(CPPFLAGS) $< -o $(@:.o=.i)
 	$(OLDAGBCC) $(CFLAGS) -o $(@:.o=.s) $(@:.o=.i)

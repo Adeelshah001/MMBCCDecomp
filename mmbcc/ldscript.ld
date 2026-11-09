@@ -1556,6 +1556,19 @@ BYTE(0x30); BYTE(0xB5); BYTE(0x04); BYTE(0x1C); BYTE(0x0D); BYTE(0x1C); BYTE(0x2
     . = 0x802fda0; .text.w83a_0802fda0 : { build/w83a_0802fda0_MATCHED.o (.text.w83a_0802fda0); } /* Wave 83 */
     . = 0x8039cfc; .text.w83a_08039cfc : { build/w83a_08039cfc_MATCHED.o (.text.w83a_08039cfc); } /* Wave 83 */
     . = 0x804367c; .text.w84d_0804367c : { build/w84d_0804367c_MATCHED.o (.text.w84d_0804367c); } /* Wave 84 */
+    . = 0x08035630; .text.w126a_08035630 : { build/w126a_08035630_MATCHED.o (.text.w126a_08035630); } /* Wave 126 */
+    . = 0x080396b4; .text.w130a_080396b4 : { build/w130a_080396b4_MATCHED.o (.text.w130a_080396b4); } /* Wave 130 */
+    . = 0x08013df8; .text.w138a_08013df8_v2 : { build/w138a_08013df8_MATCHED.o (.text.w138a_08013df8_v2); } /* Wave 138 */
+    . = 0x08016400; .text.w138b_08016400_v6 : { build/w138b_08016400_MATCHED.o (.text.w138b_08016400_v6); } /* Wave 138 */
+    . = 0x08015cf4; .text.w138b_08015cf4_v4 : { build/w138b_08015cf4_MATCHED.o (.text.w138b_08015cf4_v4); } /* Wave 138 */
+    . = 0x080160d4; .text.w138d_080160d4 : { build/w138d_080160d4_MATCHED.o (.text.w138d_080160d4); } /* Wave 138 */
+    . = 0x080424f4; .text.w139a_080424f4_v8 : { build/w139a_080424f4_MATCHED.o (.text.w139a_080424f4_v8); } /* Wave 139 */
+    . = 0x08048f3c; .text.w143a_08048F3C_v6 : { build/w143a_08048f3c_MATCHED.o (.text.w143a_08048F3C_v6); } /* Wave 143 */
+    . = 0x08016988; .text.w149c_08016988_v8_oldO2 : { build/w149c_08016988_MATCHED.o (.text.w149c_08016988_v8_oldO2); } /* Wave 149 */
+    . = 0x08012b80; .text.w194f_08012b80_v10_alias_oldO2 : { build/w194f_08012b80_MATCHED.o (.text.w194f_08012b80_v10_alias_oldO2); } /* Wave 194 */
+    . = 0x080158dc; .text.w194f_080158dc_bppinr0_oldO2 : { build/w194f_080158dc_MATCHED.o (.text.w194f_080158dc_bppinr0_oldO2); } /* Wave 194 */
+    . = 0x08037de0; .text.w194f_08037de0_p8_oldO2 : { build/w194f_08037de0_MATCHED.o (.text.w194f_08037de0_p8_oldO2); } /* Wave 194 */
+    . = 0x08042f44; .text.w194f_08042f44_v9_oldO2 : { build/w194f_08042f44_MATCHED.o (.text.w194f_08042f44_v9_oldO2); } /* Wave 194 */
     /DISCARD/ : { *(.eh_frame*); *(.comment*); *(.note*);
         /* Wave 15 fix: wave13_B.o's .text.w12a_08024384 input section (176 B C-compiled,
            c046-padded) must NOT orphan-merge into the BYTE()-emitted output section
