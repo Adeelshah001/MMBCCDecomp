@@ -75,6 +75,12 @@ make compare
 
 `make compare` gates on SHA-1 `72309736f3820470c6f372d6a05ad1f16bc5a946` (8,388,608 bytes, header title `BATTLECHIPGP`, game code `A89E`). The project is done when `make compare` passes. Until then, matched functions are verified individually: a function counts as matched only when its compiled bytes are byte-identical to the baserom, verified by build and diff (see `mmbcc/tools/regression_check.py`).
 
+## Continue in decompdecomp
+
+The `progress/` folder is a [decompdecomp](https://github.com/n-delic/decompdecomp) save of this project: 1,271 matched functions (74.6% of the 1,703 open functions in the app's layout), built from the pret sources in `mmbcc/`. To continue there, clone the repository as above, then in decompdecomp choose **New project → Open a saved project**, pick the `progress/` folder, and point it at your own copy of the game. decompdecomp checks the ROM's SHA-1 and re-judges every saved function: a match counts because it matches, not because a file says so.
+
+Note: the app judges with `agbcc` only, so the 696 functions this project built with `old_agbcc` will re-judge as best attempts until the app supports compiler ranges; 22 matched functions (12 inside `#if 0`, 10 in assembly files) did not carry over. See `progress/README.md` for the full carry-over notes. No ROM is in this folder — the manifest holds only the game's SHA-1.
+
 ## Layout
 
 - `ANALYSIS.md` — full ROM research and analysis findings (evidence first)
@@ -82,6 +88,7 @@ make compare
 - `DECOMP_MEMORY.md` — coordinator handoff: per-wave bests, mechanism closures, and the open ruling questions for the remaining functions
 - `memory.md` — central memory: verified headline state and where to recover it from
 - `mmbcc/` — the pret-style project: `Makefile`, `ldscript.ld`, `src/` (matched C), `asm/` (verified assembly), `tools/` (build scripts)
+- `progress/` — decompdecomp save (see "Continue in decompdecomp" above): `decompdecomp.json`, `src/` (one file per matched function), `include/common.h`
 - `docs/` — research notes, function lists, cross-references, per-wave match notes, `match_status.tsv` (the match registry)
 - `rom.sha1` — SHA-1 of the expected baserom (a hash record only, not the ROM)
 

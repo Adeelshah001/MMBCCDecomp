@@ -1,0 +1,29 @@
+/* GetPtr14_265D0 @ 0x080265D0 (34 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
+ * Pret source: mmbcc/src/wave11_B_old.c (registry: src/wave11_B_old.c).
+ * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
+ * Section attribute kept: the app's judge reads the symbol's own section.
+ * .set alias blocks from the pret file are NOT copied here; the aliases live
+ * in the manifest symbols so the judge resolves them.
+ */
+
+#include "common.h"
+
+typedef signed short s16;
+
+/* 0x080265D0 (34 B): returns &entry[14] of the same 28-byte table,
+ * or NULL if idx > 127 or entry[25] == 0. */
+__attribute__((section(".text.w11b_080265d0")))
+u8 *GetPtr14_265D0(void *ctx, s16 idx)
+{
+    u8 *base;
+    u8 *entry;
+    u32 addr;
+    if ((u16)idx > 127)
+        return 0;
+    base = *(u8 **)((u8 *)ctx + 4);
+    addr = (u32)(u16)idx * 28 + (u32)base;
+    entry = (u8 *)addr;
+    if (entry[25] == 0)
+        return 0;
+    return entry + 14;
+}
