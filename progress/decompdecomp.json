@@ -7381,7 +7381,7 @@
   {
    "name": "sub_08004C10",
    "vram": 134237200,
-   "size": 428,
+   "size": 383,
    "status": "open"
   },
   {
@@ -11443,7 +11443,7 @@
   {
    "name": "sub_0801DE84",
    "vram": 134340228,
-   "size": 320,
+   "size": 316,
    "status": "open"
   },
   {
@@ -14065,7 +14065,7 @@
   {
    "name": "sub_080344F0",
    "vram": 134431984,
-   "size": 1288,
+   "size": 118,
    "status": "open"
   },
   {
@@ -16621,7 +16621,7 @@
   {
    "name": "DupThunks_0804DCEC",
    "vram": 134536428,
-   "size": 28,
+   "size": 2,
    "status": "asm"
   },
   {
