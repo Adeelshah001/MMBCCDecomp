@@ -1,0 +1,26 @@
+/* Wrap_0800ec7c @ 0x0800EC7C (92 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
+ * Pret source: mmbcc/src/w36a_0800ec7c_MATCHED.c (registry: src/w36a_0800ec7c_MATCHED.c).
+ * Pret compiler: agbcc (pattern rule); decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
+ * Section attribute kept: the app's judge reads the symbol's own section.
+ * .set alias blocks from the pret file are NOT copied here; the aliases live
+ * in the manifest symbols so the judge resolves them.
+ */
+
+
+typedef short s16;
+
+extern s8 sub_08010138(u8 a, u32 b, s16 c, s16 d, s16 e, s16 f, s8 g);
+
+extern void sub_0800E1F0(u8 v);
+
+extern u8 gUnknown_08173A04[];
+
+s8 sub_0800EC7C(u8 a, u32 b, s16 c, s16 d, s16 e, s16 f, s8 g)
+{
+    s8 r = sub_08010138(gUnknown_08173A04[a], b, c, d, e, f, g);
+    if (r == 1) {
+        sub_0800E1F0(12);
+        return 1;
+    }
+    return r;
+}

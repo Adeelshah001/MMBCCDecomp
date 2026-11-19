@@ -1,0 +1,26 @@
+/* Sub_080110E0 @ 0x080110E0 (76 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
+ * Pret source: mmbcc/src/w35c_080110e0_MATCHED.c (registry: mmbcc/src/w35c_080110e0_MATCHED.c).
+ * Pret compiler: agbcc (pattern rule); decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
+ * Section attribute kept: the app's judge reads the symbol's own section.
+ * .set alias blocks from the pret file are NOT copied here; the aliases live
+ * in the manifest symbols so the judge resolves them.
+ */
+
+
+typedef short s16;
+
+extern s16 sub_08016F98(u8 a);
+
+extern u8 sub_08016FAC(u8 a, u8 i);
+
+extern void sub_08002AFC(u8 v, int w);
+
+void sub_080110E0(u8 a, u8 b)
+{
+    s16 n = sub_08016F98(a);
+    s16 i;
+    if (n <= 0)
+        return;
+    for (i = 0; i < n; i++)
+        sub_08002AFC((u8)sub_08016FAC(a, (u8)i), ((u32)b << 21) >> 16);
+}

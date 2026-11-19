@@ -1,104 +1,54 @@
-# MMBCCDecomp
+# BATTLECHIPGP: decompdecomp progress
 
-![Logo](docs/logo.jpg)
+This is a saved decompilation project created with [decompdecomp](https://github.com/n-delic/decompdecomp).
+AI agents were used during the decompilation; their C attempts were kept only when decompdecomp's byte-for-byte
+judge accepted them as matches.
 
-> [!NOTE]
-> **AI usage disclosure:** This Decompilation project was developed entirely using Muse (Meta).
+## Project details
 
-A work-in-progress matching decompilation of **Mega Man Battle Chip Challenge (USA)** for the Game Boy Advance, in the pret style: C source that compiles with the era-appropriate toolchain to a **byte-identical** ROM.
+<!-- decompdecomp:details:start -->
+- **Game:** BATTLECHIPGP
+- **Platform:** gba
+- **Compiler:** agbcc
+<!-- decompdecomp:details:end -->
+<!-- decompdecomp:progress:start -->
+- **Progress:** 408 matching function(s), 6 best attempt(s)
+- **Completion:** 408 / 1,595 functions (25.6%). 9 set aside, excluded from completion.
+<!-- decompdecomp:progress:end -->
 
-This repository does **not** contain any game assets or a ROM. An existing copy of the game, legally obtained by you, is required to build.
+## What's in this folder
 
-## Progress
-
-**C-matched: 1293 / 1677 functions (77.1%)**
+This folder is the whole of the work, and the only part of the project to share or keep in git. It holds no game
+data: everything else in the project's folder was made from the game (the ROM, `asm/`, `assets/`, the build files)
+and stays on your computer.
 
 ```
-███████████████████████░░░░░░░ 77.1% (1293/1677)
+src/<function>.c      each matched function's C, byte for byte
+best/<function>.c     the closest attempt so far at each function that doesn't match yet
+include/common.h      the shared header every function is compiled with (common_<part>.h: a part's own)
+decompdecomp.json     the game's fingerprint (its SHA-1, never the game), the compiler and its flags, the
+                      functions' layout and names, notes, instructions, which functions helpers take first, what agents
+                      learned, who matched what
+README.md             this file
 ```
 
-- 13 additional functions verified as assembly
-- **1306 byte-identical functions total**
-- Current build: 8,388,608 bytes, verified reproducible (SHA-1 `5c17f049ba76a8b457e4a0663a8a2e04b0d04978` for the in-progress build)
-- Next milestone: 80% (1342/1677, 49 short)
+## Continue on another computer
 
-Per-phase progress:
+Open decompdecomp, choose **New project → Open a saved project**, then pick this folder (or paste its git
+repository's address) and your own copy of the game. decompdecomp checks it's the same game and judges every saved
+function again: a match counts because it matches, not because a file says so.
 
-- Phase 0 Toolchain: ██████████ 100%
-- Phase 1 Disassembly: ██████████ 100%
-- Phase 2 Boundaries / naming: ██████████ 100%
-- Phase 3 Matching C: ████████░░ 77.1% (1293/1677)
-- Phase 4 Assets: ░░░░░░░░░░ 0% (text codec still unknown)
-- Phase 5 Byte-identical build: ░░░░░░░░░░ 0% (pending `make compare`)
+## Collaborate
 
-See [docs/STATUS.md](docs/STATUS.md) for the current status and `memory.md` for the verified state snapshot.
+This folder is the source of truth. Edit its C, headers, names, notes or settings and pull or merge contributions
+here. decompdecomp picks up changes automatically and judges changed code again. Deleted sources reopen their
+functions. Keep git conflict markers out of these files; unresolved conflicts pause synchronization.
 
-## Dependencies
+<!-- decompdecomp:visuals:start -->
+## Progress map
 
-- `make`, `git`, a host C compiler, `python3`
-- `binutils-arm-none-eabi` 2.42 (ARM cross-binutils: assembler, linker, objcopy)
-- `agbcc` — the era-appropriate GBA C compiler, commit `da598c1` from [pret/agbcc](https://github.com/pret/agbcc) (both `agbcc` and `old_agbcc` variants are used)
-- `gbafix` / `gbagfx` — header and graphics tools (sources vendored under `mmbcc/tools/`; build them first, see below)
+![Decompilation completion and function map](decompdecomp-progress.svg)
 
-## Building
-
-Clone the repository:
-
-```sh
-git clone https://github.com/Adeelshah001/MMBCCDecomp.git
-cd MMBCCDecomp
-```
-
-Place your legally obtained dump of Mega Man Battle Chip Challenge (USA) as `mmbcc/baserom.gba`. It is never committed; `make check` verifies it is the expected dump by SHA-1 before anything else trusts it.
-
-Build the helper tools from source (the top-level `make` does not build them for you):
-
-```sh
-make -C mmbcc/tools/gbafix
-```
-
-Build `agbcc` from [pret/agbcc](https://github.com/pret/agbcc) at commit `da598c1` and install the resulting tree (with `bin/`, `lib/` and `include/`) as `mmbcc/tools/agbcc/`.
-
-Then build from the `mmbcc/` directory:
-
-```sh
-cd mmbcc
-make check            # verifies your baserom by SHA-1
-make                  # builds mmbcc.gba (8,388,608 bytes)
-```
-
-Verify the build against the original:
-
-```sh
-make compare
-```
-
-`make compare` gates on SHA-1 `72309736f3820470c6f372d6a05ad1f16bc5a946` (8,388,608 bytes, header title `BATTLECHIPGP`, game code `A89E`). The project is done when `make compare` passes. Until then, matched functions are verified individually: a function counts as matched only when its compiled bytes are byte-identical to the baserom, verified by build and diff (see `mmbcc/tools/regression_check.py`).
-
-## Continue in decompdecomp
-
-The `progress/` folder is a [decompdecomp](https://github.com/n-delic/decompdecomp) save of this project: 1,271 matched functions (74.6% of the 1,703 open functions in the app's layout), built from the pret sources in `mmbcc/`. To continue there, clone the repository as above, then in decompdecomp choose **New project → Open a saved project**, pick the `progress/` folder, and point it at your own copy of the game. decompdecomp checks the ROM's SHA-1 and re-judges every saved function: a match counts because it matches, not because a file says so.
-
-Note: the app judges with `agbcc` only, so the 696 functions this project built with `old_agbcc` will re-judge as best attempts until the app supports compiler ranges; 22 matched functions (12 inside `#if 0`, 10 in assembly files) did not carry over. See `progress/README.md` for the full carry-over notes. No ROM is in this folder — the manifest holds only the game's SHA-1.
-
-## Layout
-
-- `ANALYSIS.md` — full ROM research and analysis findings (evidence first)
-- `PLAN.md` — multiphase decompilation plan with entry/exit criteria
-- `DECOMP_MEMORY.md` — coordinator handoff: per-wave bests, mechanism closures, and the open ruling questions for the remaining functions
-- `memory.md` — central memory: verified headline state and where to recover it from
-- `mmbcc/` — the pret-style project: `Makefile`, `ldscript.ld`, `src/` (matched C), `asm/` (verified assembly), `tools/` (build scripts)
-- `progress/` — decompdecomp save (see "Continue in decompdecomp" above): `decompdecomp.json`, `src/` (one file per matched function), `include/common.h`
-- `docs/` — research notes, function lists, cross-references, per-wave match notes, `match_status.tsv` (the match registry)
-- `rom.sha1` — SHA-1 of the expected baserom (a hash record only, not the ROM)
-
-## Legal note (absolute)
-
-- **No ROM in this repository.** The baserom is supplied by the builder at build time and verified by SHA-1. This repository contains no game ROM, no BIOS, and no copyrighted assets (graphics, audio, text content).
-- The baserom used for verification is a legally obtained dump: SHA-1 `72309736f3820470c6f372d6a05ad1f16bc5a946` (8,388,608 bytes, header title `BATTLECHIPGP`, game code `A89E`).
-- Never download ROMs or distribute copyrighted assets. Analysis reads the builder's file in place; the tree builds from a user-supplied baserom only.
-- Quirk reproduced by the build: the original cartridge's header checksum byte at `0xBD` is `0x7B` (computed `0x94`) — a factory mismatch, shipped on the cartridge, reproduced as-is.
-
-## Credits
-
-Built in the pret style, using `agbcc` and tooling in the lineage of the pret projects (see [decomps.net/tools](https://decomps.net/tools)).
+Green: matched. Gold: attempted. Grey: open. Red: set aside. Functions follow address, then source unit and name order.
+The image and tagged counts update on save. Keep project notes outside the hidden `decompdecomp` comment pairs to preserve them.
+<!-- decompdecomp:visuals:end -->
