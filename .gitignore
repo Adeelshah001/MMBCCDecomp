@@ -1,12 +1,19 @@
-# Build output
+# Local ROMs, saves, and generated output
+*.[Gg][Bb][Aa]
+*.sav
+*.sram
+/.decomp/
+/assets/
+/asm/
 /build/
-mmbcc/build/
+/rom.s
+/candidates.cfg
+/functions.cfg
+
+# Standalone build output
+/mmbcc/build/
+/mmbcc/tools/agbcc/
 *.o
 *.d
 *.elf
 *.map
-# Game data — never commit ROMs, saves, or the base ROM
-*.gba
-*.sav
-*.sram
-baserom.gba

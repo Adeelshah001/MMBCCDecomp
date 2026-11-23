@@ -1,71 +1,89 @@
-/* Sub_0801969C @ 0x0801969C (176 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/w37c2_0801969c_MATCHED.c (registry: mmbcc/src/w37c2_0801969c_MATCHED.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
-
-
 typedef short s16;
-typedef signed int s32;
-
-extern void sub_0800DD4C(u8 *o, s32 x, s32 y);
-
-extern void sub_0800DD08(u32 *out, u8 *src);
-
-extern void sub_080178A8(int a, int b, s16 c, s16 d, u8 *e);
-
-extern u8 sub_08017494(u8 *p, int bit);
-
-extern u8 sub_08017474(u8 *p);
-
-u8 sub_0801969C(u8 *s)
+typedef int s32;
+typedef struct 
 {
-    u32 out[2];
-    u8 t;
-    register s32 x;
-    register s32 y;
-    int mode;
-    sub_0800DD4C(s, *(s32 *)(s + 88), *(s32 *)(s + 92));
-    *(s32 *)(s + 88) += *(s32 *)(s + 96);
-    *(s32 *)(s + 92) += *(s32 *)(s + 100);
-    sub_0800DD08(out, s);
-    x = out[0];
-    y = out[1];
-    mode = s[13];
-    if (mode == 1)
-        goto c1;
-    if (mode > 1)
-        goto gt1;
-    if (mode == 0)
-        goto c0;
-    goto ret0;
-gt1:
-    if (mode == 2)
-        goto c2;
-    goto ret0;
-c0:
-    if (x <= 12800)
-        goto ret0;
-    sub_080178A8(82, ((u32)s[35] << 28) >> 28, 15360, (s16)y, *(u8 **)(s + 44));
-    if (sub_08017494(*(u8 **)(s + 44), 0) != 0) {
-        s[13] = 1;
-        goto ret0;
-    }
-    t = s[10] & 253;
-    t = t & 254;
-    s[10] = t;
-    goto c1tail;
-c1:
-    if (x <= 30720)
-        goto ret0;
-c1tail:
-    s[13] = 2;
-    goto ret0;
-c2:
-    if ((u8)sub_08017474(*(u8 **)(s + 44)) > 5)
-        return 1;
-ret0:
-    return 0;
+  u8 pad0[10];
+  u8 flags;
+  u8 padB[2];
+  u8 phase;
+  u8 padE[21];
+  u8 variant;
+  u8 pad24[8];
+  void *owner;
+  u8 pad30[40];
+  s32 x;
+  s32 y;
+  s32 dx;
+  s32 dy;
+} Object1969C;
+extern void sub_0800DD4C(Object1969C *, s32, s32);
+extern void sub_0800DD08(s32 *, Object1969C *);
+extern void sub_080178A8(int, int, s16, s16, void *);
+extern u8 sub_08017494(void *, int);
+extern u8 sub_08017474(void *);
+inline u8 *inline_fn(Object1969C *arg0)
+{
+  return &arg0->flags;
 }
+
+u8 sub_0801969C(Object1969C *obj)
+{
+  s32 xy[2];
+  u8 flags;
+  u8 variant;
+  int mask;
+  register s32 y;
+  register s32 x;
+  s32 new_var;
+  Object1969C *new_var2;
+  sub_0800DD4C(obj, obj->x, obj->y);
+  obj->x += obj->dx;
+  obj->y += obj->dy;
+  sub_0800DD08(xy, obj);
+  x = xy[0];
+  y = xy[1];
+  switch (obj->phase)
+  {
+    new_var = x;
+    case 0:
+      if (new_var > 12800)
+    {
+      variant = obj->variant;
+      sub_080178A8(82, (((u32) variant) << 28) >> 28, 15360, (s16) y, obj->owner);
+      if (sub_08017494(obj->owner, 0))
+      {
+        obj->phase = 1;
+      }
+      else
+      {
+        mask = 253;
+        flags = mask & (*((volatile u8 *) inline_fn(obj)));
+        flags &= 254;
+        obj->flags = flags;
+        goto advance;
+      }
+    }
+      break;
+
+    new_var2 = obj;
+    case 1:
+      if (x > 30720)
+    {
+      advance:
+      new_var2->phase = 2;
+
+    }
+      break;
+
+    case 2:
+      if (sub_08017474(obj->owner) > 5)
+    {
+      return 1;
+    }
+      break;
+
+  }
+
+  return 0;
+}
+

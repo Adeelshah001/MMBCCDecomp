@@ -27,7 +27,7 @@ extern int sub_08024384(int a);
 
 extern u8 sub_0800B148(u8 a, s16 b, u8 c);
 
-extern int sub_0800B320(u32 a, u32 b, u32 c, u32 d);
+extern int StartSelectionWithEntries(u32 a, u32 b, u32 c, u32 d);
 
 extern u8 sub_0800B2D8(void);
 
@@ -59,7 +59,7 @@ int sub_080424F4(u8 *s)
             int v = sub_08024384(4096);
             u8 idx = (u8)(v - 50);
             int tv = gUnknown_08232A5C[idx];
-            if ((u8)sub_0800B320(tv, gUnknown_082325D4, gUnknown_082325DC, 0) == 0)
+            if ((u8)StartSelectionWithEntries(tv, gUnknown_082325D4, gUnknown_082325DC, 0) == 0)
                 break;
         }
         s[0x46AD]++;

@@ -9,7 +9,7 @@
 
 extern u8 gUnknown_0200BD20[];
 
-extern void sub_080253F8(u8 *a, u8 *b);
+extern void InitChipIndexTables(u8 *a, u8 *b);
 
 extern void sub_0802616C(u8 *a, u8 *b);
 
@@ -22,7 +22,7 @@ void sub_08023F28(u8 *s)
     u8 *q62;
     *(u16 *)(gUnknown_0200BD20 + 88) = 1;
     *(u32 *)(gUnknown_0200BD20 + 52) = (u32)s;
-    sub_080253F8(gUnknown_0200BD20, s + 436);
+    InitChipIndexTables(gUnknown_0200BD20, s + 436);
     sub_0802616C(gUnknown_0200BD20 + 20, *(u8 **)(gUnknown_0200BD20 + 52));
     sub_0802617C(gUnknown_0200BD20 + 24, *(u8 **)(gUnknown_0200BD20 + 52) + 1184);
     s = s + 5028;

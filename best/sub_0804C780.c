@@ -1,34 +1,70 @@
-/* Sub_0804C780 @ 0x0804C780 (52 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/w35b_0804c780_MATCHED.c (registry: mmbcc/src/w35b_0804c780_MATCHED.c).
- * Pret compiler: agbcc (pattern rule); decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
+typedef void (*AudioCallback)(u8 *);
 
+struct MusicPlayer {
+    u32 song;
+    u8 reserved04[0x20];
+    u16 fadeInterval;
+    u16 fadeCounter;
+    u16 fadeVolume;
+    u8 reserved2A[0x0A];
+    u32 ident;
+};
 
-extern void sub_0804CECC(u32 x);
+struct MusicPlayerEntry {
+    struct MusicPlayer *player;
+    void *tracks;
+    u8 trackCount;
+    u8 reserved09[3];
+};
 
-void sub_0804C780(int idx)
+struct SongEntry {
+    u32 song;
+    u16 playerIndex;
+    u16 priority;
+};
+
+extern AudioCallback D_0200CE08;
+extern const struct MusicPlayerEntry D_08106D7C[];
+extern const struct SongEntry D_08106DD0[];
+extern const u8 D_00000007[];
+extern void sub_0804CECC(struct MusicPlayer *);
+
+void sub_0804CA08(u8 *state)
 {
-    u32 sh = (u32)idx << 16;
-    register u32 *tbl1 = (u32 *)0x08106d7c;
-    register u32 *tbl2 = (u32 *)0x08106dd0;
-    u32 t;
-    u16 v;
-    u32 base;
-    u32 v2;
-    u32 v3;
-    u32 v4;
-    
-    
-    t = (sh >> 13) + (u32)tbl2;
-    v = *(u16 *)(t + 4);
-    base = (v * 3) * 4;
-    base += (u32)tbl1;
-    v2 = *(u32 *)base;
-    v3 = *(u32 *)v2;
-    v4 = *(u32 *)t;
-    if (v3 == v4)
-        sub_0804CECC(v2);
+    D_0200CE08(state);
+}
+
+void sub_0804C85C(struct MusicPlayer *player, u16 speed)
+{
+    if (player->ident == 0x68736D53) {
+        player->fadeCounter = speed;
+        player->fadeInterval = speed;
+        player->fadeVolume = 0x101;
+    }
+}
+
+void m4aMPlayAllStop(void)
+{
+    unsigned int count = (u16)(u32)D_00000007;
+    const struct MusicPlayerEntry *entry;
+
+    if (count != 0) {
+        entry = D_08106D7C;
+        do {
+            sub_0804CECC(entry->player);
+            entry++;
+        } while (--count != 0);
+    }
+}
+
+void sub_0804C780(int rawIndex)
+{
+    u32 index = (u32)rawIndex << 16;
+    const struct MusicPlayerEntry *players = D_08106D7C;
+    const struct SongEntry *songs = D_08106DD0;
+    const struct SongEntry *song = (const struct SongEntry *)((const u8 *)songs + (index >> 13));
+    struct MusicPlayer *player = players[song->playerIndex].player;
+
+    if (player->song == song->song)
+        sub_0804CECC(player);
 }

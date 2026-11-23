@@ -11,7 +11,7 @@ extern void sub_08004F18(void);
 
 extern u8 sub_0800B148(u32 a, u32 b, u32 c);
 
-extern u8 sub_0800B320(u32 a, u32 b, u32 c, u32 d);
+extern u8 StartSelectionWithEntries(u32 a, u32 b, u32 c, u32 d);
 
 extern void sub_0800B448(u32 a, u32 b, u32 c);
 
@@ -33,7 +33,7 @@ void sub_08046960(u8 *s)
             goto inc;
         break;
     case 1:
-        if (sub_0800B320(0x08232e8c, 0, 0, 0) == 0)
+        if (StartSelectionWithEntries(0x08232e8c, 0, 0, 0) == 0)
             break;
         sub_0800B448(0, 0x8d5, 0);
         goto inc;

@@ -7,7 +7,7 @@
  */
 
 
-extern void sub_0800244C(u8 *p, int v);
+extern void QueueResourceTransfer(u8 *p, int v);
 
 void sub_0800C878(u8 *s)
 {
@@ -30,5 +30,5 @@ void sub_0800C878(u8 *s)
     
     w = 12;
     w &= *fp;
-    sub_0800244C(entry, (w << 12) + 0x2320);
+    QueueResourceTransfer(entry, (w << 12) + 0x2320);
 }

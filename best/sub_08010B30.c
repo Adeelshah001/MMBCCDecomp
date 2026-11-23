@@ -1,40 +1,34 @@
-/* Sub_08010B30 @ 0x08010B30 (112 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/w36b_08010b30_MATCHED.c (registry: mmbcc/src/w36b_08010b30_MATCHED.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
-
-
 typedef u8 (*Func)(u8 *s);
-
 extern Func gUnknown_08173EB8[];
-
+extern u8 sub_0804DCD0(u8 *base, Func func);
 extern void sub_08004F18(void);
-
 extern void sub_0800D568(u32 x);
-
 extern void sub_0800D59C(u32 x);
-
 extern void sub_0801112C(u8 x);
-
 extern void sub_08004F80(void);
 
 void sub_08010B30(void)
 {
-    u8 *base = (u8 *)0x020051b0;
-    if ((1 & base[15]) == 0) {
+    u8 *base = (u8 *)0x020051B0;
+    u8 one = 1;
+    Func func;
+
+    if ((one & base[0x0F]) == 0) {
         sub_08004F18();
-        base[4] = ((Func *)0x08173eb8)[base[4]](base);
-        if (base[20] != 0) {
-            base[20]--;
+        func = gUnknown_08173EB8[base[4]];
+        base[4] = sub_0804DCD0(base, func);
+        if (base[0x14] != 0) {
+            base[0x14]--;
         }
-        sub_0800D568(*(u32 *)0x020053c0);
-        sub_0800D59C(*(u32 *)0x020053c0);
+        {
+            u32 *other = (u32 *)0x020053C0;
+            sub_0800D568(*other);
+            sub_0800D59C(*other);
+        }
         sub_0801112C(base[2]);
         sub_08004F80();
     } else {
-        base[4] = gUnknown_08173EB8[base[4]](base);
+        func = gUnknown_08173EB8[base[4]];
+        base[4] = sub_0804DCD0(base, func);
     }
 }

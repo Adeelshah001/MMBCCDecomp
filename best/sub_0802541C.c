@@ -1,17 +1,29 @@
-/* F_0802541C @ 0x0802541C (70 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/w17c_misc_old.c (registry: src/w17c_misc_old.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
+u8 sub_08025478(void *s, u16 idx)
+{
+    u16 lim = *(u16 *)((u8 *)s + 18);
+    u8 result;
+    if (idx < lim)
+        result = *(*(u8 **)((u8 *)s + 8) + idx);
+    else
+        result = 0;
+    return result;
+}
 
+void sub_08025290(u8 *p, u8 i);
+
+void sub_080254B4(u8 *p, u8 i)
+{
+    u8 *q = *(u8 **)(p + 8) + i;
+    u32 base = *(u32 *)(p + 4);
+    u8 *r = (u8 *)(*q + base);
+    (*r)--;
+    if (*r == 0)
+        sub_08025290(p + 12, i);
+}
 
 extern void sub_0802533C(u8 *p, u8 idx);
-
 extern void sub_080253BC(u8 *s);
 
-/* 0x0802541c (70 B): F_0802533c loop + Fill_253BC. */
 void sub_0802541C(u8 *s, u8 *p, u16 n)
 {
     u16 i;
@@ -19,7 +31,21 @@ void sub_0802541C(u8 *s, u8 *p, u16 n)
         u8 *s4;
         sub_0802533C(*(u8 **)s, p[i]);
         s4 = *(u8 **)(s + 4);
-        s4[p[i]]++;
+        (*(u8 *)((u32)p[i] + (u32)s4))++;
     }
     sub_080253BC(s);
+}
+
+extern void sub_0802526C(u8 *, u8);
+extern u8 sub_08025324(u8 *, u8);
+
+void sub_080254E0(u8 *s, u8 i)
+{
+    u8 *count = *(u8 **)(s + 4) + i;
+    u8 limit = sub_08025324(*(u8 **)s, i);
+    if (*count != limit) {
+        (*(u8 **)(s + 4))[i]++;
+        if ((*(u8 **)(s + 4))[i] == 1)
+            sub_0802526C(s + 12, i);
+    }
 }

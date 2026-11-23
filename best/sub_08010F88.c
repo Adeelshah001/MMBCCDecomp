@@ -1,27 +1,42 @@
-/* ClearSlot_10F88 @ 0x08010F88 (44 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/wave8_u_old.c (registry: src/wave8_u_old.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
+extern void sub_080111B4(u8 state);
 
+int sub_08011054(u8 *out)
+{
+    u8 *state = (u8 *)0x020051B0;
+    int result = 0;
+    if (state[4] == 1) {
+        *out = state[12];
+        result = 1;
+    }
+    return result;
+}
 
-extern u8 gUnknown_020051B0[];
+int sub_08010FB4(u8 slot)
+{
+    u32 offset = slot * 12;
+    u8 *entry = (u8 *)(offset + 0x020051C8);
+    if (entry[0] != 0)
+        goto occupied;
+    if (((s8 *)entry)[1] != 0)
+        goto occupied;
+    return 1;
+occupied:
+    return 0;
+}
 
 u32 sub_08010F88(u8 x)
 {
-    u8 *p = gUnknown_020051B0;
+    u8 *p = (u8 *)0x020051B0;
     int off;
     u8 *q;
-    u8 v;
-
-    v = p[3];
-    v &= ~(1 << x);
+    u32 mask = 1U << x;
+    u32 v = p[3];
+    v &= ~mask;
     {
-        u8 z = 0;
+        u8 z;
 
         p[3] = v;
+        z = 0;
         off = x * 12;
         p += 24;
         q = p + off;

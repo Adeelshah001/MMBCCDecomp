@@ -7,12 +7,12 @@
  */
 
 
-extern u32 *sub_08017000(u8 a, u8 b, u8 c, u8 d);
+extern u32 *CreateBattleObject(u8 a, u8 b, u8 c, u8 d);
 
 /* 0x0801709c (40 B): Node_PopAndInit(0,0,0,0) leaf. */
 u32 *sub_0801709C(u8 a)
 {
-    u32 *n = sub_08017000(0, 0, 0, 0);
+    u32 *n = CreateBattleObject(0, 0, 0, 0);
     if (n != 0) {
         u8 *q = (u8 *)n;
         u32 z = 0;

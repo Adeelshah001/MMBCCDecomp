@@ -1,10 +1,4 @@
-/* Func_0801EAC4 @ 0x0801EAC4 (268 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/w51c_0801eac4_MATCHED.c (registry: src/w51c_0801eac4_MATCHED.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
+extern u32 *D_082243D8[];
 
 
 extern void sub_0800D9FC(u8 *s);
@@ -27,7 +21,7 @@ void sub_0801EAC4(u8 *s) {
                 return;
         }
         if ((cur[0] & 1) != 0) {
-            u32 **base = (u32 **)0x082243D8;
+            u32 **base = D_082243D8;
             register u32 sh;
             u32 *slot;
             
@@ -77,8 +71,9 @@ void sub_0801EAC4(u8 *s) {
         }
         sub_0800D9EC(s, cur[2]);
         hv = *(u16 *)0x081705B0;
-        b = *(u8 *)(0x020031E4 + ((hv >> 4) << 1));
-        cl = (u8)(b & 3);
+        cl = 3;
+        b = *(volatile u8 *)(0x020031E4 + ((hv >> 4) << 1));
+        cl &= b;
         {
             int cl2 = cl;
             int mk;

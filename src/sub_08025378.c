@@ -8,6 +8,6 @@
 
 
 /* IdxByte_08025378 @ 0x08025378 */
-u8 sub_080252F8(u8 *p);
+u8 GetChipInventoryEntryFlag(u8 *p);
 
-u8 sub_08025378(u8 *p, u8 i) { return sub_080252F8(p + i); }
+u8 sub_08025378(u8 *p, u8 i) { return GetChipInventoryEntryFlag(p + i); }

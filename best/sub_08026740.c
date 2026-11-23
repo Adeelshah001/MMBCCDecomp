@@ -1,70 +1,38 @@
-/* Task_Clock_08026740 @ 0x08026740 (116 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/w25b_08026740.c (registry: mmbcc/src/w25b_08026740.c).
- * Pret compiler: agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
-
-
-typedef struct {
-    u8 pad0[13];
-    u8 mode;
-    u8 pad1[3];
-    u8 f17;
-    u8 pad2[17];
-    u8 f35;
-    u8 pad3[8];
-    u32 f44;
-    u8 pad4[40];
-    u32 f88;
-    u32 f92;
-    u32 f96;
-    u32 f100;
-} S;
-
-extern void sub_08000EF8(void);
-
-extern void sub_08000DC0(u32 slot);
+extern u8 D_020070F0[];
+extern void (*const D_0822D8EC[])(u8 *);
+void sub_08000EF8(void);
+void sub_08000DC0(u32 slot);
 
 void sub_08026740(void)
 {
-    u8 *S;
-    u16 max;
+    u8 *state;
+    u16 maxTime;
+
     sub_08000EF8();
-    S = (u8 *)0x020070F0;
-    max = 0x633B;
+    state = D_020070F0;
+    maxTime = 0x633B;
     for (;;) {
-        if (S[0] != 11) {
-            S[16]++;
-            if ((u8)S[16] > 59) {
-                S[16] = 0;
-                if (S[17] <= 58) {
-                    S[17]++;
-                } else {
-                    register u32 hrs = *(u16 *)(S + 18);
-                    if (hrs != max) {
-                        S[17] = 0;
-                        if (S[18] <= 58) {
-                            S[18]++;
-                        } else {
-                            if (S[19] != 99) {
-                                S[19]++;
-                                S[18] = 0;
-                            }
-                        }
+        if (state[0] != 11) {
+            if (++state[16] > 59) {
+                int zero = 0;
+                state[16] = zero;
+                if (state[17] <= 58) {
+                    state[17]++;
+                } else if (*(u16 *)(state + 18) != maxTime) {
+                    state[17] = zero;
+                    if (state[18] <= 58) {
+                        state[18]++;
+                    } else if (state[19] != 99) {
+                        state[19]++;
+                        state[18] = zero;
                     }
                 }
             }
         }
         {
-            register u32 *tbl = (u32 *)0x0822D8EC;
-            register u32 idx = S[0];
-            register u32 idx4 = idx << 2;
-            register u32 *fnaddr;
-            
-            fnaddr = (u32 *)(idx4 + (u32)tbl);
-            ((void (*)(u8 *))*fnaddr)(S);
+            void (*const *table)(u8 *) = D_0822D8EC;
+            u32 mode = state[0];
+            table[mode](state);
         }
         sub_08000DC0(1);
     }

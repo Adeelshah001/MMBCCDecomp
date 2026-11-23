@@ -9,7 +9,7 @@
 
 typedef signed int s32;
 
-extern void sub_0800B4E4(void);
+extern void ResetSelectionDisplayEntries(void);
 
 extern void sub_0800B4C8(void);
 
@@ -28,7 +28,7 @@ u32 sub_0800A6BC(u8 *p)
 
     if (v == 0) {
         p[1] = 1;
-        sub_0800B4E4();
+        ResetSelectionDisplayEntries();
         sub_0800B4C8();
         t = p[19];
         t &= -3;

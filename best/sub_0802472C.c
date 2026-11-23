@@ -1,19 +1,40 @@
-/* ConstZeroS16_2472C @ 0x0802472C (6 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/wave3_e_old.c (registry: src/wave3_e_old.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
 
+struct ChipRecord24618 {
+    u8 unk00[8];
+    u16 field08;
+    u8 unk0A[2];
+    u8 field0C;
+    u8 field0D;
+    u8 unk0E[2];
+};
 
-typedef short s16;
+extern const struct ChipRecord24618 D_0822740C[];
 
-/* 0x0802472C (6B, tentative): computes (u32)a << 24, tests it, returns 0
- * either way (s16 per caller sign-extension). */
-s16 sub_0802472C(u8 a)
+short sub_0802472C(u8 input)
 {
-    if ((u32)a << 24)
+    return (short)((u32)input << 24);
+}
+
+u8 sub_08024618(u8 rawIndex)
+{
+    register u32 index = rawIndex;
+    if (index > 248)
         return 0;
-    return 0;
+    return D_0822740C[index].field0D;
+}
+
+u8 sub_080245FC(u8 rawIndex)
+{
+    register u32 index = rawIndex;
+    if (index > 248)
+        return 0;
+    return D_0822740C[index].field0C;
+}
+
+u16 sub_080245E0(u8 rawIndex)
+{
+    register u32 index = rawIndex;
+    if (index > 248)
+        return 0;
+    return D_0822740C[index].field08;
 }

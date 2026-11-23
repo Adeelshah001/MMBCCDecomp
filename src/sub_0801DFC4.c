@@ -9,7 +9,7 @@
 
 typedef signed short s16;
 
-extern u32 *sub_08017000(u8 a, u8 b, u8 c, u8 d);
+extern u32 *CreateBattleObject(u8 a, u8 b, u8 c, u8 d);
 
 extern void sub_0801E87C(s16 a, s16 b, u32 *out);
 
@@ -24,7 +24,7 @@ u8 *sub_0801DFC4(int a, int b, int c, int d)
     s16 sc, sd;
     u32 out[2];
 
-    n = (u8 *)sub_08017000(0, 0, 0, 13);
+    n = (u8 *)CreateBattleObject(0, 0, 0, 13);
     if (n != 0)
     {
         u32 z;

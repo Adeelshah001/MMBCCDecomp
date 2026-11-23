@@ -1,30 +1,43 @@
-/* sub_0800B368 @ 0x0800B368 (72 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/wave10_T_old.c (registry: src/wave10_T_old.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
+extern u8 D_02004E40[];
+extern void sub_0800B520(u32 *b, u32 c, u32 d);
+extern void ResetSelectionDisplayEntries(void);
+extern void sub_0800B4C8(void);
 
-
-extern u8 gUnknown_02004E40[];
-
-void sub_0800B520(u32 a, u32 b, u32 c);
-
-void sub_0800B4E4(void);
-
-void sub_0800B4C8(void);
-
-/* sub_0800B368 @ 0x0800B368 (72 B).
- * If (gEwram_02004E40[4] & 128) != 0: clear base[0..3], base[5]=3,
- * *(u32*)(base+32)=a, call B520(b,c,d)/B4E4()/B4C8(), return 1.
- * Else: base[5]=1, return 0.
- * Key idiom: inverted if ((x & 128) == 0) { else-branch } gives ROM's
- * beq-to-else layout; store order 0,3,2,1 matches ROM's scheduling. */
-u8 sub_0800B368(u32 a, u32 b, u32 c, u32 d)
+u32 sub_0800B308(void)
 {
-    u8 *base = gUnknown_02004E40;
-    if ((base[4] & 128) == 0) {
+    u8 *base = (u8 *)0x02004e40;
+    int mask = 15;
+    if ((mask &= base[4]) != 0)
+        return 0;
+    return 1;
+}
+
+int StartSelectionWithEntries(u32 *a, u32 *b, u32 c, u32 d)
+{
+    u8 *base = (u8 *)0x02004e40;
+    u8 flag = base[4];
+    register u8 g;
+    if ((flag & 15) != 0)
+        return 0;
+    g = 128;
+    g &= flag;
+    if (g == 0) {
+        base[5] = 1;
+        return 0;
+    }
+    *(u32 *)(base + 32) = (u32)a;
+    sub_0800B520(b, c, d);
+    base[5] = 3;
+    ResetSelectionDisplayEntries();
+    sub_0800B4C8();
+    return 1;
+}
+
+u8 sub_0800B368(u32 a, u32 *b, u32 c, u32 d)
+{
+    u8 *base = (u8 *)0x02004e40;
+    int mask = 128;
+    if ((mask &= base[4]) == 0) {
         base[5] = 1;
         return 0;
     }
@@ -35,7 +48,24 @@ u8 sub_0800B368(u32 a, u32 b, u32 c, u32 d)
     base[5] = 3;
     *(u32 *)(base + 32) = a;
     sub_0800B520(b, c, d);
-    sub_0800B4E4();
+    ResetSelectionDisplayEntries();
     sub_0800B4C8();
     return 1;
+}
+
+void ResetSelectionDisplayEntries(void)
+{
+    u8 *base = (u8 *)0x02004e40;
+    u16 i = 0;
+    u8 *entries = base + 0x88;
+    u16 marker = 0x8000;
+    int flags;
+    do {
+        short index = i;
+        *(u16 *)((u32)entries + index * 0x24) = marker;
+        i = index + 1;
+    } while ((short)i <= 2);
+    flags = 4;
+    flags |= base[0x14];
+    base[0x14] = flags;
 }

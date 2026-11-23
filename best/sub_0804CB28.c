@@ -9,7 +9,7 @@
 
 typedef signed int s32;
 
-extern s32 sub_0804DD08(s32 a, s32 b);
+extern s32 __divsi3(s32 a, s32 b);
 
 extern void sub_0804CD34(void);
 
@@ -35,13 +35,13 @@ void sub_0804CB28(u32 keys)
     
     p16 = *(u16 *)(tbl + tm * 2);
     *(u32 *)(p + 16) = p16;
-    p[11] = (u8)sub_0804DD08(1584, p16);
-    v = sub_0804DD08(0x91d1b * p16 + 5000, 10000);
+    p[11] = (u8)__divsi3(1584, p16);
+    v = __divsi3(0x91d1b * p16 + 5000, 10000);
     *(u32 *)(p + 20) = v;
-    *(u32 *)(p + 24) = (sub_0804DD08(0x1000000, v) + 1) >> 1;
+    *(u32 *)(p + 24) = (__divsi3(0x1000000, v) + 1) >> 1;
     *(u16 *)0x04000102 = z;
     dst = (u16 *)0x04000100;
-    *dst = (u16)-sub_0804DD08(0x44940, p16);
+    *dst = (u16)-__divsi3(0x44940, p16);
     sub_0804CD34();
     while (*(volatile u8 *)0x04000006 == 159)
         ;

@@ -1,29 +1,75 @@
-/* FlagA_8628 @ 0x08008628 (44 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/wave8_s_old.c (registry: src/wave8_s_old.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
-
-
-extern u8 gUnknown_02003670[];
-
-s8 sub_08008628(u8 *p)
+void sub_08008BB8(u16 *dest, u16 value, u8 mode)
 {
-    int r;
+    if ((u8)(mode) == 0)
+        *dest = (u16)value;
+}
+extern u8 D_02003670[];
+extern const u8 D_000011AE[];
+int sub_08008680(u8 *p)
+{
+    s8 result;
+    u8 *base;
     u32 flag;
+    volatile u8 *address;
     if (p[11])
-        goto Ldef;
-    flag = gUnknown_02003670[0x11ae] & 1;
-    r = 32;
+        goto fallback;
+    base = D_02003670;
+    address = base + (u32)D_000011AE;
+    flag = 1;
+    flag &= *address;
+    result = 32;
     if (flag)
-        goto Lend;
-    r = 64;
-    goto Lend;
-Ldef:
-    r = 32;
-Lend:
-    
-    return (s8)r;
+        goto done;
+    result = 22;
+    goto done;
+fallback:
+    result = 8;
+done:
+    return result;
+}
+
+int sub_08008654(u8 *p)
+{
+    s8 result;
+    u8 *base;
+    u32 flag;
+    volatile u8 *address;
+    if (p[11])
+        goto fallback;
+    base = D_02003670;
+    address = base + (u32)D_000011AE;
+    flag = 1;
+    flag &= *address;
+    result = 5;
+    if (flag)
+        goto done;
+    result = 6;
+    goto done;
+fallback:
+    result = 5;
+done:
+    return result;
+}
+
+int sub_08008628(u8 *p)
+{
+    s8 result;
+    u8 *base;
+    u32 flag;
+    volatile u8 *address;
+    if (p[11])
+        goto fallback;
+    base = D_02003670;
+    address = base + (u32)D_000011AE;
+    flag = 1;
+    flag &= *address;
+    result = 32;
+    if (flag)
+        goto done;
+    result = 64;
+    goto done;
+fallback:
+    result = 32;
+done:
+    return result;
 }

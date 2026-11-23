@@ -15,3 +15,110 @@ typedef unsigned char u8;
 typedef volatile unsigned char vu8;
 
 #endif /* MMBCC_COMMON_H */
+
+/* Chip lookup with IDs restricted to 0 through 248. */
+u8 sub_080246FC(int rawIndex);
+
+/* Entry wrappers for the scene state at 0x02004E40. */
+void sub_0800B3F8(u8 index, u32 value, u8 mode);
+void sub_0800B448(u8 index, u16 value, u8 mode);
+
+void DrawDecimalDigits(u32 value, u16 tileBase, u8 slot, u8 row, u8 count);
+
+/* Known layouts for the serial link state and slot records. */
+struct SerialLinkStatus {
+    u16 unk00;
+    u16 enabled;
+    u8 id;
+    u8 ready;
+};
+
+struct LinkSlotRecord {
+    u8 unk00[0x14];
+    u8 unk14;
+    u8 unk15;
+    u8 unk16[2];
+};
+
+void UpdateSerialLinkStatus(void);
+void InitLinkSlotRecords(void);
+
+void sub_0800D728(u8 *sprite, int id, int frame);
+
+void InitSceneWorkState(void);
+u8 sub_0800EF3C(u8 *state);
+s8 sub_0800EDB0(u8 input);
+
+struct SpriteState23110;
+void UpdateSpritePositionAndAnimation(struct SpriteState23110 *state);
+void sub_08023264(u8 *state);
+
+void sub_08003134(u32 *state);
+void sub_0800313C(u32 *state);
+void sub_0800314C(u32 *state, u32 value, u32 *previous);
+
+void sub_08004548(void *buffer);
+void sub_0800456C(void);
+
+/* Selection state display-entry initialization. */
+void ResetSelectionDisplayEntries(void);
+
+/* Initialize and clear the chip table buffers. */
+void InitChipIndexTables(u8 *state, u8 *buffer);
+void sub_08025308(u8 *table);
+
+/* Transition to selection mode 3 from mode 1. */
+u32 TrySetSelectionMode3(u8 option, u8 value);
+
+/* Base-36 code conversion and byte-checksum validation. */
+void sub_08023DD8(u8 *bytes, u16 *digits);
+int HasInvalidCodeChecksum(const u8 *bytes, u8 check);
+
+/* Signed fixed-point movement. */
+short CalculateCappedEasingStep(u16 target, u16 current, short maxStep);
+
+/* Selection palette blend and side-slot lookup. */
+void sub_0802142C(u8 *state, u8 blend);
+int FindActiveSideSlot(u8 *state, u8 side);
+
+/* Pending transfers at 0x02002FB0. */
+struct ResourceTransferEntry {
+    u8 flags;
+    u8 padding[3];
+    u32 destination;
+    const void *resource;
+};
+
+struct ResourceTransferQueue {
+    u32 count;
+    struct ResourceTransferEntry entries[16];
+};
+
+/* Scene object slot records based at 0x020051B0. */
+struct SceneObjectSlot {
+    u8 pad0[2];
+    u8 kind;
+    s8 x;
+    s8 y;
+    u8 pad5;
+    u8 status;
+    u8 pad7[5];
+};
+
+u32 CreateSceneObjectInSlot(u8 index, u8 option, u8 x, u8 y, u8 kind);
+
+u32 sub_08024434(u16 a);
+
+void sub_08007798(u8 x, u8 y, u8 palette, u8 animated);
+
+/* Sequence commands consume bytes through the track cursor at +0x40. */
+struct ScriptState4DA;
+void TrackReadByteInto1F(void *unused, struct ScriptState4DA *state);
+void TrackReadByteInto26(void *unused, struct ScriptState4DA *state);
+void TrackReadByteInto27(void *unused, struct ScriptState4DA *state);
+
+/* Tracked audio ID and serial link transition helpers. */
+u16 GetTrackedAudioId(void);
+void sub_0804A328(void);
+void sub_0804A38C(void);
+int sub_0804A40C(void);

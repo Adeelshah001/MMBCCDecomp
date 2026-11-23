@@ -7,14 +7,14 @@
  */
 
 
-u32 sub_080247C4(u8 idx);
+u32 GetChipInventoryCount(u8 idx);
 
 u8 sub_080245C4(u8 idx);
 
 void sub_08037914(u8 *p, u32 b)
 {
     u32 v = (u8)b;
-    u16 r = (u16)sub_080247C4((u8)v);
+    u16 r = (u16)GetChipInventoryCount((u8)v);
     if (r == 1)
         p[0x469c] = (u8)r;
     else if ((u8)sub_080245C4((u8)v) > 3)

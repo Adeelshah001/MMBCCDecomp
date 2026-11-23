@@ -11,7 +11,7 @@ typedef short s16;
 
 typedef struct { u32 x, y; } Pair;
 
-extern u32 *sub_08017000(u8 a, u8 b, u8 c, u8 d);
+extern u32 *CreateBattleObject(u8 a, u8 b, u8 c, u8 d);
 
 extern u32 gUnknown_020053C0;
 
@@ -45,7 +45,7 @@ u32 *sub_0801D070(u8 kind, u32 *parent, u32 *info, u16 count)
     off = (-5 * n) << 7;
     prev = parent;
     for (i = 0; i < n; i++) {
-        node = sub_08017000(1, 1, 0, 12);
+        node = CreateBattleObject(1, 1, 0, 12);
         ((u8 *)node)[16] = 1;
         ((u8 *)node)[17] = (kind << 4) | i;
         ((u8 *)node)[18] = n;

@@ -7,7 +7,7 @@
  */
 
 
-extern void sub_0800244C(u8 *a, u32 b);
+extern void QueueResourceTransfer(u8 *a, u32 b);
 
 extern void sub_0800288C(u8 *a, u32 b);
 
@@ -16,7 +16,7 @@ extern void sub_0800DEF8(u8 *a, u16 b, u8 c, u32 d, u8 e);
 void sub_0800DEA4(u8 *a1, u32 a2, u16 a3, u8 a4, u8 *a5, u32 a6, u8 a7)
 {
     u32 off = a3 * 32 + (250u << 24);
-    sub_0800244C(a1, a2 + off);
+    QueueResourceTransfer(a1, a2 + off);
     sub_0800288C(a1 + 12, a4 * 32);
     sub_0800DEF8(a5, a3, a4, a6, a7);
 }

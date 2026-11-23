@@ -11,7 +11,7 @@ typedef short s16;
 
 extern int sub_08010508(int a);
 
-extern int sub_0804DD08(int a, int b);
+extern int __divsi3(int a, int b);
 
 u8 sub_08010138(u8 a0, u32 a1, u16 a2, u16 a3, u16 a4, u16 a5, u8 a6)
 {
@@ -61,7 +61,7 @@ u8 sub_08010138(u8 a0, u32 a1, u16 a2, u16 a3, u16 a4, u16 a5, u8 a6)
         a4 = t;
     }
     {
-        register u32 q1 = (u32)(sub_0804DD08((s16)a3 * 24, (s16)a5) << 16) >> 16;
+        register u32 q1 = (u32)(__divsi3((s16)a3 * 24, (s16)a5) << 16) >> 16;
         if ((s16)a3 > 0 && q1 == 0)
             q1 = 1;
         else
@@ -69,7 +69,7 @@ u8 sub_08010138(u8 a0, u32 a1, u16 a2, u16 a3, u16 a4, u16 a5, u8 a6)
         g[0x3b] = q1;
     }
     {
-        register u32 t = (u32)(sub_0804DD08((s16)a4 * 24, (s16)a5) << 16) >> 16;
+        register u32 t = (u32)(__divsi3((s16)a4 * 24, (s16)a5) << 16) >> 16;
         if ((s16)a4 > 0 && t == 0)
             q = 1;
         else

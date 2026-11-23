@@ -9,14 +9,14 @@
 
 typedef signed short s16;
 
-extern u32 *sub_08017000(u8 a, u8 b, u8 c, u8 d);
+extern u32 *CreateBattleObject(u8 a, u8 b, u8 c, u8 d);
 
 u8 *sub_08020340(u8 *a)
 {
     u8 *p = 0;
     s16 v = *(s16 *)(*(u8 **)0x020053c0 + 10);
     if (v > 1) {
-        p = (u8 *)sub_08017000(0, 0, 0, 18);
+        p = (u8 *)CreateBattleObject(0, 0, 0, 18);
         if (p != 0) {
             u8 z = 0;
             p[16] = 3;
@@ -24,7 +24,7 @@ u8 *sub_08020340(u8 *a)
             p[120] = 47;
             *(u8 **)(p + 40) = a;
         }
-        p = (u8 *)sub_08017000(0, 0, 0, 18);
+        p = (u8 *)CreateBattleObject(0, 0, 0, 18);
         if (p != 0) {
             p[16] = 3;
             p[17] = 1;

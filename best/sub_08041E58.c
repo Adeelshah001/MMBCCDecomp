@@ -9,7 +9,7 @@
 
 u32 sub_08024F88(u16 *p);
 
-u32 sub_0800B320(u32 a, u32 b, u32 c, u32 d);
+u32 StartSelectionWithEntries(u32 a, u32 b, u32 c, u32 d);
 
 u32 sub_0800B420(u32 a, u16 *b, u32 c);
 
@@ -34,7 +34,7 @@ u32 sub_08041E58(u8 *s)
     switch (s[0x46AD]) {
     case 0:
         sub_08024F88(buf);
-        if ((u8)sub_0800B320(0x08232634, 0, 0, 0)) {
+        if ((u8)StartSelectionWithEntries(0x08232634, 0, 0, 0)) {
             u16 *p;
             for (i = 0, p = b; i <= 7; i++)
                 { u16 *d = p + i; *d = buf[i]; }

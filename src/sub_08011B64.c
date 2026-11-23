@@ -7,7 +7,7 @@
  */
 
 
-extern u32 sub_08011070(u8 a, u8 b);
+extern u32 TrySetSelectionMode3(u8 a, u8 b);
 
 extern u32 sub_0801109C(void);
 
@@ -26,7 +26,7 @@ u32 sub_08011B64(u8 *p)
             goto Lret1;
         }
     }
-    if ((u8)sub_08011070(p[0x23], 2) == 0)
+    if ((u8)TrySetSelectionMode3(p[0x23], 2) == 0)
         goto Lret0a;
     p[5] = 1;
 L1:

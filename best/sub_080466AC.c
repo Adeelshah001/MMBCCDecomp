@@ -9,7 +9,7 @@
 
 extern u8 sub_08006DD8(void *p, u32 a, u32 b, u32 c, u32 d);
 
-extern u32 sub_080247C4(u8 idx);
+extern u32 GetChipInventoryCount(u8 idx);
 
 extern u32 sub_080241F8(u16 a);
 
@@ -37,7 +37,7 @@ void sub_080466AC(u8 *s)
             x8 = (u8)(x8 + 5);
         
         sub_08006DD8((void *)x, tbl[0], tbl[1] + 2 * i, 3, 2);
-        if ((u16)sub_080247C4(x8) != 0 || (u8)sub_080241F8(0x1000) == x8) {
+        if ((u16)GetChipInventoryCount(x8) != 0 || (u8)sub_080241F8(0x1000) == x8) {
             sub_080070F0(x8, tbl[4], tbl[5] + 2 * i, 0);
             sub_08006A54(sub_080246A8(x8), tbl[8], tbl[9] + 2 * i, 8, 2);
             {

@@ -1,29 +1,51 @@
-/* FlagSet_08026F98 @ 0x08026F98 (52 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/wave8_r_old.c (registry: src/wave8_r_old.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
+extern u32 gUnknown_0822DC84[];
+extern void sub_08027F80(u8 *p);
+extern u16 D_020031E0[];
+extern u8 D_02003670[];
+extern u8 D_020070F0[];
 
+void sub_08027718(u8 *s)
+{
+    u32 *tbl = gUnknown_0822DC84;
+    u32 *e = tbl + s[1];
+    ((void (*)(u8 *))(*e))(s);
+}
 
-typedef int s32;
+void sub_08027E5C(u8 *p)
+{
+    p[5] |= 0xFF;
+    p[6] = 0;
+    p[4] = 0;
+    p[3] &= ~6;
+    p[3] &= 0x0F;
+    p[3] &= ~8;
+    p[7] |= 0xFF;
+    sub_08027F80(p);
+}
 
-void sub_08026F98(u8 x) {
-    u16 *p = (u16 *)0x020031E0;
-    u16 v;
+void sub_08026F98(u8 x)
+{
+    u16 *p = D_020031E0;
+    u32 v = 0x90 << 5;
+    u32 a;
+    u32 t;
 
-    v = *p;
-    v |= 144 << 5;
+    v = v | *p;
     *p = v;
-    {
-        register u8 *b = (u8 *)0x02003670;
-        s32 t;
+    a = (u32)D_02003670;
+    t = (x | -x) >> 31;
+    t &= 0x20;
+    a += 0x11AC;
+    *(u8 *)a = (u8)t;
+}
 
-        
-        t = (x | -x) >> 31;
-        t &= 32;
-        b += 0x11AC;
-        *b = (u8)t;
-    }
+int sub_08026D94(void)
+{
+    u8 *p = D_020070F0;
+    int r;
+    if (p[1] != 0)
+        r = ((s8 *)p)[2];
+    else
+        r = -1;
+    return r;
 }

@@ -8,8 +8,8 @@
 
 
 /* Fwd_08001c4c @ 0x08001c4c */
-void sub_08001C5C(void);
+void InitLinkSlotRecords(void);
 
  void sub_08001C88(void);
 
-void sub_08001C4C(void) { sub_08001C5C(); sub_08001C88(); }
+void sub_08001C4C(void) { InitLinkSlotRecords(); sub_08001C88(); }

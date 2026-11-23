@@ -7,7 +7,7 @@
  */
 
 
-extern u16 sub_080247C4(u8 idx);
+extern u16 GetChipInventoryCount(u8 idx);
 
 u8 sub_080467DC(void)
 {
@@ -18,7 +18,7 @@ u8 sub_080467DC(void)
         u16 v;
         if (i > 194)
             idx = i + 5;
-        v = sub_080247C4(idx);
+        v = GetChipInventoryCount(idx);
         if (v)
             n++;
         i++;

@@ -7,20 +7,20 @@
  */
 
 
-extern u32 sub_080247E8(u8 a);
+extern u32 TryAddChipToInventory(u8 a);
 
 extern u8 sub_080245C4(u8 idx);
 
-extern u32 sub_080247C4(u8 idx);
+extern u32 GetChipInventoryCount(u8 idx);
 
 u8 sub_080378B8(u8 *p, u8 v)
 {
     u8 r = 0;
-    if ((u16)sub_080247E8(v) == 0)
+    if ((u16)TryAddChipToInventory(v) == 0)
         r = 3;
     else if ((u8)sub_080245C4(v) > 3)
         r = 2;
-    else if ((u16)sub_080247C4(v) == 1)
+    else if ((u16)GetChipInventoryCount(v) == 1)
         r = 1;
     else if (v == *(p + 0x469E))
         r = 4;

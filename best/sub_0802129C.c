@@ -13,7 +13,7 @@ u32 sub_0804DE70(u32 a, u32 b);
 
 u32 sub_0804DEE8(u32 a, u32 b);
 
-void sub_08009860(s16 a, u16 b, u8 c, u8 d, u8 e);
+void DrawDecimalDigits(s16 a, u16 b, u8 c, u8 d, u8 e);
 
 void sub_080098C4(u8 a, u16 b, u8 c, u8 d);
 
@@ -31,8 +31,8 @@ void sub_0802129C(u8 *s)
     case 12: {
         u16 *base = (u16 *)0x0817386c;
         
-        sub_08009860(a, base[22], 9, 0, 2);
-        sub_08009860(b, base[22], 11, 0, 2);
+        DrawDecimalDigits(a, base[22], 9, 0, 2);
+        DrawDecimalDigits(b, base[22], 11, 0, 2);
         break;
     }
     case 13: {
@@ -58,14 +58,14 @@ void sub_0802129C(u8 *s)
             sub_08009994(q, base[22], 17, 2);
             r = sub_0804DEE8(t, 10) + 1;
             sub_08009994(r, base[22], 17, 3);
-            sub_08009860(b, base[22], 15, 2, 2);
+            DrawDecimalDigits(b, base[22], 15, 2, 2);
         }
         break;
     }
     case 1: {
         u16 *base = (u16 *)0x0817386c;
         
-        sub_08009860(a, base[22], 10, 0, 2);
+        DrawDecimalDigits(a, base[22], 10, 0, 2);
         break;
     }
     case 2: {
@@ -74,7 +74,7 @@ void sub_0802129C(u8 *s)
         {
             u16 *base = (u16 *)0x0817386c;
             
-            sub_08009860(a, base[22], 10, 0, 3);
+            DrawDecimalDigits(a, base[22], 10, 0, 3);
         }
         cnt = 0;
         i = 0;
@@ -86,7 +86,7 @@ void sub_0802129C(u8 *s)
         {
             u16 *base = (u16 *)0x0817386c;
             
-            sub_08009860((s16)cnt, base[22], 14, 0, 3);
+            DrawDecimalDigits((s16)cnt, base[22], 14, 0, 3);
         }
         break;
     }

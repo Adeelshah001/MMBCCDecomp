@@ -1,54 +1,51 @@
-# BATTLECHIPGP: decompdecomp progress
+![Decompilation completion and function map](decompdecomp-progress.svg)
 
-This is a saved decompilation project created with [decompdecomp](https://github.com/n-delic/decompdecomp).
-AI agents were used during the decompilation; their C attempts were kept only when decompdecomp's byte-for-byte
-judge accepted them as matches.
+# Mega Man Battle Chip Challenge decompilation
 
-## Project details
+A matching Game Boy Advance decompilation in [decompdecomp](https://github.com/n-delic/decompdecomp).
+AI agents contributed C attempts. A function counts as matched when the compiled bytes match the original.
 
 <!-- decompdecomp:details:start -->
-- **Game:** BATTLECHIPGP
+- **Game:** Mega Man Battle Chip Challenge
 - **Platform:** gba
 - **Compiler:** agbcc
 <!-- decompdecomp:details:end -->
 <!-- decompdecomp:progress:start -->
-- **Progress:** 408 matching function(s), 6 best attempt(s)
-- **Completion:** 408 / 1,595 functions (25.6%). 9 set aside, excluded from completion.
+- **Progress:** 603 matching function(s), 609 best attempt(s)
+- **Completion:** 603 / 1,593 functions (37.9%). 14 set aside, excluded from completion.
 <!-- decompdecomp:progress:end -->
 
-## What's in this folder
+## Continue the decompilation
 
-This folder is the whole of the work, and the only part of the project to share or keep in git. It holds no game
-data: everything else in the project's folder was made from the game (the ROM, `asm/`, `assets/`, the build files)
-and stays on your computer.
+1. Install [decompdecomp](https://github.com/n-delic/decompdecomp/releases/latest) and set up `agbcc` in **Compilers & tools**. On Windows, the GBA compiler runs through WSL 2.
+2. Clone this repository with `git clone https://github.com/Adeelshah001/MMBCCDecomp.git`.
+3. In decompdecomp, choose **New project → Open a saved project**. Select the cloned repository root and your own dump of Mega Man Battle Chip Challenge (USA).
 
-```
-src/<function>.c      each matched function's C, byte for byte
-best/<function>.c     the closest attempt so far at each function that doesn't match yet
-include/common.h      the shared header every function is compiled with (common_<part>.h: a part's own)
-decompdecomp.json     the game's fingerprint (its SHA-1, never the game), the compiler and its flags, the
-                      functions' layout and names, notes, instructions, which functions helpers take first, what agents
-                      learned, who matched what
-README.md             this file
-```
+The expected cartridge code is `A89E` and the dump is 8,388,608 bytes.
+Its SHA-1 is `72309736f3820470c6f372d6a05ad1f16bc5a946`. decompdecomp checks the dump and rejudges saved functions on import.
 
-## Continue on another computer
+## Project files
 
-Open decompdecomp, choose **New project → Open a saved project**, then pick this folder (or paste its git
-repository's address) and your own copy of the game. decompdecomp checks it's the same game and judges every saved
-function again: a match counts because it matches, not because a file says so.
+- `src/` holds matching C, `best/` holds the best attempts so far, and `include/` holds the shared header.
+- `decompdecomp.json` records the dump fingerprint, function layout, names, compiler settings, and research notes.
+- `unlisted/` preserves additional C from the local project for reference outside the active save.
 
-## Collaborate
+Keep ROMs, save files, extracted assets, and generated disassembly local. Commit saved C, headers, and metadata
+from the repository root after decompdecomp judges your changes.
 
-This folder is the source of truth. Edit its C, headers, names, notes or settings and pull or merge contributions
-here. decompdecomp picks up changes automatically and judges changed code again. Deleted sources reopen their
-functions. Keep git conflict markers out of these files; unresolved conflicts pause synchronization.
+The map updates when decompdecomp saves. Green means matched, gold means attempted, grey means open, and red means
+set aside. Keep project notes outside the tagged blocks so the app preserves them.
+
+<details>
+<summary>Generated progress map</summary>
 
 <!-- decompdecomp:visuals:start -->
-## Progress map
-
 ![Decompilation completion and function map](decompdecomp-progress.svg)
-
-Green: matched. Gold: attempted. Grey: open. Red: set aside. Functions follow address, then source unit and name order.
-The image and tagged counts update on save. Keep project notes outside the hidden `decompdecomp` comment pairs to preserve them.
 <!-- decompdecomp:visuals:end -->
+
+</details>
+
+## Standalone build
+
+The earlier matching-decompilation project lives in `mmbcc/`. Its build instructions are in [INSTALL.md](INSTALL.md).
+The progress map above tracks the decompdecomp save at the root.

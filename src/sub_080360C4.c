@@ -30,7 +30,7 @@ u32 sub_0800B148(u32 a, u32 b, u32 c);
 
 u32 sub_0800B2D8(void);
 
-u32 sub_0800B320(u32 a, u32 b, u32 c, u32 d);
+u32 StartSelectionWithEntries(u32 a, u32 b, u32 c, u32 d);
 
 u32 sub_0800B308(void);
 
@@ -51,7 +51,7 @@ u32 sub_080360C4(u8 *p)
     }
     case 1:
         if ((u8)sub_0800B2D8()) {
-            if ((u8)sub_0800B320(0x0822EB44, 0, 0, 0))
+            if ((u8)StartSelectionWithEntries(0x0822EB44, 0, 0, 0))
                 p[3]++;
         }
         break;

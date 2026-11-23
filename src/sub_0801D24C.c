@@ -7,11 +7,11 @@
  */
 
 
-extern u32 *sub_08017000(u8 a, u8 b, u8 c, u8 d);
+extern u32 *CreateBattleObject(u8 a, u8 b, u8 c, u8 d);
 
 u8 *sub_0801D24C(u8 *p, u8 x)
 {
-    u8 *r = (u8 *)sub_08017000(0, 0, 0, 12);
+    u8 *r = (u8 *)CreateBattleObject(0, 0, 0, 12);
     if (r != 0) {
         r[16] = 3;
         r[17] = x;

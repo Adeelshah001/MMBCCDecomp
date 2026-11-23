@@ -1,31 +1,27 @@
-/* Text_SelectBlob @ 0x0804C6B4 (44 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/text.c (registry: src/text.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
+struct MusicPlayer {
+    void *info;
+    void *track;
+    u8 numTracks;
+    u8 unk9;
+    u16 unkA;
+};
 
+struct Song {
+    void *header;
+    u16 ms;
+    u16 me;
+};
 
-extern u32 gUnknown_08106D7C[];
+extern const struct MusicPlayer D_08106D7C[];
+extern const struct Song D_08106DD0[];
+void sub_0804CDE8(void *info, void *header);
 
-extern u8 gUnknown_08106DD0[];
-
-void Text_OpenDialogue(u32 a, u32 b);
-
-/* Text_SelectBlob @0x0804C6B4 — MATCHED with old_agbcc.
- * Indexes the 8-byte text directory, loads blob pointer and config word,
- * calls Text_OpenDialogue. */
-void sub_0804C6B4(u16 idx)
+void sub_0804C6B4(u16 n)
 {
-    u32 off = (u32)idx << 16;
-    u32 *cfgs = gUnknown_08106D7C;
-    u8 *dir = gUnknown_08106DD0;
-    u32 *entry;
-    u16 sub;
+    const struct MusicPlayer *mplayTable = D_08106D7C;
+    u32 tmp = (u32)D_08106DD0;
+    const struct Song *song = (const struct Song *)(tmp + n * 8);
 
-    off >>= 13;
-    entry = (u32 *)(dir + off);
-    sub = *(u16 *)((u8 *)entry + 4);
-    Text_OpenDialogue(*(u32 *)((u8 *)cfgs + sub * 12), entry[0]);
+    tmp = song->ms;
+    sub_0804CDE8(mplayTable[tmp].info, song->header);
 }

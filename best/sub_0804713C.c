@@ -11,7 +11,7 @@ extern u8 sub_0800B148(int a, int b, int c);
 
 extern u8 sub_0800B2D8(void);
 
-extern u8 sub_0800B320(u32 a, u32 b, u32 c, u32 d);
+extern u8 StartSelectionWithEntries(u32 a, u32 b, u32 c, u32 d);
 
 extern u8 sub_0800B308(void);
 
@@ -28,7 +28,7 @@ u8 sub_0804713C(u8 *s, u32 a, u32 b, u32 c, u32 d)
     case 1:
         if (sub_0800B2D8() == 0)
             goto ret;
-        r = sub_0800B320(a, b, c, d);
+        r = StartSelectionWithEntries(a, b, c, d);
         goto tail;
     case 2: r = sub_0800B308(); goto tail;
     case 3: r = sub_0800B2B4(); goto tail;

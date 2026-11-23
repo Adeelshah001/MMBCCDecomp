@@ -13,14 +13,14 @@ typedef signed short s16;
 
 struct ObjVec;
 
-extern u32 *sub_08017000(u8 a, u8 b, u8 c, u8 d);
+extern u32 *CreateBattleObject(u8 a, u8 b, u8 c, u8 d);
 
 extern void sub_0800DD2C(struct ObjVec *o, s32 x, s32 y);
 
 /* 0x0801ebf0 (82 B): Node_PopAndInit(0,1,c,15), 5 params, no tail. */
 u32 *sub_0801EBF0(u8 a, u8 b, u8 c, u16 d, u16 e)
 {
-    u32 *n = sub_08017000(0, 1, c, 15);
+    u32 *n = CreateBattleObject(0, 1, c, 15);
     if (n != 0) {
         u8 *q = (u8 *)n;
         u32 z = 0;

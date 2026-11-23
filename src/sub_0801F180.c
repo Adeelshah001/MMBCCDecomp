@@ -7,11 +7,11 @@
  */
 
 
-extern u32 *sub_08017000(u8 a, u8 b, u8 c, u8 d);
+extern u32 *CreateBattleObject(u8 a, u8 b, u8 c, u8 d);
 
 u8 *sub_0801F180(u8 *a)
 {
-    register u8 *p = (u8 *)sub_08017000(1, 1, 0, 17);
+    register u8 *p = (u8 *)CreateBattleObject(1, 1, 0, 17);
     register u8 *aa = a;
     if (p != 0) {
         register u8 z = 0;

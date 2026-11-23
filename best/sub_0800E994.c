@@ -17,7 +17,7 @@ extern void sub_08011DF0(void *a, void *b, int c);
 
 extern void sub_08016FD0(void *a, void *b, int c);
 
-extern void sub_0800EE98(void);
+extern void InitSceneWorkState(void);
 
 extern void sub_08004DFC(u8 x);
 
@@ -45,6 +45,6 @@ void sub_0800E994(void)
         sub_08011DF0(c, (void *)0x02005280, 2);
         sub_08016FD0((u8 *)c + 40, (void *)0x020053d0, 36);
     }
-    sub_0800EE98();
+    InitSceneWorkState();
     sub_08004DFC(((struct F *)0x02004f80)->f2);
 }

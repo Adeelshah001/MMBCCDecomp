@@ -7,7 +7,7 @@
  */
 
 
-void sub_08004B94(int x);
+void InitLinkSessionState(int x);
 
 s8 sub_08004BC0(void);
 
@@ -21,7 +21,7 @@ int sub_0802FD68(u8 *p)
         goto L2;
     goto End;
 L1:
-    sub_08004B94(1);
+    InitLinkSessionState(1);
     p[3]++;
 L2:
     {

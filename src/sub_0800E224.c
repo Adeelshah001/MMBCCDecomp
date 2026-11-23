@@ -23,7 +23,7 @@ typedef struct {
     u32 f100;
 } S;
 
-extern u32 *sub_08011E20(u8 a, u8 b, u8 c);
+extern u32 *CreateSceneSlotNode(u8 a, u8 b, u8 c);
 
 extern void sub_08016E0C(u8 *s, u32 v);
 
@@ -45,8 +45,8 @@ void sub_0800E224(void)
     *(u16 *)(S + 24) = 1;
     if (S[21] == 0) {
         S[21]++;
-        n1 = sub_08011E20(1, 0, 1);
-        n2 = sub_08011E20(1, 1, 1);
+        n1 = CreateSceneSlotNode(1, 0, 1);
+        n2 = CreateSceneSlotNode(1, 1, 1);
         sub_08016E0C((u8 *)n1, S[4]);
         sub_08016E0C((u8 *)n2, S[5]);
     }

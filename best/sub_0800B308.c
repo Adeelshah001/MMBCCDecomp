@@ -1,18 +1,15 @@
-/* Check_B308 @ 0x0800B308 (24 B, ELF compiled size) — matched C from the pret-style MMBCC decomp.
- * Pret source: mmbcc/src/wave9_e_old.c (registry: src/wave9_e_old.c).
- * Pret compiler: old_agbcc; decompdecomp judges with its pinned agbcc -mthumb-interwork -O2.
- * Section attribute kept: the app's judge reads the symbol's own section.
- * .set alias blocks from the pret file are NOT copied here; the aliases live
- * in the manifest symbols so the judge resolves them.
- */
-
-
-extern u8 gUnknown_02004E40[];
+extern u8 D_02004E40[];
+extern void sub_0800B520(const u16 *, const u16 *, const u16 *);
+extern void ResetSelectionDisplayEntries(void);
+extern void sub_0800B4C8(void);
 
 u32 sub_0800B308(void)
 {
-    u8 v = gUnknown_02004E40[4];
-    if ((v & 15) == 0)
+    u8 *base = (u8 *)0x02004e40;
+    u32 mask = 15;
+    u32 flags = base[4];
+    if ((mask & flags) == 0)
         return 1;
     return 0;
 }
+

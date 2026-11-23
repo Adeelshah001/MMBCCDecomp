@@ -7,7 +7,7 @@
  */
 
 
-extern int sub_080247C4(int idx);
+extern int GetChipInventoryCount(int idx);
 
 extern u32 sub_08024434(u16 a);
 
@@ -34,7 +34,7 @@ void sub_08035A24(void)
         u8 ret;
         if (i > 194)
             arg = (u8)(i + 5);
-        ret = (u8)sub_080247C4(arg);
+        ret = (u8)GetChipInventoryCount(arg);
         if (ret != 0) {
             c7 += ret;
             c6++;
