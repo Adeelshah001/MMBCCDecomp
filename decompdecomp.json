@@ -1,7 +1,7 @@
 {
  "format": 1,
- "saved_at": 1795450735.6949253,
- "revision": 1861,
+ "saved_at": 1795456170.485679,
+ "revision": 1862,
  "title": "BATTLECHIPGP",
  "platform": "gba",
  "game": {
@@ -1977,19 +1977,9 @@
    "best_score": 455,
    "best_by": "codex-gpt-6.2-sol-high-1"
   },
-  "sub_08010FB4": {
-   "vram": 134287284,
-   "best_score": 515,
-   "best_by": "codex-gpt-6.2-sol-high-1"
-  },
   "sub_08010FDC": {
    "vram": 134287324,
    "best_score": 920,
-   "best_by": "codex-gpt-6.2-sol-high-1"
-  },
-  "sub_08011054": {
-   "vram": 134287444,
-   "best_score": 330,
    "best_by": "codex-gpt-6.2-sol-high-1"
   },
   "TrySetSelectionMode3": {
@@ -2934,8 +2924,8 @@
   },
   "sub_0801DE84": {
    "vram": 134340228,
-   "best_score": 100,
-   "best_by": "antigravity-gemini-4-neon-high-1"
+   "matched_by": "antigravity-gemini-4-neon-high-1",
+   "readable": false
   },
   "sub_0801DFAC": {
    "vram": 134340524,
@@ -3147,11 +3137,6 @@
    "matched_by": "restored",
    "readable": false
   },
-  "sub_0802129C": {
-   "vram": 134353564,
-   "best_score": 200,
-   "best_by": "restored"
-  },
   "sub_0802142C": {
    "vram": 134353964,
    "matched_by": "codex-gpt-6.2-sol-high-1",
@@ -3272,20 +3257,10 @@
    "best_score": 60,
    "best_by": "codex-gpt-6.2-sol-high-1"
   },
-  "sub_080223A0": {
-   "vram": 134357920,
-   "best_score": 435,
-   "best_by": "opencode-deepseek-v4.1-flash-free-1"
-  },
   "sub_080223E4": {
    "vram": 134357988,
    "best_score": 55,
    "best_by": "permuter"
-  },
-  "sub_080225B4": {
-   "vram": 134358452,
-   "best_score": 705,
-   "best_by": "opencode-deepseek-v4.1-flash-free-1"
   },
   "sub_080225E4": {
    "vram": 134358500,
@@ -3312,19 +3287,9 @@
    "best_score": 10,
    "best_by": "restored"
   },
-  "sub_080226B0": {
-   "vram": 134358704,
-   "best_score": 25,
-   "best_by": "restored"
-  },
   "sub_08022700": {
    "vram": 134358784,
    "best_score": 840,
-   "best_by": "restored"
-  },
-  "sub_0802278C": {
-   "vram": 134358924,
-   "best_score": 25,
    "best_by": "restored"
   },
   "sub_080227DC": {
@@ -3362,16 +3327,6 @@
    "best_score": 80,
    "best_by": "codex-gpt-6.2-sol-high-1"
   },
-  "sub_08022E88": {
-   "vram": 134360712,
-   "best_score": 10,
-   "best_by": "opencode-deepseek-v4.1-flash-free-1"
-  },
-  "sub_08022F48": {
-   "vram": 134360904,
-   "best_score": 10,
-   "best_by": "codex-gpt-6.2-sol-high-1"
-  },
   "sub_08022F88": {
    "vram": 134360968,
    "matched_by": "restored",
@@ -3381,11 +3336,6 @@
    "vram": 134361008,
    "matched_by": "restored",
    "readable": false
-  },
-  "sub_08022FE4": {
-   "vram": 134361060,
-   "best_score": 40,
-   "best_by": "codex-gpt-6.2-sol-high-1"
   },
   "sub_08023034": {
    "vram": 134361140,
@@ -4592,11 +4542,6 @@
    "best_score": 15,
    "best_by": "permuter"
   },
-  "sub_080344F0": {
-   "vram": 134431984,
-   "best_score": 51375,
-   "best_by": "codex-gpt-6.2-sol-high-1"
-  },
   "sub_08034B4C": {
    "vram": 134433612,
    "best_score": 226,
@@ -5292,11 +5237,6 @@
    "matched_by": "restored",
    "readable": false
   },
-  "sub_08046960": {
-   "vram": 134506848,
-   "best_score": 880,
-   "best_by": "restored"
-  },
   "sub_08046CA0": {
    "vram": 134507680,
    "matched_by": "codex-gpt-6.2-sol-high-1",
@@ -5391,11 +5331,6 @@
    "vram": 134516540,
    "matched_by": "restored",
    "readable": false
-  },
-  "sub_080493EC": {
-   "vram": 134517740,
-   "best_score": 685,
-   "best_by": "permuter"
   },
   "sub_080496A8": {
    "vram": 134518440,
@@ -6059,8 +5994,8 @@
   },
   "DivZeroStub_4DD90": {
    "vram": 134536592,
-   "best_score": 105,
-   "best_by": "restored"
+   "matched_by": "restored",
+   "readable": false
   },
   "sub_0804DD9C": {
    "vram": 134536604,
@@ -6084,8 +6019,8 @@
   },
   "sub_0804DFA8": {
    "vram": 134537128,
-   "best_score": 210,
-   "best_by": "permuter"
+   "matched_by": "permuter",
+   "readable": false
   },
   "sub_0804E008": {
    "vram": 134537224,

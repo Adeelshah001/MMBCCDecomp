@@ -11,8 +11,8 @@ AI agents contributed C attempts. A function counts as matched when the compiled
 - **Compiler:** agbcc
 <!-- decompdecomp:details:end -->
 <!-- decompdecomp:progress:start -->
-- **Progress:** 603 matching function(s), 609 best attempt(s)
-- **Completion:** 603 / 1,593 functions (37.9%). 14 set aside, excluded from completion.
+- **Progress:** 606 matching function(s), 593 best attempt(s)
+- **Completion:** 606 / 1,593 functions (38.0%). 14 set aside, excluded from completion.
 <!-- decompdecomp:progress:end -->
 
 ## Continue the decompilation
@@ -28,7 +28,6 @@ Its SHA-1 is `72309736f3820470c6f372d6a05ad1f16bc5a946`. decompdecomp checks the
 
 - `src/` holds matching C, `best/` holds the best attempts so far, and `include/` holds the shared header.
 - `decompdecomp.json` records the dump fingerprint, function layout, names, compiler settings, and research notes.
-- `unlisted/` preserves additional C from the local project for reference outside the active save.
 
 Keep ROMs, save files, extracted assets, and generated disassembly local. Commit saved C, headers, and metadata
 from the repository root after decompdecomp judges your changes.

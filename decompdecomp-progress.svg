@@ -1,19 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="840" height="390" viewBox="0 0 840 390" role="img" aria-labelledby="title desc">
-<title id="title">603 / 1,593 functions matched (37.9%)</title>
+<title id="title">606 / 1,593 functions matched (38.0%)</title>
 <desc id="desc">Completion excludes set-aside functions. Green: matched; gold: attempted; grey: open; red: set aside.</desc>
 <rect width="840" height="390" rx="12" fill="#0f172a"/>
 <g font-family="sans-serif" fill="#f1f5f9">
 <text x="20" y="32" font-size="20">Decompilation progress</text>
 <text x="820" y="32" text-anchor="end" font-size="16">gba</text>
-<text x="20" y="59" font-size="16">603 / 1,593 functions matched (37.9%)</text>
+<text x="20" y="59" font-size="16">606 / 1,593 functions matched (38.0%)</text>
 <rect x="20" y="74" width="800" height="18" rx="4" fill="#334155"/>
-<rect x="20" y="74" width="302.825" height="18" rx="4" fill="#238636"/>
+<rect x="20" y="74" width="304.331" height="18" rx="4" fill="#238636"/>
 <rect x="20" y="108" width="10" height="10" fill="#238636"/>
-<text x="36" y="118" font-size="13">Matched: 603</text>
+<text x="36" y="118" font-size="13">Matched: 606</text>
 <rect x="220" y="108" width="10" height="10" fill="#bf8700"/>
-<text x="236" y="118" font-size="13">Attempt: 609</text>
+<text x="236" y="118" font-size="13">Attempt: 593</text>
 <rect x="420" y="108" width="10" height="10" fill="#64748b"/>
-<text x="436" y="118" font-size="13">Open: 381</text>
+<text x="436" y="118" font-size="13">Open: 394</text>
 <rect x="620" y="108" width="10" height="10" fill="#b54747"/>
 <text x="636" y="118" font-size="13">Aside: 14</text>
 <text x="20" y="144" font-size="12">Function map: up to 1 function(s) per tile</text>
@@ -1511,14 +1511,14 @@
 <g><title>sub_08010F88: {&#x27;attempt&#x27;: 1}</title>
 <rect x="190.000" y="220" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_08010FB4: {&#x27;attempt&#x27;: 1}</title>
-<rect x="200.000" y="220" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_08010FB4: {&#x27;open&#x27;: 1}</title>
+<rect x="200.000" y="220" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_08010FDC: {&#x27;attempt&#x27;: 1}</title>
 <rect x="210.000" y="220" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_08011054: {&#x27;attempt&#x27;: 1}</title>
-<rect x="220.000" y="220" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_08011054: {&#x27;open&#x27;: 1}</title>
+<rect x="220.000" y="220" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>TrySetSelectionMode3: {&#x27;matched&#x27;: 1}</title>
 <rect x="230.000" y="220" width="8.000" height="8" fill="#238636"/>
@@ -2234,8 +2234,8 @@
 <g><title>sub_0801DDC4: {&#x27;attempt&#x27;: 1}</title>
 <rect x="200.000" y="250" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_0801DE84: {&#x27;attempt&#x27;: 1}</title>
-<rect x="210.000" y="250" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_0801DE84: {&#x27;matched&#x27;: 1}</title>
+<rect x="210.000" y="250" width="8.000" height="8" fill="#238636"/>
 </g>
 <g><title>sub_0801DFAC: {&#x27;attempt&#x27;: 1}</title>
 <rect x="220.000" y="250" width="8.000" height="8" fill="#bf8700"/>
@@ -2450,8 +2450,8 @@
 <g><title>sub_08021290: {&#x27;matched&#x27;: 1}</title>
 <rect x="120.000" y="260" width="8.000" height="8" fill="#238636"/>
 </g>
-<g><title>sub_0802129C: {&#x27;attempt&#x27;: 1}</title>
-<rect x="130.000" y="260" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_0802129C: {&#x27;open&#x27;: 1}</title>
+<rect x="130.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_0802142C: {&#x27;matched&#x27;: 1}</title>
 <rect x="140.000" y="260" width="8.000" height="8" fill="#238636"/>
@@ -2546,8 +2546,8 @@
 <g><title>sub_08022320: {&#x27;attempt&#x27;: 1}</title>
 <rect x="440.000" y="260" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_080223A0: {&#x27;attempt&#x27;: 1}</title>
-<rect x="450.000" y="260" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_080223A0: {&#x27;open&#x27;: 1}</title>
+<rect x="450.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_080223E4: {&#x27;attempt&#x27;: 1}</title>
 <rect x="460.000" y="260" width="8.000" height="8" fill="#bf8700"/>
@@ -2555,8 +2555,8 @@
 <g><title>sub_080224E4: {&#x27;open&#x27;: 1}</title>
 <rect x="470.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
-<g><title>sub_080225B4: {&#x27;attempt&#x27;: 1}</title>
-<rect x="480.000" y="260" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_080225B4: {&#x27;open&#x27;: 1}</title>
+<rect x="480.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_080225E4: {&#x27;matched&#x27;: 1}</title>
 <rect x="490.000" y="260" width="8.000" height="8" fill="#238636"/>
@@ -2573,14 +2573,14 @@
 <g><title>sub_08022680: {&#x27;attempt&#x27;: 1}</title>
 <rect x="530.000" y="260" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_080226B0: {&#x27;attempt&#x27;: 1}</title>
-<rect x="540.000" y="260" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_080226B0: {&#x27;open&#x27;: 1}</title>
+<rect x="540.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_08022700: {&#x27;attempt&#x27;: 1}</title>
 <rect x="550.000" y="260" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_0802278C: {&#x27;attempt&#x27;: 1}</title>
-<rect x="560.000" y="260" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_0802278C: {&#x27;open&#x27;: 1}</title>
+<rect x="560.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_080227DC: {&#x27;attempt&#x27;: 1}</title>
 <rect x="570.000" y="260" width="8.000" height="8" fill="#bf8700"/>
@@ -2615,14 +2615,14 @@
 <g><title>sub_08022E14: {&#x27;attempt&#x27;: 1}</title>
 <rect x="670.000" y="260" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_08022E88: {&#x27;attempt&#x27;: 1}</title>
-<rect x="680.000" y="260" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_08022E88: {&#x27;open&#x27;: 1}</title>
+<rect x="680.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_08022EBC: {&#x27;open&#x27;: 1}</title>
 <rect x="690.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
-<g><title>sub_08022F48: {&#x27;attempt&#x27;: 1}</title>
-<rect x="700.000" y="260" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_08022F48: {&#x27;open&#x27;: 1}</title>
+<rect x="700.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_08022F88: {&#x27;matched&#x27;: 1}</title>
 <rect x="710.000" y="260" width="8.000" height="8" fill="#238636"/>
@@ -2630,8 +2630,8 @@
 <g><title>sub_08022FB0: {&#x27;matched&#x27;: 1}</title>
 <rect x="720.000" y="260" width="8.000" height="8" fill="#238636"/>
 </g>
-<g><title>sub_08022FE4: {&#x27;attempt&#x27;: 1}</title>
-<rect x="730.000" y="260" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_08022FE4: {&#x27;open&#x27;: 1}</title>
+<rect x="730.000" y="260" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_08023024: {&#x27;open&#x27;: 1}</title>
 <rect x="740.000" y="260" width="8.000" height="8" fill="#64748b"/>
@@ -3506,8 +3506,8 @@
 <g><title>sub_0803449C: {&#x27;attempt&#x27;: 1}</title>
 <rect x="440.000" y="300" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_080344F0: {&#x27;attempt&#x27;: 1}</title>
-<rect x="450.000" y="300" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_080344F0: {&#x27;open&#x27;: 1}</title>
+<rect x="450.000" y="300" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_080349F8: {&#x27;open&#x27;: 1}</title>
 <rect x="460.000" y="300" width="8.000" height="8" fill="#64748b"/>
@@ -4205,8 +4205,8 @@
 <g><title>sub_08046904: {&#x27;matched&#x27;: 1}</title>
 <rect x="370.000" y="330" width="8.000" height="8" fill="#238636"/>
 </g>
-<g><title>sub_08046960: {&#x27;attempt&#x27;: 1}</title>
-<rect x="380.000" y="330" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_08046960: {&#x27;open&#x27;: 1}</title>
+<rect x="380.000" y="330" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_08046CA0: {&#x27;matched&#x27;: 1}</title>
 <rect x="390.000" y="330" width="8.000" height="8" fill="#238636"/>
@@ -4292,8 +4292,8 @@
 <g><title>sub_08049234: {&#x27;open&#x27;: 1}</title>
 <rect x="660.000" y="330" width="8.000" height="8" fill="#64748b"/>
 </g>
-<g><title>sub_080493EC: {&#x27;attempt&#x27;: 1}</title>
-<rect x="670.000" y="330" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_080493EC: {&#x27;open&#x27;: 1}</title>
+<rect x="670.000" y="330" width="8.000" height="8" fill="#64748b"/>
 </g>
 <g><title>sub_08049560: {&#x27;open&#x27;: 1}</title>
 <rect x="680.000" y="330" width="8.000" height="8" fill="#64748b"/>
@@ -4775,8 +4775,8 @@
 <g><title>__divsi3: {&#x27;aside&#x27;: 1}</title>
 <rect x="670.000" y="350" width="8.000" height="8" fill="#b54747"/>
 </g>
-<g><title>DivZeroStub_4DD90: {&#x27;attempt&#x27;: 1}</title>
-<rect x="680.000" y="350" width="8.000" height="8" fill="#bf8700"/>
+<g><title>DivZeroStub_4DD90: {&#x27;matched&#x27;: 1}</title>
+<rect x="680.000" y="350" width="8.000" height="8" fill="#238636"/>
 </g>
 <g><title>sub_0804DD9C: {&#x27;attempt&#x27;: 1}</title>
 <rect x="690.000" y="350" width="8.000" height="8" fill="#bf8700"/>
@@ -4799,8 +4799,8 @@
 <g><title>Wrap_0804DF9E: {&#x27;attempt&#x27;: 1}</title>
 <rect x="750.000" y="350" width="8.000" height="8" fill="#bf8700"/>
 </g>
-<g><title>sub_0804DFA8: {&#x27;attempt&#x27;: 1}</title>
-<rect x="760.000" y="350" width="8.000" height="8" fill="#bf8700"/>
+<g><title>sub_0804DFA8: {&#x27;matched&#x27;: 1}</title>
+<rect x="760.000" y="350" width="8.000" height="8" fill="#238636"/>
 </g>
 <g><title>sub_0804E008: {&#x27;attempt&#x27;: 1}</title>
 <rect x="770.000" y="350" width="8.000" height="8" fill="#bf8700"/>
